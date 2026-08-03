@@ -1,0 +1,41 @@
+{
+  "sources": {
+    ".raw/private/reynolds-theories-of-programming-languages-2009.pdf": {
+      "hash": "3edeb05d41a9f1a00b7f1fa64a4f6188e878ff11f0019fbbbd6036e743352195",
+      "hash_algorithm": "sha256",
+      "ingested_at": "2026-08-03",
+      "source_type": "book",
+      "pages": 513,
+      "pages_created": [
+        "wiki/sources/reynolds-theories-of-programming-languages.md",
+        "wiki/chapters/chapter-01-predicate-logic.md",
+        "wiki/chapters/chapter-02-simple-imperative-language.md",
+        "wiki/chapters/chapter-03-program-specifications.md",
+        "wiki/chapters/chapter-04-arrays.md",
+        "wiki/chapters/chapter-05-failure-io-continuations.md",
+        "wiki/chapters/chapter-06-transition-semantics.md",
+        "wiki/chapters/chapter-07-nondeterminism.md",
+        "wiki/chapters/chapter-08-shared-variable-concurrency.md",
+        "wiki/chapters/chapter-09-csp.md",
+        "wiki/chapters/chapter-10-lambda-calculus.md",
+        "wiki/chapters/chapter-11-eager-functional-language.md",
+        "wiki/chapters/chapter-12-functional-continuations.md",
+        "wiki/chapters/chapter-13-iswim-like-languages.md",
+        "wiki/chapters/chapter-14-normal-order-language.md",
+        "wiki/chapters/chapter-15-simple-type-system.md",
+        "wiki/chapters/chapter-16-subtypes-intersection-types.md",
+        "wiki/chapters/chapter-17-polymorphism.md",
+        "wiki/chapters/chapter-18-module-specification.md",
+        "wiki/chapters/chapter-19-algol-like-languages.md",
+        "wiki/chapters/appendix-mathematical-background.md"
+      ],
+      "pages_updated": [
+        "wiki/index.md",
+        "wiki/overview.md",
+        "wiki/hot.md",
+        "wiki/log.md",
+        "wiki/glossary.md"
+      ]
+    }
+  }
+}
