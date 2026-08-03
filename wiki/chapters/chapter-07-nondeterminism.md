@@ -42,6 +42,58 @@ related:
 - **교착 (deadlock)**
 - **최약 전제조건 (weakest precondition)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 하나의 시작 상태에서 여러 실행이 가능한 언어를 정의하고, 가능 결과 집합과 최약 전제조건으로 그 정확성을 추론한다.
+>
+> **English:** Defines languages with multiple possible executions from one state and reasons about them through sets of outcomes and weakest preconditions.
+
+### §7.1 · 가드 명령과 선택
+
+여러 참 가드 중 하나를 선택해 실행하는 조건·반복 구문을 전이 규칙으로 정의한다. 선택 방법은 언어 의미가 의도적으로 정하지 않는다.
+
+**English — Guarded commands and choice:** Transition rules define conditionals and loops that choose one enabled guard. The language semantics deliberately leaves the choice unresolved.
+
+### §7.2 · 유계 비결정성과 파워도메인
+
+프로그램 의미를 가능한 결과들의 집합으로 올리되, 발산 정보와 집합 순서를 어떻게 다룰지 정해야 한다. 유계 분기는 도메인 구조를 제어한다.
+
+**English — Bounded nondeterminism and powerdomains:** Program meaning is lifted to sets of possible results, but divergence and the ordering of result sets must be chosen carefully. Finite branching controls the domain structure.
+
+### §7.3 · 집합값 의미 방정식
+
+선택은 결과 집합의 합집합, 순차 합성은 각 가능한 중간 결과에 대한 다음 의미의 합집합이 된다. while은 다시 고정점으로 정의된다.
+
+**English — Set-valued semantic equations:** Choice becomes union of outcome sets; sequencing unions the second command’s outcomes over all possible intermediate results. Loops again require a fixed point.
+
+### §7.4 · 악마적 선택의 명세와 증명
+
+모든 허용 실행이 사후조건을 만족해야 한다는 관점에서는 선택이 검증자에게 불리하게 작용한다. 증명 규칙은 각 가능한 분기를 모두 검사한다.
+
+**English — Specification under demonic choice:** If every permitted execution must satisfy the postcondition, choice behaves demonically from the verifier’s perspective. Proof rules must establish every possible branch.
+
+### §7.5 · 최약 전제조건
+
+wp(C,Q)는 C가 원하는 종료 의미 아래 Q를 보장하게 하는 가장 약한 시작 조건이다. 구문별 변환 법칙은 프로그램을 논리식으로 역계산한다.
+
+**English — Weakest preconditions:** wp(C,Q) is the weakest starting condition ensuring that C establishes Q under the chosen termination interpretation. Syntax-directed equations calculate it backward.
+
+## 반드시 남겨야 할 핵심
+
+- 비결정성은 무작위성이 아니라 여러 행동을 모두 허용하는 명세다.
+  - EN: Nondeterminism is not randomness; it specifies that multiple behaviors are permitted.
+- may와 must 관찰에 따라 결과 집합의 순서와 프로그램 동치가 달라진다.
+  - EN: May- and must-observations induce different orders on result sets and different program equivalences.
+- 최약 전제조건은 의미론과 자동 검증 조건 생성 사이의 다리다.
+  - EN: Weakest preconditions bridge semantics and automatic verification-condition generation.
+
+> [!warning] 자주 생기는 혼동
+> - 한 번의 실행 결과만 보고 비결정적 프로그램의 정확성을 판단하지 않는다.
+>   - EN: Do not judge a nondeterministic program from one observed run.
+> - 종료를 요구하는 wp와 부분 정확성용 wlp의 차이를 확인한다.
+>   - EN: Check whether the transformer requires termination (wp) or only partial correctness (wlp).
+
 ## 1단계 — 활성 가드 중 하나를 고르기 — §7.1
 
 여러 가드가 참이면 어느 분기든 실행될 수 있고, 모두 거짓이면 선택문은 교착하거나 반복문은 끝난다.

@@ -42,6 +42,58 @@ related:
 - **비지역 탈출 (nonlocal exit)**
 - **비함수화 (defunctionalization)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 적극 함수형 언어의 제어 흐름을 계속 전달 방식으로 명시하고, 계속을 값으로 노출하거나 일차 평가기로 변환하는 과정을 보인다.
+>
+> **English:** Makes control flow explicit through continuation passing, exposes continuations as values, and derives a first-order evaluator from them.
+
+### §12.1 · 계속 전달 의미론
+
+식의 의미는 값 하나가 아니라 결과를 받아 다음 계산을 수행할 계속을 인수로 받는다. 평가 순서는 계속이 중첩되는 순서에 명시적으로 나타난다.
+
+**English — Continuation semantics:** An expression meaning accepts a continuation that consumes its value and performs the rest of the computation. Evaluation order becomes explicit in continuation nesting.
+
+### §12.2–12.3 · 일급 계속과 프로그래밍 기법
+
+현재 계속을 값으로 캡처하면 이후 호출 시 현재 문맥을 버리고 저장된 제어 지점으로 이동할 수 있다. 조기 탈출, 코루틴, 탐색 같은 비지역 제어를 구성한다.
+
+**English — First-class continuations as a technique:** Capturing the current continuation as a value permits later invocation to discard the current context and resume a saved control point, implementing early exit, coroutines, and search.
+
+### §12.4 · 비함수화로 일차 상태 만들기
+
+실제로 만들어지는 계속 함수의 유한한 형태를 태그 있는 데이터 생성자로 바꾸고, 이를 해석하는 apply 단계로 분리한다. 고차 의미가 명시적 제어 스택을 가진 기계가 된다.
+
+**English — Defunctionalization into first-order states:** Replaces the finite family of continuation functions with tagged data constructors plus an apply operation. The higher-order semantics becomes a machine with an explicit control stack.
+
+### §12.5 · 일차 평가 기계의 구성
+
+제어 식, 환경, 계속 프레임 사이를 이동하는 상태 전이로 평가를 요약한다. 각 프레임은 아직 평가하지 않은 문맥의 정확한 종류를 기록한다.
+
+**English — Structure of the first-order evaluator:** Evaluation is summarized as transitions among a control expression, environment, and continuation frames. Each frame records the exact pending context.
+
+### §12.6 · 두 의미론의 대응
+
+일차 프레임을 다시 계속 함수로 해석하는 대응을 정의하고 각 기계 단계가 계속 의미를 보존함을 보여 두 설명의 동치를 정당화한다.
+
+**English — Relating the two semantics:** Interprets first-order frames back as continuation functions and shows each machine step preserves continuation meaning, justifying equivalence of the accounts.
+
+## 반드시 남겨야 할 핵심
+
+- CPS는 숨은 평가 문맥과 순서를 함수 인수로 노출한다.
+  - EN: CPS exposes hidden evaluation context and order as a function argument.
+- 비함수화는 의미 정의에서 추상 기계와 구현을 체계적으로 유도한다.
+  - EN: Defunctionalization systematically derives an abstract machine and implementation from a semantic definition.
+- 일급 계속은 ‘돌아갈 곳’을 복사·저장·호출할 수 있는 값으로 만든다.
+  - EN: First-class continuations make ‘where to return’ a value that can be copied, stored, and invoked.
+
+> [!warning] 자주 생기는 혼동
+> - 저장된 계속을 호출하는 것은 일반 함수 호출처럼 현재 위치로 다시 돌아오지 않는다.
+>   - EN: Invoking a saved continuation does not return to the invocation point like an ordinary function call.
+> - CPS의 결과형과 원래 식의 값형을 같은 것으로 보지 않는다.
+>   - EN: Do not conflate the CPS answer type with the original expression’s value type.
+
 ## 1단계 — 모든 결과를 계속에 넘기기 — §12.1
 
 평가기는 값을 반환하는 대신 그 값을 받을 함수 k를 호출한다.

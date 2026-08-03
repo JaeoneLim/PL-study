@@ -1,7 +1,9 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { units } from "../content/course";
+import { bookOverview } from "../content/book-overview";
+import { chapterGuides } from "../content/chapter-guides";
+import { parts, units } from "../content/course";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const date = "2026-08-03";
@@ -37,6 +39,7 @@ async function write(relative: string, body: string) {
 }
 
 function chapterNote(unit: (typeof units)[number]) {
+  const guide = chapterGuides[unit.slug];
   const related = units
     .filter((candidate) => candidate.part === unit.part && candidate.slug !== unit.slug)
     .slice(0, 3)
@@ -44,6 +47,9 @@ function chapterNote(unit: (typeof units)[number]) {
     .join("\n");
   const goals = unit.goals.map((goal) => `- ${goal.ko}\n  - EN: ${goal.en}`).join("\n");
   const terms = unit.keyTerms.map((term) => `- **${term.ko} (${term.en})**`).join("\n");
+  const detailedContents = guide.sections.map((item) => `### ${item.covers} · ${item.title.ko}\n\n${item.detail.ko}\n\n**English — ${item.title.en}:** ${item.detail.en}`).join("\n\n");
+  const takeaways = guide.takeaways.map((item) => `- ${item.ko}\n  - EN: ${item.en}`).join("\n");
+  const cautions = guide.cautions.map((item) => `- ${item.ko}\n  - EN: ${item.en}`).join("\n");
   const steps = unit.steps.map((step) => `## ${step.title.ko} — ${step.covers}\n\n${step.summary.ko}\n\n${step.detail.ko}\n\n> [!question] 책을 덮고 답해 보기\n> ${step.checkpoint.ko}\n\n### English companion\n\n${step.summary.en}\n\n${step.detail.en}`).join("\n\n---\n\n");
   const quiz = unit.quiz.map((question, index) => {
     const options = question.options.map((option, optionIndex) => `- ${String.fromCharCode(65 + optionIndex)}. ${option.ko} / ${option.en}`).join("\n");
@@ -82,6 +88,22 @@ ${goals}
 ## 핵심 용어
 
 ${terms}
+
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> ${guide.purpose.ko}
+>
+> **English:** ${guide.purpose.en}
+
+${detailedContents}
+
+## 반드시 남겨야 할 핵심
+
+${takeaways}
+
+> [!warning] 자주 생기는 혼동
+${cautions.split("\n").map((line) => `> ${line}`).join("\n")}
 
 ${steps}
 
@@ -180,16 +202,64 @@ ${indexEntries}
 - [[log|Operation log]]
 `);
 
-await write("wiki/overview.md", `# Course overview
+const overviewArcs = bookOverview.arcs.map((arc) => `## ${arc.number}. ${arc.title.ko} (${arc.title.en}) — Ch. ${arc.chapters}\n\n**핵심 질문:** ${arc.question.ko}\n\n${arc.summary.ko}\n\n**English:** ${arc.summary.en}\n\n> [!success] 이 흐름을 마치면\n> ${arc.outcome.ko}\n>\n> EN: ${arc.outcome.en}`).join("\n\n---\n\n");
+const overviewSpine = bookOverview.semanticSpine.map((stage) => `${stage.number}. **${stage.title.ko} (${stage.title.en})**\n   - ${stage.detail.ko}\n   - EN: ${stage.detail.en}`).join("\n");
+const overviewLenses = bookOverview.recurringLenses.map((lens) => `- **${lens.title.ko} (${lens.title.en})** — ${lens.detail.ko}\n  - EN: ${lens.detail.en}`).join("\n");
+const overviewMethod = bookOverview.studyMethod.map((step, index) => `${index + 1}. ${step.ko}\n   - EN: ${step.en}`).join("\n");
+const overviewItinerary = parts.map((part) => `### ${part.number}부 · ${part.ko} (${part.en})\n\n${units.filter((unit) => unit.part === part.number).map((unit) => `- [[${filenames[unit.slug]}|${unit.number}. ${unit.title.ko}]] — ${unit.eyebrow.ko}`).join("\n")}`).join("\n\n");
 
-The repository treats the book as four connected arcs:
+await write("wiki/overview.md", `---
+type: overview
+title: "Theories of Programming Languages — Course Overview"
+created: ${date}
+updated: ${date}
+status: evergreen
+source: "[[reynolds-theories-of-programming-languages]]"
+tags:
+  - programming-languages
+  - semantics
+  - study-map
+---
 
-1. **의미의 기초** — abstract syntax, denotation, proof, state, fixed points.
-2. **행동의 의미** — transitions, nondeterminism, concurrency, communication.
-3. **함수와 제어** — lambda calculus, evaluation strategy, continuations, stores.
-4. **타입과 추상화** — simple types, subtyping, polymorphism, modules, Algol.
+# 책 전체 개요 (Whole-book overview)
 
-The [[reynolds-theories-of-programming-languages|source page]] records the argument arc. Every chapter page contains Korean-first notes, an English companion, retrieval prompts, and quizzes.
+> [!abstract] 이 책은 무엇을 하려는가
+> ${bookOverview.lead.ko}
+>
+> **English:** ${bookOverview.lead.en}
+
+## 책의 중심 논지
+
+${bookOverview.thesis.ko}
+
+**English:** ${bookOverview.thesis.en}
+
+> [!question] 책 전체를 관통하는 질문
+> ${bookOverview.drivingQuestion.ko}
+>
+> EN: ${bookOverview.drivingQuestion.en}
+
+# 네 개의 개념 흐름
+
+${overviewArcs}
+
+# 반복되는 사고 순서
+
+${overviewSpine}
+
+# 장을 넘어 반복되는 관점
+
+${overviewLenses}
+
+# 전체 장별 여정
+
+${overviewItinerary}
+
+# 권장 학습 순서
+
+${overviewMethod}
+
+Every chapter page now contains a detailed section map, Korean-first explanation, English companion, precise takeaways, common-confusion notes, retrieval prompts, and original quizzes. The [[reynolds-theories-of-programming-languages|source page]] records the ingestion and copyright boundary.
 `);
 
 await write("wiki/hot.md", `# Hot context

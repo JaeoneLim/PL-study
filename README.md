@@ -7,7 +7,9 @@ units: Chapters 1–19 plus the mathematical appendix.
 ## What is included
 
 - Full Korean and English routes (`/ko`, `/en`)
+- A whole-book introduction (`/ko/overview`, `/en/overview`) connecting the complete argument before Chapter 1
 - A separate study page for every chapter and the appendix
+- Precise section-by-section chapter maps, technical takeaways, and common-confusion notes
 - Four guided conceptual steps in every unit
 - 60 original multiple-choice concept checks with explanations
 - Local progress tracking with no account or server-side data

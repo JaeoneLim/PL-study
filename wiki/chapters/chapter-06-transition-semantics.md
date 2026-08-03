@@ -42,6 +42,52 @@ related:
 - **결정성 (determinacy)**
 - **라벨 전이 (labeled transition)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 프로그램 실행을 최종 함수가 아니라 작은 단계들의 관계로 설명하여 중간 상태, 실패, 입출력을 직접 관찰하게 한다.
+>
+> **English:** Describes execution as a relation of small steps rather than a final function, making intermediate state, failure, and I/O directly observable.
+
+### §6.1 · 구성과 전이 관계
+
+구성은 남은 명령과 현재 상태를 함께 담는다. 한 단계 전이는 한 구성에서 다음 구성으로의 가능한 실행 움직임이다.
+
+**English — Configurations and transitions:** A configuration pairs the command still to execute with the current state. A one-step transition is one possible execution move between configurations.
+
+### §6.2 · 구조적 실행 규칙
+
+대입, 순차 합성, 조건, 반복의 실행을 추론 규칙으로 정의한다. 복합 명령의 단계는 직접 하위 명령의 단계에서 유도되므로 구문 구조를 따른다.
+
+**English — Structural execution rules:** Inference rules define execution of assignment, sequencing, conditionals, and loops. Steps of a compound command are derived from steps of its immediate subcommands.
+
+### §6.3 · 실패 구성
+
+실패는 더 진행할 수 없는 정상 종료와 구별되는 종착 구성이 된다. 주변 규칙은 이 구성을 순차 문맥 밖으로 전파한다.
+
+**English — Failure configurations:** Failure becomes a terminal configuration distinct from normal completion. Context rules propagate it outward through sequencing.
+
+### §6.4 · 입출력 표지 전이
+
+전이에 입력 또는 출력 사건을 붙이면 실행 경로가 관찰 흔적을 생성한다. 외부 환경과의 상호작용을 내부 상태 변경과 분리할 수 있다.
+
+**English — Labeled input/output transitions:** Labeling transitions with input or output events makes execution paths generate observable traces and separates environment interaction from internal state change.
+
+## 반드시 남겨야 할 핵심
+
+- 표시적 의미론은 전체 결과를, 전이 의미론은 결과가 만들어지는 과정을 강조한다.
+  - EN: Denotational semantics emphasizes whole results; transition semantics emphasizes the process that produces them.
+- 실행기는 전이 규칙을 반복 적용하는 것으로 이해할 수 있다.
+  - EN: An interpreter can be understood as repeatedly applying transition rules.
+- 라벨이 있는 전이는 동시성과 통신에서 관찰 가능한 사건의 기반이 된다.
+  - EN: Labeled transitions become the basis for observable events in concurrency and communication.
+
+> [!warning] 자주 생기는 혼동
+> - 진행할 규칙이 없는 상태가 항상 정상 종료는 아니다. stuck 상태와 종료를 구분한다.
+>   - EN: A configuration with no applicable rule is not necessarily successful; distinguish stuck states from termination.
+> - 메타언어의 규칙 적용 순서와 대상 언어의 실행 순서를 혼동하지 않는다.
+>   - EN: Do not confuse the metalanguage’s rule application with the object language’s execution order.
+
 ## 1단계 — 실행 상태를 구성으로 만들기 — §6.1
 
 비종료 구성은 남은 명령과 상태를, 종료 구성은 결과 상태를 담는다.

@@ -31,6 +31,20 @@ test("renders the Korean course map with every unit", async () => {
   assert.match(html, /술어 논리/);
   assert.match(html, /Algol 계열 언어/);
   assert.match(html, /수학적 배경/);
+  assert.match(html, /책 전체 개요부터/);
+});
+
+test("renders a whole-book overview in both languages", async () => {
+  const [koResponse, enResponse] = await Promise.all([render("/ko/overview"), render("/en/overview")]);
+  assert.equal(koResponse.status, 200);
+  assert.equal(enResponse.status, 200);
+  const [ko, en] = await Promise.all([koResponse.text(), enResponse.text()]);
+  assert.match(ko, /한 권의 논증으로 읽는 프로그래밍 언어 이론/);
+  assert.match(ko, /책 전체를 관통하는 질문/);
+  assert.match(ko, /각 장이 전체 논증에서 맡는 자리/);
+  assert.match(en, /Programming language theory as one connected argument/);
+  assert.match(en, /Four connected arcs/i);
+  assert.match(en, /Complete chapter itinerary/i);
 });
 
 test("renders an English chapter lesson and quiz", async () => {
@@ -41,6 +55,9 @@ test("renders an English chapter lesson and quiz", async () => {
   assert.match(html, /Step 1 — A minimal language with binding/);
   assert.match(html, /Concept check/);
   assert.match(html, /beta-reduction/i);
+  assert.match(html, /What this chapter actually covers/);
+  assert.match(html, /Normal-order evaluation/);
+  assert.match(html, /COMMON CONFUSIONS/);
 });
 
 test("keeps copyrighted source material out of the tracked surface", async () => {

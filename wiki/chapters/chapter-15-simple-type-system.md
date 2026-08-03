@@ -44,6 +44,64 @@ related:
 - **내재적 의미 (intrinsic semantics)**
 - **재귀 타입 (recursive type)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 타입 판단을 추론 규칙으로 정의하고, 타입 안전성을 외재적·내재적·집합론적 관점에서 비교한다.
+>
+> **English:** Defines typing judgments by inference rules and compares extrinsic, intrinsic, and set-theoretic accounts of type safety.
+
+### §15.1–15.2 · 타입, 문맥, 판단, 규칙
+
+Γ ⊢ e : τ는 문맥 Γ가 자유 변수 타입을 가정할 때 e가 τ형이라는 유도 가능한 주장이다. 변수·함수·적용·곱·합 규칙이 구문 구조를 따른다.
+
+**English — Types, contexts, judgments, and rules:** Γ ⊢ e : τ is a derivable claim that e has type τ under assumptions Γ for free variables. Rules for variables, functions, application, products, and sums follow syntax structure.
+
+### §15.3 · 명시적 타입 표기
+
+람다 매개변수와 재귀 지점에 타입을 기록하면 타입 검사 규칙의 선택이 구문에 드러난다. 암시적 추론과 달리 유도 탐색의 모호성이 줄어든다.
+
+**English — Explicit typing:** Annotating lambda parameters and recursive points exposes typing choices in syntax and reduces ambiguity compared with implicit inference.
+
+### §15.4 · 외재적 타입 의미
+
+먼저 존재하는 비타입 언어의 항 중 안전하게 행동하는 항을 타입별로 분류한다. 보존과 진행 성질은 잘 타입된 닫힌 항이 타입 오류에 걸리지 않음을 뒷받침한다.
+
+**English — Extrinsic meaning of types:** Classifies safe terms inside an already existing untyped language. Preservation and progress support the claim that closed well-typed terms do not encounter type errors.
+
+### §15.5 · 내재적 관점
+
+타입 유도 자체를 프로그램 구문의 일부로 보아 잘 타입된 항만 언어에 존재하게 한다. 같은 표면 항도 서로 다른 유도에 따라 다른 내재 객체가 될 수 있다.
+
+**English — Intrinsic view:** Treats typing derivations as part of program syntax so only well-typed terms inhabit the language. One surface term may correspond to different intrinsic objects through different derivations.
+
+### §15.6 · 집합론적 해석
+
+각 타입을 값 집합으로, 함수 타입을 적절한 함수 집합으로 해석하고 타입 규칙이 의미 포함을 보존함을 확인한다.
+
+**English — Set-theoretic semantics:** Interprets each type as a set of values and function types as suitable function sets, checking that typing rules preserve membership.
+
+### §15.7 · 재귀 타입
+
+목록·트리처럼 자기 자신을 참조하는 타입을 타입 방정식의 해로 정의한다. fold/unfold의 명시 여부와 양·음의 위치가 건전한 해 구성에 영향을 준다.
+
+**English — Recursive types:** Defines lists and trees as solutions of recursive type equations. Explicit fold/unfold and positive versus negative occurrences affect sound construction.
+
+## 반드시 남겨야 할 핵심
+
+- 타입은 실행 전에 프로그램의 가능한 사용을 제한하는 정적 증명 체계다.
+  - EN: A type system is a static proof system restricting how programs may be used before execution.
+- 타입 건전성은 ‘잘 타입되면 원하는 모든 결과가 맞다’가 아니라 특정 오류가 배제된다는 주장이다.
+  - EN: Type soundness excludes specified errors; it does not claim every well-typed result is otherwise correct.
+- 외재적·내재적 의미는 타입과 항 중 무엇을 먼저 두는지 다르다.
+  - EN: Extrinsic and intrinsic accounts differ in whether untyped terms or typed constructions come first.
+
+> [!warning] 자주 생기는 혼동
+> - 타입 검사 가능성과 타입 추론 가능성을 같은 문제로 보지 않는다.
+>   - EN: Do not equate type checking with type inference.
+> - 진행은 반드시 종료한다는 뜻이 아니라 다음 단계 또는 값이라는 뜻이다.
+>   - EN: Progress does not mean termination; it means a term is a value or can step.
+
 ## 1단계 — 타입을 판단으로 말하기 — §15.1–15.2
 
 `Γ ⊢ e : τ`는 문맥 Γ의 가정 아래 e가 타입 τ를 가진다는 유도 가능한 주장이다.

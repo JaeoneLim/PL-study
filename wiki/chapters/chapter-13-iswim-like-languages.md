@@ -43,6 +43,64 @@ related:
 - **예외 처리기 (exception handler)**
 - **백트래킹 (backtracking)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 적극 함수형 언어에 가변 참조를 결합하고, 예외·백트래킹·입출력까지 상태와 계속의 조합으로 설명한다.
+>
+> **English:** Combines mutable references with an eager functional language and explains exceptions, backtracking, and I/O through the interaction of state and continuations.
+
+### §13.1 · 별칭, 위치, 저장소
+
+참조 값은 저장소 위치를 가리키고 여러 이름이 같은 위치를 가리키면 별칭이 생긴다. 환경은 이름을 값에, 저장소는 위치를 현재 내용에 대응시켜 분리된다.
+
+**English — Aliasing, locations, and stores:** Reference values point to store locations; aliasing occurs when multiple names reach the same location. Environments map names to values, while stores separately map locations to current contents.
+
+### §13.2–13.3 · 상태를 통과시키는 평가와 계속
+
+평가 판단은 값과 함께 갱신된 저장소를 반환한다. 계속 의미론에서는 계속이 값과 저장소를 함께 받아 평가 순서와 부작용 순서를 동시에 고정한다.
+
+**English — State-threaded evaluation and continuations:** Evaluation returns an updated store along with a value. In continuation semantics, continuations consume both value and store, fixing evaluation order and effect order together.
+
+### §13.4–13.6 · 문법 설탕, 일차 기계, 예제
+
+대입·블록·반복 같은 편의 구문을 핵심 참조 연산으로 번역하고, 계속을 비함수화해 환경-저장소-제어 스택 기반 평가기를 얻는다.
+
+**English — Derived forms, first-order machine, and examples:** Translates assignment, blocks, loops, and other conveniences into core reference operations, then defunctionalizes continuations into an evaluator with environment, store, and control stack.
+
+### §13.7 · 예외
+
+정상 계속과 별도의 예외 계속을 사용하면 raise는 정상 나머지 계산을 건너뛰고 가장 가까운 handler로 제어와 값을 전달한다.
+
+**English — Exceptions:** With a separate exception continuation, raise bypasses the normal remainder and transfers control and a value to the nearest handler.
+
+### §13.8 · 백트래킹과 상태 복원
+
+실패 계속은 다음 선택지를 기억한다. 선택 시점의 저장소도 보존할지 결정해야 하며, 복원 정책에 따라 탐색 의미가 달라진다.
+
+**English — Backtracking and state restoration:** A failure continuation remembers the next alternative. Whether the store at the choice point is restored is a semantic decision that changes search behavior.
+
+### §13.9–13.10 · 입출력과 효과 조합의 복잡성
+
+입출력은 외부 세계와 되돌릴 수 없는 관찰을 만든다. 참조, 예외, 백트래킹, I/O를 함께 두면 효과 순서와 복구 가능성이 상호작용해 단순한 등식 추론을 깨뜨린다.
+
+**English — I/O and complications of combining effects:** I/O creates externally visible, often irreversible observations. Combining references, exceptions, backtracking, and I/O makes effect order and recoverability interact, invalidating simple equations.
+
+## 반드시 남겨야 할 핵심
+
+- 환경은 이름의 스코프를, 저장소는 위치 내용의 시간 변화를 설명한다.
+  - EN: The environment explains lexical naming; the store explains how location contents change over time.
+- 별칭 때문에 한 이름을 통한 갱신이 다른 이름의 관찰을 바꾼다.
+  - EN: Aliasing lets an update through one name change observations through another.
+- 여러 효과의 조합은 각 효과를 따로 이해한 것보다 더 복잡하다.
+  - EN: Combining effects is more complex than understanding each one in isolation.
+
+> [!warning] 자주 생기는 혼동
+> - 참조 값과 참조가 가리키는 현재 값을 구분한다.
+>   - EN: Distinguish a reference value from the current value stored at its location.
+> - 백트래킹이 제어만 되돌리는지 저장소와 출력까지 되돌리는지 모델에서 확인한다.
+>   - EN: Check whether backtracking restores only control or also state and output.
+
 ## 1단계 — 환경은 위치를, 저장소는 값을 — §13.1–13.2
 
 변수 바인딩과 변경 가능한 셀을 분리하면 참조 생성·읽기·쓰기를 정확히 모델링할 수 있다.

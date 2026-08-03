@@ -42,6 +42,58 @@ related:
 - **적극 평가 (eager evaluation)**
 - **고정점 결합자 (fixed-point combinator)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 함수 정의와 적용만으로 계산을 표현하는 최소 언어를 세우고, 축약 전략·표시적 의미·데이터 인코딩을 연결한다.
+>
+> **English:** Builds a minimal language of function definition and application, connecting reduction strategy, denotational meaning, and data encodings.
+
+### §10.1–10.2 · 람다 구문과 축약
+
+변수, 추상화, 적용으로 항을 만들고 자유 변수와 α-동치를 정의한다. β-축약은 함수 적용을 캡처 회피 치환으로 계산하며 여러 redex 중 어디를 줄일지 선택할 수 있다.
+
+**English — Lambda syntax and reduction:** Terms contain variables, abstraction, and application, with free variables and alpha-equivalence. Beta-reduction computes application by capture-avoiding substitution and permits choices among redexes.
+
+### §10.3 · 정상 순서 평가
+
+가장 바깥쪽 왼쪽 redex를 먼저 줄이는 전략은 정규형이 존재할 때 이를 찾는 성질이 있다. 사용되지 않는 인수는 평가하지 않을 수 있다.
+
+**English — Normal-order evaluation:** Reducing the leftmost outermost redex first finds a normal form when one exists and can avoid evaluating unused arguments.
+
+### §10.4 · 적극 평가
+
+함수 본문에 대입하기 전에 인수를 값으로 평가한다. 실제 구현과 잘 맞지만 정상 순서가 종료하는 일부 항에서 발산할 수 있다.
+
+**English — Eager evaluation:** Arguments are evaluated to values before substitution into a function body. This suits conventional implementations but may diverge on terms normal order can normalize.
+
+### §10.5 · 함수 도메인의 표시적 의미
+
+람다 항을 환경에서 의미 값으로 보내고 적용을 의미 함수 적용으로 해석한다. 자기 적용을 포함하려면 값 도메인이 자신의 함수 공간과 연결되는 재귀 구조가 필요하다.
+
+**English — Denotational semantics over function domains:** Maps lambda terms and environments to semantic values, interpreting application as semantic function application. Self-application requires a domain recursively related to its own function space.
+
+### §10.6 · 람다 계산 안의 프로그래밍
+
+불리언, 자연수, 쌍, 목록, 재귀를 고차 함수로 인코딩한다. 표현 가능성은 높지만 평가 비용과 타입 안전성은 별도 문제다.
+
+**English — Programming inside the lambda calculus:** Encodes booleans, naturals, pairs, lists, and recursion as higher-order functions. Expressiveness is high, while evaluation cost and type safety remain separate concerns.
+
+## 반드시 남겨야 할 핵심
+
+- β-축약은 단순 문자열 치환이 아니라 바인딩을 보존하는 계산 규칙이다.
+  - EN: Beta-reduction is a binding-preserving computation rule, not textual replacement.
+- 평가 전략은 같은 항의 종료 여부와 비용을 바꿀 수 있다.
+  - EN: Evaluation strategy can change termination and cost for the same term.
+- 최소 언어에서도 데이터와 제어는 고차 함수로 표현할 수 있다.
+  - EN: Even a minimal language can represent data and control through higher-order functions.
+
+> [!warning] 자주 생기는 혼동
+> - 정규형이 존재한다는 것과 모든 축약 순서가 정규형에 도달한다는 것은 다르다.
+>   - EN: Existence of a normal form does not mean every reduction order reaches it.
+> - α-동치인 항은 바인더 철자만 다르며 의미상 같은 바인딩 구조다.
+>   - EN: Alpha-equivalent terms differ only in binder spelling and have the same binding structure.
+
 ## 1단계 — 바인더가 있는 최소 언어 — §10.1–10.2
 
 변수, 추상화 `λx.e`, 적용 `e₀ e₁`만으로 계산 언어를 만든다.

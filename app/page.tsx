@@ -21,12 +21,12 @@ export default function LanguageGateway() {
           <span><strong>KO / EN</strong> full course</span>
         </div>
         <div className="language-choices">
-          <Link className="language-card primary" href="/ko">
+          <Link className="language-card primary" href="/ko/overview">
             <span className="language-code">KO</span>
             <span><strong>한국어로 공부하기</strong><small>기술 용어는 영어와 함께 표시됩니다</small></span>
             <span aria-hidden="true">→</span>
           </Link>
-          <Link className="language-card" href="/en">
+          <Link className="language-card" href="/en/overview">
             <span className="language-code">EN</span>
             <span><strong>Study in English</strong><small>Switch languages from any chapter</small></span>
             <span aria-hidden="true">→</span>

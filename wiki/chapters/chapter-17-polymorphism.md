@@ -42,6 +42,46 @@ related:
 - **System F (System F)**
 - **다형적 인코딩 (polymorphic encoding)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 타입을 매개변수로 추상화하는 System F식 다형성을 정의하고, 하나의 프로그램이 여러 타입에서 균일하게 작동하는 방식을 설명한다.
+>
+> **English:** Defines System F-style abstraction over types and explains how one program acts uniformly at many types.
+
+### §17.1 · 타입 추상화와 적용 규칙
+
+Λα.e는 타입 α에 대해 일반화된 항이고 e[τ]는 이를 특정 타입에 인스턴스화한다. 전칭 타입 ∀α.τ의 도입 규칙은 α가 값 문맥 가정에 의존하지 않는다는 신선성 조건을 요구한다.
+
+**English — Type abstraction and application:** Λα.e generalizes a term over type α, while e[τ] instantiates it. Introduction of ∀α.τ requires a freshness condition so α does not depend on value-context assumptions.
+
+### §17.2 · 다형적 프로그래밍과 데이터 인코딩
+
+다형 항등 함수, 조합자, 목록 연산을 한 정의로 여러 원소 타입에 사용한다. 불리언·쌍·목록 같은 추상 자료를 다형 함수의 사용 규약으로 인코딩할 수도 있다.
+
+**English — Polymorphic programming and data encodings:** One definition of identity, combinators, and list operations works at many element types. Booleans, pairs, and lists can also be encoded by the polymorphic ways clients may consume them.
+
+### §17.3 · 외재적 의미와 비술어성
+
+전칭 타입의 값은 모든 타입 인스턴스에서 요구를 만족해야 한다. 타입이 자기 자신을 포함한 넓은 타입 우주를 양화하는 비술어성은 단순 집합론 해석을 어렵게 만든다.
+
+**English — Extrinsic semantics and impredicativity:** A universal value must satisfy its specification at every type instance. Impredicative quantification over a universe containing the quantified type itself complicates naive set-theoretic semantics.
+
+## 반드시 남겨야 할 핵심
+
+- 매개변수 다형성은 타입별 분기 없이 균일한 구현을 재사용한다.
+  - EN: Parametric polymorphism reuses one uniform implementation without type-specific branching.
+- ∀ 도입과 제거는 값 수준 함수의 λ 추상화와 적용에 대응하는 타입 수준 구조다.
+  - EN: Universal introduction and elimination are type-level analogues of value-level lambda abstraction and application.
+- 다형 타입 자체가 프로그램 행동에 강한 제약을 준다.
+  - EN: A polymorphic type alone places strong constraints on program behavior.
+
+> [!warning] 자주 생기는 혼동
+> - 매개변수 다형성과 서브타입 다형성·오버로딩을 구분한다.
+>   - EN: Distinguish parametric polymorphism from subtype polymorphism and overloading.
+> - 일반화할 타입 변수가 환경 가정에 자유롭게 나타나면 건전하지 않다.
+>   - EN: Generalizing a type variable that occurs free in assumptions is unsound.
+
 ## 1단계 — 타입 변수도 바인딩하기 — §17.1
 
 `Λα.e`는 타입 α를 추상화하고 `e [T]`는 다형적 항을 구체 타입 T에서 사용한다.

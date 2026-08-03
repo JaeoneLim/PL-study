@@ -43,6 +43,64 @@ related:
 - **공정성 (fairness)**
 - **말더듬/뭉개기 (stuttering/mumbling)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 공유 저장소에서 명령들이 뒤섞여 실행될 때 상호 배제, 데드락, 공정성, 관찰 동치를 어떻게 정의하는지 다룬다.
+>
+> **English:** Explains mutual exclusion, deadlock, fairness, and observational equivalence when commands interleave over a shared store.
+
+### §8.1 · 병렬 합성과 인터리빙
+
+C₁ ∥ C₂는 어느 쪽의 다음 원자 단계도 선택할 수 있다. 가능한 실행은 각 구성요소의 순서를 보존하면서 서로 섞인 전이 경로다.
+
+**English — Parallel composition and interleaving:** In C₁ ∥ C₂, either component may take the next atomic step. Executions are interleavings that preserve each component’s local order.
+
+### §8.2–8.3 · 임계 구역과 상호 배제
+
+공유 불변식을 깨뜨릴 수 있는 코드 조각을 원자적으로 보호한다. 조건부 임계 구역은 가드가 참일 때만 진입하며 상호 배제와 대기를 함께 표현한다.
+
+**English — Critical regions and mutual exclusion:** Code that could violate a shared invariant is protected atomically. Conditional critical regions combine mutual exclusion with waiting until a guard holds.
+
+### §8.4–8.5 · 데드락과 공정성
+
+데드락은 종료하지 않았지만 아무 전이도 없는 전역 상태다. 공정성은 계속 가능하거나 반복 가능해지는 구성요소가 영원히 선택에서 배제되지 않도록 실행 경로를 제한한다.
+
+**English — Deadlock and fairness:** Deadlock is a nonterminal global state with no transition. Fairness restricts paths so a component that remains or repeatedly becomes enabled is not postponed forever.
+
+### §8.6 · 재개를 이용한 병렬 의미
+
+각 명령의 가능한 다음 단계와 나머지 행동을 재개 나무로 표현한 뒤, 두 나무를 섞어 병렬 실행의 선택 구조를 만든다.
+
+**English — Resumption semantics for parallelism:** Each command’s possible next steps and residual behavior form a resumption tree; combining two trees constructs the choices of a parallel execution.
+
+### §8.7 · 전이 흔적
+
+흔적은 외부에서 보이는 상태 변화의 연속으로 프로그램을 비교한다. 중간 상태를 포함하면 간섭 가능성과 원자성 경계가 드러난다.
+
+**English — Transition traces:** Traces compare programs by sequences of externally visible state changes. Intermediate states expose interference opportunities and atomicity boundaries.
+
+### §8.8 · 머뭇거림과 뭉개짐
+
+내부적으로 아무 변화가 없는 단계를 삽입하는 stuttering과 연속 내부 단계를 하나로 합치는 mumbling 아래에서 닫힌 흔적 의미를 사용해 관찰 세분화 차이를 제거한다.
+
+**English — Stuttering and mumbling:** Trace sets are closed under inserting unchanged steps (stuttering) and combining adjacent internal steps (mumbling), abstracting from irrelevant granularity.
+
+## 반드시 남겨야 할 핵심
+
+- 병렬 정확성은 각 스레드의 단독 정확성만으로 얻어지지 않는다. 간섭을 함께 분석해야 한다.
+  - EN: Parallel correctness does not follow from isolated thread correctness; interference must be analyzed.
+- 안전성은 나쁜 일이 일어나지 않음을, 생존성은 좋은 일이 결국 일어남을 말한다.
+  - EN: Safety says bad things never happen; liveness says good things eventually happen.
+- 공정성은 프로그램 코드가 아니라 허용할 스케줄에 대한 의미론적 가정이다.
+  - EN: Fairness is a semantic assumption about admitted schedules, not merely a property of program text.
+
+> [!warning] 자주 생기는 혼동
+> - 원자성의 단위를 명시하지 않으면 가능한 인터리빙 집합이 결정되지 않는다.
+>   - EN: Without an explicit atomicity granularity, the set of possible interleavings is undefined.
+> - 데드락 없음이 기아 없음이나 공정성을 자동으로 보장하지 않는다.
+>   - EN: Freedom from deadlock does not automatically guarantee freedom from starvation or fairness.
+
 ## 1단계 — 병렬 실행을 인터리빙으로 — §8.1
 
 각 프로세스는 한 번에 한 원자적 전이를 수행하며 스케줄러가 순서를 비결정적으로 고른다.

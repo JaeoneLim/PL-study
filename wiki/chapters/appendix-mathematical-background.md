@@ -43,6 +43,52 @@ related:
 - **분리합 (disjoint union)**
 - **반사·추이 폐쇄 (reflexive-transitive closure)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 책의 의미 함수, 전이 관계, 도메인 구성에 반복 사용되는 집합·관계·함수·곱·분리합 표기를 준비한다.
+>
+> **English:** Prepares the set, relation, function, product, and disjoint-union notation repeatedly used in semantic functions, transition relations, and domain constructions.
+
+### §A.1 · 집합과 멱집합
+
+원소, 부분집합, 합집합, 교집합, 차집합, 멱집합을 정의한다. 구문 범주·상태 공간·가능 결과 집합을 읽는 기본 표기다.
+
+**English — Sets and powersets:** Defines membership, subset, union, intersection, difference, and powerset—the base notation for syntax categories, state spaces, and sets of outcomes.
+
+### §A.2, A.6 · 관계, 합성, 폐쇄
+
+이항 관계의 역·합성·거듭제곱과 반사·대칭·추이 성질을 다룬다. 반사-추이 폐쇄는 0회 이상의 실행 단계를 표현한다.
+
+**English — Relations, composition, and closure:** Covers converse, composition, powers of binary relations, and reflexive, symmetric, and transitive properties. Reflexive-transitive closure represents zero or more execution steps.
+
+### §A.3–A.4 · 전체·부분 함수와 함수 연산
+
+함수를 특별한 관계로 보고 정의역·치역·합성·제한·갱신을 정의한다. 부분 함수는 비종료나 정의되지 않은 연산의 첫 모델이 된다.
+
+**English — Total and partial functions:** Treats functions as special relations and defines domain, range, composition, restriction, and update. Partial functions provide the first model of divergence or undefined operations.
+
+### §A.5 · 곱과 분리합
+
+곱은 여러 성분이 함께 존재함을, 분리합은 태그가 붙은 대안 중 하나임을 표현한다. 구성·환경에는 곱이, 정상·오류 결과에는 분리합이 반복 사용된다.
+
+**English — Products and disjoint unions:** Products express simultaneous components; disjoint unions express one tagged alternative. Products recur in configurations and environments, sums in normal-versus-error results.
+
+## 반드시 남겨야 할 핵심
+
+- 의미론 표기는 대부분 집합 사이의 함수와 관계를 정밀하게 조합한 것이다.
+  - EN: Most semantic notation precisely combines functions and relations between sets.
+- 부분 함수와 관계는 각각 결정적 계산과 여러 가능한 계산의 자연스러운 모델이다.
+  - EN: Partial functions and relations naturally model deterministic and multiply possible computations, respectively.
+- 곱과 합의 차이는 ‘모두 있음’과 ‘경우 중 하나’를 구분한다.
+  - EN: The difference between products and sums is the difference between ‘all components’ and ‘one of several cases.’
+
+> [!warning] 자주 생기는 혼동
+> - x ∈ S와 X ⊆ S, 함수 적용과 관계 합성을 표기상 구분한다.
+>   - EN: Keep membership versus subset, and function application versus relation composition, notationally distinct.
+> - 분리합의 태그를 생략하면 겹치는 집합의 원소가 어느 경우에서 왔는지 잃는다.
+>   - EN: Without tags in a disjoint union, an element shared by both sets loses its originating case.
+
 ## 1단계 — 집합 표기 안정시키기 — §A.1
 
 원소, 부분집합, 합집합, 교집합, 차집합, 멱집합을 이후 의미 도메인의 기본 문법으로 사용한다.

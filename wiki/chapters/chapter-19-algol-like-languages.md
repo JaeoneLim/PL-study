@@ -43,6 +43,64 @@ related:
 - **스택 규율 (stack discipline)**
 - **Algol (Algol)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 함수형 추상화와 지역 가변 상태를 구절 타입 및 스택 수명 규율 아래 결합해 Algol식 언어의 의미와 구현 원리를 설명한다.
+>
+> **English:** Combines functional abstraction with local mutable state under phrase types and stack lifetimes to explain Algol-like meaning and implementation.
+
+### §19.1–19.2 · 데이터 타입과 구절 타입
+
+데이터 타입은 저장되는 값의 종류를, 구절 타입은 표현식·수용자·변수·명령·프로시저처럼 계산이 제공하는 능력을 분류한다. 타입 규칙은 읽기와 쓰기를 분리한다.
+
+**English — Data types and phrase types:** Data types classify stored values; phrase types classify capabilities such as expressions, acceptors, variables, commands, and procedures. Typing separates reading from writing.
+
+### §19.3 · 매개변수 전달과 예제
+
+값·이름·프로시저 매개변수를 구절 타입으로 비교한다. 실제 인수를 값이 아니라 계산 구절로 전달하면 재평가와 부작용이 호출 문맥에 남는다.
+
+**English — Parameter passing and examples:** Compares value, name, and procedure parameters through phrase types. Passing an actual argument as a computation rather than a value preserves re-evaluation and effects in the calling context.
+
+### §19.4 · 배열과 선언자
+
+배열은 인덱스에서 변수 구절로 가는 값으로, 선언자는 신선한 지역 저장을 본문에 제공하는 고차 구절로 본다. 범위 종료 시 위치 수명도 끝나야 한다.
+
+**English — Arrays and declarators:** Arrays map indices to variable phrases; declarators are higher-order phrases supplying fresh local storage to a body. Location lifetime must end with scope.
+
+### §19.5 · 스택 규율을 내장한 의미
+
+지역 위치가 결과나 장수 클로저를 통해 탈출하지 못하도록 의미 범주를 제한한다. 중첩 선언의 할당과 해제가 후입선출이 됨을 의미 수준에서 정당화한다.
+
+**English — Semantics enforcing stack discipline:** Semantic categories prevent local locations from escaping through results or longer-lived closures, justifying last-in-first-out allocation and deallocation for nested declarations.
+
+### §19.6–19.7 · 변수와 프로시저 의미
+
+변수는 읽는 expression과 쓰는 acceptor의 쌍으로, 프로시저는 인수 구절을 받아 결과 구절을 만드는 고차 의미로 해석한다. 별칭과 호출 방식이 이 구조에서 드러난다.
+
+**English — Meaning of variables and procedures:** Variables pair a readable expression with a writable acceptor; procedures are higher-order meanings from argument phrases to result phrases. Aliasing and calling modes become explicit.
+
+### §19.8 · 확장과 단순화의 대가
+
+재귀 프로시저, 복합 데이터, 매개변수 방식 같은 확장을 넣을 때 구절 타입, 수명, 평가 규칙 중 무엇이 바뀌는지 추적한다. 단순화는 표현력이나 안전 보장을 줄일 수 있다.
+
+**English — Tradeoffs in extensions and simplifications:** Tracks which phrase types, lifetimes, and evaluation rules change when adding recursion, richer data, or parameter modes. Simplification can reduce expressiveness or safety guarantees.
+
+## 반드시 남겨야 할 핵심
+
+- 구절 타입은 값의 종류보다 프로그램 조각이 제공하는 사용 능력을 분류한다.
+  - EN: Phrase types classify the capabilities offered by program fragments rather than only kinds of values.
+- 스택 할당의 정당성은 지역 참조가 범위를 탈출하지 않는다는 의미·타입 성질에 달려 있다.
+  - EN: Justifying stack allocation depends on a semantic or typing guarantee that local references do not escape.
+- Algol식 결합은 함수와 상태의 단순 이론을 함께 놓을 때 생기는 긴장을 드러낸다.
+  - EN: The Algol-like combination exposes tensions that arise when the simple theories of functions and state meet.
+
+> [!warning] 자주 생기는 혼동
+> - variable을 단순 위치와 동일시하지 않는다. 읽기와 쓰기 능력의 쌍으로 본다.
+>   - EN: Do not identify a variable with a bare location; treat it as paired read and write capabilities.
+> - call-by-name 매개변수는 값이 아니므로 사용 횟수만큼 실제 인수가 다시 계산될 수 있다.
+>   - EN: A call-by-name parameter is not a value, so its actual argument may be recomputed at each use.
+
 ## 1단계 — 값과 계산 능력의 타입 분리 — §19.1–19.2
 
 데이터 타입은 저장되는 값의 종류를, 구절 타입은 식·대입 대상·명령·프로시저 같은 사용 방식을 분류한다.

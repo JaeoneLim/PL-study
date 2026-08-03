@@ -42,6 +42,58 @@ related:
 - **결과 규칙 (rule of consequence)**
 - **건전성 (soundness)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 프로그램의 의미를 실행 결과뿐 아니라 사전·사후 조건과 증명 규칙으로 표현하고, 실제 알고리즘 증명에 적용한다.
+>
+> **English:** Expresses program meaning through preconditions, postconditions, and proof rules, then applies the system to nontrivial algorithms.
+
+### §3.1–3.2 · 명세의 의미와 유도 체계
+
+Hoare 삼중항은 사전조건을 만족하는 상태에서 명령이 종료하면 사후조건이 성립한다는 부분 정확성 주장이다. 유도 트리는 기본 공리와 규칙으로 이런 주장을 만든다.
+
+**English — Meaning of specifications and derivation systems:** A Hoare triple is a partial-correctness claim: if a command starts in a precondition state and terminates, the postcondition holds. Derivation trees construct such claims from axioms and rules.
+
+### §3.3–3.5 · 대입, 순차 합성, 반복 규칙
+
+대입 규칙은 사후조건에 역치환하고, 순차 합성은 중간 단언을 연결한다. while 규칙의 핵심은 반복 전후에 보존되는 불변식이며 결과 조건은 불변식과 가드의 거짓을 결합한다.
+
+**English — Rules for assignment, sequencing, and iteration:** Assignment reasons backward by substitution in the postcondition; sequencing links an intermediate assertion. The while rule centers on an invariant preserved by the body, with exit combining the invariant and false guard.
+
+### §3.6 · 피보나치 프로그램 증명
+
+연속한 피보나치 수를 상태 변수와 반복 횟수에 연결하는 불변식을 설계한다. 다중 대입의 동시성 여부가 불변식 보존에 직접 영향을 준다.
+
+**English — Proof of a Fibonacci program:** An invariant relates state variables and the iteration count to consecutive Fibonacci numbers. Whether multiple assignment is simultaneous directly affects preservation.
+
+### §3.7 · 빠른 거듭제곱 증명
+
+지수를 짝수·홀수로 나누면서 누산값과 남은 밑·지수가 원래 거듭제곱을 보존한다는 대수적 불변식을 사용한다.
+
+**English — Proof of fast exponentiation:** An algebraic invariant states that the accumulator combined with the remaining base and exponent still represents the original power while even and odd cases reduce the exponent.
+
+### §3.8 · 복잡성, 종료, 표현력의 한계
+
+부분 정확성과 전체 정확성을 구분하고, 종료 함수와 단언 언어의 표현력이 추가로 필요함을 확인한다. 규칙의 건전성과 상대적 완전성도 별개의 질문이다.
+
+**English — Complications, termination, and limits:** Separates partial from total correctness and identifies the extra need for variants and an expressive assertion language. Soundness and relative completeness of the rules are distinct questions.
+
+## 반드시 남겨야 할 핵심
+
+- 프로그램 증명의 창조적 핵심은 계산이 아니라 적절한 불변식의 발견이다.
+  - EN: The creative core of program proof is discovering the right invariant, not performing the derivation.
+- 검증 조건은 큰 증명을 논리식 묶음으로 환원해 자동화 지점을 드러낸다.
+  - EN: Verification conditions reduce a large proof to logical formulas and expose opportunities for automation.
+- 부분 정확성은 종료를 약속하지 않는다. 전체 정확성에는 감소 척도가 필요하다.
+  - EN: Partial correctness does not promise termination; total correctness needs a decreasing measure.
+
+> [!warning] 자주 생기는 혼동
+> - while 가드를 불변식 자체로 착각하지 않는다. 불변식은 가드가 참인 반복 중에도 보존되어야 한다.
+>   - EN: Do not mistake the while guard for the invariant; the invariant must be preserved while the guard is true.
+> - 대입 규칙의 치환 방향은 사전조건에서 사후조건으로가 아니라 사후조건에서 거꾸로다.
+>   - EN: Assignment substitution works backward from the postcondition, not forward from the precondition.
+
 ## 1단계 — 명세가 약속하는 것 — §3.1
 
 부분 정확성은 종료했을 때의 결과를, 전체 정확성은 종료와 결과를 함께 약속한다.

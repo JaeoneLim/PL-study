@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { CompletionButton } from "../../../components/CompletionButton";
 import { QuizPanel } from "../../../components/QuizPanel";
 import { SiteHeader } from "../../../components/SiteHeader";
+import { chapterGuides } from "../../../../content/chapter-guides";
 import { getUnit, getUnitNeighbors, isLocale, units } from "../../../../content/course";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
@@ -30,6 +31,8 @@ export default async function ChapterPage({ params }: Props) {
   const unit = getUnit(slug);
   if (!unit) notFound();
   const locale = localeParam;
+  const guide = chapterGuides[slug];
+  if (!guide) notFound();
   const { previous, next } = getUnitNeighbors(slug);
 
   return (
@@ -57,6 +60,7 @@ export default async function ChapterPage({ params }: Props) {
           <aside className="chapter-toc">
             <p>{locale === "ko" ? "학습 단계" : "ON THIS PAGE"}</p>
             <nav aria-label={locale === "ko" ? "장 목차" : "Chapter contents"}>
+              <a href="#contents"><span>00</span>{locale === "ko" ? "상세 내용 지도" : "Detailed contents"}</a>
               {unit.steps.map((step, index) => <a href={`#${step.id}`} key={step.id}><span>{String(index + 1).padStart(2, "0")}</span>{step.title[locale].replace(/^.*?—\s*/, "")}</a>)}
               <a href="#quiz"><span>✓</span>{locale === "ko" ? "개념 확인" : "Concept check"}</a>
             </nav>
@@ -64,6 +68,30 @@ export default async function ChapterPage({ params }: Props) {
           </aside>
 
           <article className="lesson-content">
+            <section className="chapter-deep-guide" id="contents">
+              <p className="section-index">00 · {locale === "ko" ? "장 전체 내용 지도" : "DETAILED CHAPTER MAP"}</p>
+              <h2>{locale === "ko" ? "이 장에서 실제로 다루는 것" : "What this chapter actually covers"}</h2>
+              <p className="deep-guide-purpose">{guide.purpose[locale]}</p>
+              <div className="section-brief-list">
+                {guide.sections.map((item) => (
+                  <article key={item.covers}>
+                    <span>{item.covers}</span>
+                    <div><h3>{item.title[locale]}</h3><p>{item.detail[locale]}</p></div>
+                  </article>
+                ))}
+              </div>
+              <div className="precision-panels">
+                <section>
+                  <p>{locale === "ko" ? "반드시 남겨야 할 핵심" : "WHAT TO RETAIN"}</p>
+                  <ul>{guide.takeaways.map((item) => <li key={item.en}>{item[locale]}</li>)}</ul>
+                </section>
+                <section className="caution-panel">
+                  <p>{locale === "ko" ? "자주 생기는 혼동" : "COMMON CONFUSIONS"}</p>
+                  <ul>{guide.cautions.map((item) => <li key={item.en}>{item[locale]}</li>)}</ul>
+                </section>
+              </div>
+            </section>
+
             {unit.steps.map((step, index) => (
               <section className="study-step" id={step.id} key={step.id}>
                 <div className="step-meta"><span>{String(index + 1).padStart(2, "0")}</span><small>{step.covers}</small></div>
@@ -88,7 +116,7 @@ export default async function ChapterPage({ params }: Props) {
         </div>
 
         <nav className="chapter-neighbors" aria-label={locale === "ko" ? "이전 및 다음 장" : "Previous and next chapters"}>
-          {previous ? <Link href={`/${locale}/chapter/${previous.slug}`}><span>← {locale === "ko" ? "이전" : "PREVIOUS"}</span><strong>{previous.number}. {previous.title[locale]}</strong></Link> : <span />}
+          {previous ? <Link href={`/${locale}/chapter/${previous.slug}`}><span>← {locale === "ko" ? "이전" : "PREVIOUS"}</span><strong>{previous.number}. {previous.title[locale]}</strong></Link> : <Link href={`/${locale}/overview`}><span>← {locale === "ko" ? "먼저 읽기" : "START HERE"}</span><strong>{locale === "ko" ? "책 전체 개요" : "Whole-book overview"}</strong></Link>}
           {next ? <Link className="next" href={`/${locale}/chapter/${next.slug}`}><span>{locale === "ko" ? "다음" : "NEXT"} →</span><strong>{next.number}. {next.title[locale]}</strong></Link> : <Link className="next" href={`/${locale}`}><span>{locale === "ko" ? "완료" : "FINISH"} →</span><strong>{locale === "ko" ? "과정 지도" : "Course map"}</strong></Link>}
         </nav>
       </main>

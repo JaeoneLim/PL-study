@@ -43,6 +43,58 @@ related:
 - **메모화 (memoization)**
 - **무한 리스트 (infinite list)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 인수를 먼저 계산하지 않는 정상 순서 언어를 정의하고, 이름 호출과 필요 호출의 의미·비용·공유 차이를 분석한다.
+>
+> **English:** Defines a normal-order language and analyzes the meaning, cost, and sharing differences among call-by-name and call-by-need.
+
+### §14.1 · 정상 순서 평가 판단
+
+함수 적용은 평가되지 않은 인수 식과 그 환경을 본문에 전달한다. 인수가 실제로 필요할 때마다 해당 환경에서 평가된다.
+
+**English — Normal-order evaluation judgments:** Function application passes an unevaluated argument expression with its environment into the body. The argument is evaluated in that environment whenever demanded.
+
+### §14.2–14.3 · 파생 구문과 무한 구조 예제
+
+조건, 목록, 재귀를 정상 순서 핵심으로 표현하면 사용하지 않는 분기를 피하고 잠재적으로 무한한 목록의 유한 접두사를 소비할 수 있다.
+
+**English — Derived forms and infinite structures:** Encoding conditionals, lists, and recursion in the normal-order core avoids unused branches and permits finite consumption of potentially infinite lists.
+
+### §14.4 · 직접 표시적 의미
+
+식 의미가 필요한 정보만 근사하도록 비엄격 함수 공간을 사용한다. 엄격성 여부는 인수의 ⊥가 결과를 반드시 ⊥로 만드는지로 드러난다.
+
+**English — Direct denotational semantics:** Uses non-strict function spaces so expression meanings demand only needed information. Strictness is visible in whether a bottom argument necessarily yields bottom.
+
+### §14.5 · 축약과 환경 평가의 대응
+
+치환 기반 정상 순서 축약과 환경·서스펜션 기반 평가가 같은 관찰 결과를 주는 관계를 비교한다. 구현은 반복 치환을 피한다.
+
+**English — Relating reduction and environment evaluation:** Relates substitution-based normal-order reduction to evaluation using environments and suspensions. Implementations avoid repeated textual substitution while preserving observations.
+
+### §14.6 · 필요 호출과 공유
+
+처음 강제한 인수 결과를 저장해 이후 사용이 같은 값을 재사용하게 한다. 이는 이름 호출의 의미를 유지하면서 중복 평가를 줄이지만 메모이제이션 저장소가 필요하다.
+
+**English — Call-by-need and sharing:** Caches the result when an argument is first forced, so later uses share the value. This preserves call-by-name results while reducing repeated work, at the cost of memoization state.
+
+## 반드시 남겨야 할 핵심
+
+- 정상 순서는 정규형이 존재할 때 찾지만 같은 계산을 반복할 수 있다.
+  - EN: Normal order finds a normal form when one exists but may repeat work.
+- 지연 평가는 정상 순서의 비엄격성과 결과 공유를 결합한다.
+  - EN: Lazy evaluation combines normal-order non-strictness with sharing.
+- 무한 자료 구조는 전체를 생성하지 않고 요구된 부분만 관찰한다.
+  - EN: Infinite data structures are observed by producing only demanded portions.
+
+> [!warning] 자주 생기는 혼동
+> - call-by-name과 call-by-need는 결과가 같아도 평가 횟수와 공간 동작이 다르다.
+>   - EN: Call-by-name and call-by-need may agree on results while differing in evaluation count and space behavior.
+> - ‘지연’이 항상 효율적이라는 뜻은 아니다. 유지되는 thunk가 공간 누수를 만들 수 있다.
+>   - EN: ‘Lazy’ does not always mean efficient; retained thunks can cause space leaks.
+
 ## 1단계 — 인수를 값이 아닌 식으로 전달 — §14.1–14.2
 
 함수 적용은 인수를 먼저 평가하지 않고 본문에서 필요할 때 정의 환경과 함께 평가한다.

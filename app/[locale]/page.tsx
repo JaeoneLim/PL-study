@@ -43,8 +43,8 @@ export default async function CourseHome({ params }: Props) {
               ? "추상 구문에서 Algol의 스택 규율까지. 장마다 핵심 질문, 의미 흐름, 손으로 풀어 보는 점검 문제를 연결했습니다."
               : "From abstract syntax to Algol's stack discipline. Every chapter connects a driving question, semantic dataflow, and retrieval practice."}</p>
             <div className="hero-actions">
-              <Link className="button primary" href={`/${locale}/chapter/${firstUnit.slug}`}>{locale === "ko" ? "1장 시작하기" : "Start Chapter 1"}<span aria-hidden="true">→</span></Link>
-              <a className="button text" href="#course-map">{locale === "ko" ? "과정 둘러보기" : "Explore the map"}<span aria-hidden="true">↓</span></a>
+              <Link className="button primary" href={`/${locale}/overview`}>{locale === "ko" ? "책 전체 개요부터" : "Start with the overview"}<span aria-hidden="true">→</span></Link>
+              <Link className="button text" href={`/${locale}/chapter/${firstUnit.slug}`}>{locale === "ko" ? "바로 1장 시작" : "Go to Chapter 1"}<span aria-hidden="true">↗</span></Link>
             </div>
           </div>
           <aside className="hero-index-card" aria-label={locale === "ko" ? "과정 구성" : "Course structure"}>
@@ -57,6 +57,15 @@ export default async function CourseHome({ params }: Props) {
             ))}
             <div className="index-card-footer"><span>{locale === "ko" ? "예상 학습" : "EST. STUDY"}</span><strong>{Math.round(units.reduce((sum, unit) => sum + unit.minutes, 0) / 60)} h</strong></div>
           </aside>
+        </section>
+
+        <section className="overview-invitation">
+          <div><span>00</span><p className="kicker">{locale === "ko" ? "장별 학습 전에" : "BEFORE THE CHAPTERS"}</p></div>
+          <h2>{locale === "ko" ? "먼저 책 전체가 무엇을 설명하려는지 읽어 보세요." : "First see what the book is trying to explain as a whole."}</h2>
+          <p>{locale === "ko"
+            ? "네 개의 개념 흐름, 반복되는 의미론적 도구, 19개 장의 역할을 한 페이지에서 연결합니다."
+            : "Connect the four conceptual arcs, recurring semantic tools, and the role of all 19 chapters on one page."}</p>
+          <Link href={`/${locale}/overview`}>{locale === "ko" ? "책 전체 개요 읽기" : "Read the whole-book overview"}<span aria-hidden="true">→</span></Link>
         </section>
 
         <section className="method-strip" aria-label={locale === "ko" ? "학습 방법" : "Study method"}>

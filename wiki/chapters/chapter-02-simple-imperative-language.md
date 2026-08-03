@@ -42,6 +42,58 @@ related:
 - **구문 설탕 (syntactic sugar)**
 - **완전 추상성 (full abstraction)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 작은 명령형 언어를 완전한 수학적 대상으로 만들고, 반복과 재귀에 의미를 부여하는 도메인 이론의 최소 도구를 도입한다.
+>
+> **English:** Turns a small imperative language into a complete mathematical object and introduces the minimum domain theory needed to interpret iteration and recursion.
+
+### §2.1–2.2 · 구문, 상태, 의미 함수
+
+식은 상태에서 값으로, 명령은 상태에서 상태로 가는 부분 함수로 해석된다. 정의되지 않음은 산술 오류가 아니라 비종료를 먼저 나타낸다.
+
+**English — Syntax, states, and semantic functions:** Expressions map states to values, while commands are partial functions from states to states. Undefinedness initially represents nontermination rather than arithmetic failure.
+
+### §2.3–2.4 · 도메인, 연속성, 최소 고정점
+
+부분 정보를 순서화하고 증가 사슬의 최소 상계를 사용한다. 연속 함수의 최소 고정점은 while 의미를 유한한 반복 근사의 극한으로 구성한다.
+
+**English — Domains, continuity, and least fixed points:** Partial information is ordered and increasing chains receive least upper bounds. A continuous function’s least fixed point constructs while-loop meaning as the limit of finite approximations.
+
+### §2.5–2.6 · 선언, 치환, 문법 설탕
+
+지역 변수 선언의 의미를 환경 확장과 치환으로 비교한다. for 문은 핵심 언어로 번역되는 파생 형식이며 번역이 변수 포획과 평가 횟수를 보존해야 한다.
+
+**English — Declarations, substitution, and syntactic sugar:** Local declarations are compared through environment extension and substitution. A for-command is derived syntax whose translation must preserve binding and evaluation behavior.
+
+### §2.7 · 산술 오류의 명시화
+
+비종료와 오류를 같은 미정의 값으로 합치면 관찰을 잃는다. 결과 도메인에 오류를 별도 경우로 추가해 두 현상을 구분한다.
+
+**English — Making arithmetic errors explicit:** Collapsing divergence and arithmetic error into one undefined result loses observations. Extending the result domain with an explicit error separates them.
+
+### §2.8 · 건전성과 완전 추상성
+
+의미가 실행 관찰을 보존하는지, 그리고 문맥이 구별할 수 없는 프로그램만 의미적으로 같게 두는지 검사한다. 완전 추상성은 의미 동치와 문맥 동치의 일치를 요구한다.
+
+**English — Soundness and full abstraction:** Checks whether denotations preserve operational observations and identify only programs no context can distinguish. Full abstraction asks denotational and contextual equivalence to coincide.
+
+## 반드시 남겨야 할 핵심
+
+- 명령의 핵심 의미 객체는 상태 변환이며 비종료 때문에 보통 부분적이다.
+  - EN: A command’s central semantic object is a state transformer, generally partial because of divergence.
+- while은 방정식의 아무 해가 아니라 유한 실행에서 접근 가능한 최소 해를 취한다.
+  - EN: A while-loop takes the least solution of its semantic equation—the one approximated by finite executions.
+- 언어 확장은 새 관찰을 의미 도메인에 추가하게 만든다.
+  - EN: Language extensions force new observations into the semantic domain.
+
+> [!warning] 자주 생기는 혼동
+> - ⊥를 자동으로 ‘오류’라 부르지 않는다. 이 장의 기본 모델에서는 비종료다.
+>   - EN: Do not automatically read bottom as ‘error’; in the basic model it denotes nontermination.
+> - 고정점 방정식만 쓰는 것으로는 부족하다. 왜 최소 고정점인지 설명해야 한다.
+>   - EN: Writing a fixed-point equation is insufficient; explain why the least fixed point is selected.
+
 ## 1단계 — 명령을 상태 변환으로 읽기 — §2.1–2.2
 
 식은 상태를 관찰하고, 명령은 상태를 바꾼다.

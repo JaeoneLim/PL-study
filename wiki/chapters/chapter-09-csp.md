@@ -42,6 +42,52 @@ related:
 - **동기식 통신 (synchronous communication)**
 - **통신 교착 (communication deadlock)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 공유 변수 대신 동기적 통신으로 프로세스를 결합하고, 통신 가능성·데드락·공정성을 사건 중심으로 분석한다.
+>
+> **English:** Composes processes through synchronous communication instead of shared variables and analyzes communication, deadlock, and fairness through events.
+
+### §9.1–9.2 · 프로세스 구문과 동기 전이
+
+입력·출력 가드와 병렬 프로세스를 정의한다. 대응하는 송신과 수신이 동시에 준비될 때 하나의 통신 전이가 일어나며 값 전달과 두 프로세스의 진행이 함께 발생한다.
+
+**English — Process syntax and synchronized transitions:** Defines input/output guards and parallel processes. A communication transition occurs only when matching send and receive actions are ready, transferring a value and advancing both sides.
+
+### §9.3 · 언어 설계 제한의 선택
+
+채널 연결 형태, 한 채널의 송수신자 수, 가드 안 명령 허용 범위를 제한하면 구현과 추론은 단순해지지만 표현력도 달라진다.
+
+**English — Choosing language restrictions:** Restricting channel topology, numbers of senders and receivers, or commands inside guards simplifies implementation and reasoning while changing expressive power.
+
+### §9.4 · 통신 프로토콜 예제
+
+파이프라인, 버퍼, 반복 서버 같은 예에서 프로세스 내부 상태와 외부 메시지 순서를 분리해 설계한다. 채널 방향과 종료 프로토콜이 전체 동작을 결정한다.
+
+**English — Communication protocol examples:** Pipelines, buffers, and repeated servers separate private process state from external message order. Channel direction and termination protocol determine global behavior.
+
+### §9.5–9.6 · 통신 데드락과 공정성
+
+모든 프로세스가 맞지 않는 통신을 기다리면 데드락이다. 여러 통신이 가능한 반복 선택에서는 특정 파트너가 영원히 무시되지 않도록 공정성 조건을 구분한다.
+
+**English — Communication deadlock and fairness:** Deadlock occurs when every process waits for unmatched communication. Repeated choices among enabled communications require fairness conditions so a partner is not ignored forever.
+
+## 반드시 남겨야 할 핵심
+
+- CSP의 핵심 관찰은 메모리 셀이 아니라 프로세스 사이의 통신 사건이다.
+  - EN: CSP’s central observations are communication events between processes, not shared memory cells.
+- 동기 통신은 데이터 전달과 제어 동기화를 한 사건으로 결합한다.
+  - EN: Synchronous communication combines data transfer and control synchronization in one event.
+- 프로세스의 지역적 진행 가능성이 전체 시스템의 진행 가능성을 뜻하지 않는다.
+  - EN: Local readiness of processes does not imply global system progress.
+
+> [!warning] 자주 생기는 혼동
+> - 비동기 메시지 큐 모델을 이 장의 동기 rendezvous 모델과 섞지 않는다.
+>   - EN: Do not mix an asynchronous message-queue model with this chapter’s synchronous rendezvous model.
+> - 통신 값뿐 아니라 통신 순서와 상대 프로세스도 관찰의 일부다.
+>   - EN: The order and partner of communications matter, not only the transmitted values.
+
 ## 1단계 — 통신을 가드로 사용 — §9.1
 
 입력과 출력은 상대 프로세스가 맞는 동작을 준비했을 때만 함께 진행한다.

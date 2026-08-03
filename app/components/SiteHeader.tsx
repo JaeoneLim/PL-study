@@ -14,6 +14,7 @@ export function SiteHeader({ locale, alternateHref }: Props) {
         <span>Semantic Atlas</span>
       </Link>
       <nav className="header-nav" aria-label={locale === "ko" ? "주요 탐색" : "Primary navigation"}>
+        <Link href={`/${locale}/overview`}>{locale === "ko" ? "책 전체 개요" : "Book overview"}</Link>
         <Link href={`/${locale}#course-map`}>{locale === "ko" ? "과정 지도" : "Course map"}</Link>
         <Link href={`/${locale}/chapter/mathematical-background`}>{locale === "ko" ? "수학 부록" : "Math appendix"}</Link>
         <Link className="locale-switch" href={alternateHref} hrefLang={locale === "ko" ? "en" : "ko"}>

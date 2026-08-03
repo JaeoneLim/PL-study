@@ -42,6 +42,52 @@ related:
 - **이진 탐색 (binary search)**
 - **고차 단언 (higher-order assertion)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 배열을 포함하도록 상태와 단언 논리를 확장하고, 이진 탐색을 통해 데이터 구조 불변식과 범위 추론을 연습한다.
+>
+> **English:** Extends states and assertion logic with arrays, using binary search to practice data-structure invariants and range reasoning.
+
+### §4.1–4.2 · 배열 구문과 함수적 저장
+
+배열 읽기와 갱신을 핵심 구문에 추가하고, 배열 값을 인덱스에서 원소로 가는 유한 함수로 본다. 갱신은 새 배열 값을 만들되 나머지 인덱스를 보존한다.
+
+**English — Array syntax and functional stores:** Adds array selection and update, treating an array value as a finite function from indices to elements. Update creates a new array value while preserving all other indices.
+
+### §4.3 · 이진 탐색과 구간 불변식
+
+검색 후보가 현재 경계 사이에만 존재한다는 불변식과 정렬 가정을 결합한다. 각 분기는 후보 구간을 줄이면서 목표 원소의 가능성을 보존한다.
+
+**English — Binary search and interval invariants:** Combines sortedness with an invariant that any candidate lies within the current bounds. Each branch shrinks the interval while preserving the possibility of the target.
+
+### §4.4 · 배열 대입의 추론 규칙
+
+스칼라 대입의 단순 치환 대신 배열 갱신 식을 단언에 반영한다. 선택-갱신 관계는 같은 인덱스와 다른 인덱스의 경우를 나눈다.
+
+**English — Inference rules for array assignment:** Replaces scalar substitution with array-update expressions inside assertions. Selection after update splits into equal-index and unequal-index cases.
+
+### §4.5 · 배열 전체에 대한 고차 단언
+
+정렬됨, 구간 내 일치, 모든 원소의 성질처럼 인덱스를 양화하는 단언을 사용한다. 단언 언어가 배열 함수와 양화를 충분히 표현해야 증명 규칙이 유용하다.
+
+**English — Higher-order assertions about arrays:** Uses quantified assertions for sortedness, interval agreement, and elementwise properties. Useful proof rules require an assertion language expressive enough for arrays and quantification.
+
+## 반드시 남겨야 할 핵심
+
+- 배열은 여러 독립 변수의 묶음이 아니라 인덱스 함수로 모델링할 수 있다.
+  - EN: An array can be modeled as an indexed function rather than a bundle of unrelated variables.
+- 배열 알고리즘의 불변식은 값뿐 아니라 유효 인덱스 구간을 함께 추적한다.
+  - EN: Array-algorithm invariants track valid index ranges as well as values.
+- 데이터 구조가 풍부해지면 단언 언어의 표현력도 함께 확장되어야 한다.
+  - EN: As data structures grow richer, the assertion language must grow with them.
+
+> [!warning] 자주 생기는 혼동
+> - 배열 갱신이 기존 배열의 모든 위치를 파괴한다고 생각하지 않는다.
+>   - EN: Do not treat array update as destroying every existing element.
+> - 경계 밖 접근과 정렬 가정은 알고리즘 증명에서 별도 의무다.
+>   - EN: Bounds safety and the sortedness assumption are separate proof obligations.
+
 ## 1단계 — 배열을 유한 함수로 모델링 — §4.1–4.2
 
 배열 값은 첨자 집합에서 정수로 가는 함수이며, 배열 변수는 상태가 그런 함수를 배정하는 이름이다.

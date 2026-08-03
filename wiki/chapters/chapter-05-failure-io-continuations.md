@@ -42,6 +42,64 @@ related:
 - **계속 (continuation)**
 - **CPS (continuation-passing style)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 종료 상태 하나로는 설명할 수 없는 실패·중간 출력·입력을 모델링하고, 계속과 재개가 복잡한 제어를 어떻게 통일하는지 보인다.
+>
+> **English:** Models failure, intermediate output, and input—effects a single final state cannot express—and shows how continuations and resumptions unify complex control.
+
+### §5.1 · 실패를 별도 결과로 분리
+
+fail은 정상 종료나 비종료와 다른 관찰이다. 의미 결과에 실패 표식을 추가하고, 순차 합성이 실패 이후 계산을 실행하지 않도록 전파 규칙을 정한다.
+
+**English — Failure as a distinct result:** Failure is observable apart from normal termination and divergence. The result domain gains a failure case, and sequencing propagates failure without running the remainder.
+
+### §5.2–5.3 · 중간 출력과 연속성의 물리적 의미
+
+출력은 유한 또는 무한 관찰 시퀀스로 나타난다. 유한 시간에 얻는 정보는 유한 입력 정보에만 의존해야 한다는 계산 가능성 직관이 연속성 요구를 뒷받침한다.
+
+**English — Intermediate output and the physical case for continuity:** Output is represented by finite or infinite observation sequences. The idea that finite-time output depends only on finite input information motivates semantic continuity.
+
+### §5.4–5.5 · 곱·분리합과 재귀 도메인 방정식
+
+여러 결과 성분은 곱으로, 대안 결과는 태그 있는 합으로 조립한다. 자기 참조하는 상호작용 구조는 도메인 동형 방정식의 최소 해로 구성한다.
+
+**English — Products, sums, and recursive domain equations:** Products combine result components; tagged sums represent alternatives. Self-referential interaction structures are constructed as solutions to recursive domain isomorphisms.
+
+### §5.6 · 입력과 재개
+
+입력을 요청한 계산은 끝난 것이 아니라 가능한 각 입력에 대한 다음 계산을 기다린다. 재개는 출력, 입력 요청, 종료를 단계적으로 담는 나무형 의미다.
+
+**English — Input and resumptions:** A computation requesting input has not finished; it awaits a continuation for each possible input. A resumption is a tree-like meaning containing output, input requests, and termination step by step.
+
+### §5.7 · 계속 의미론
+
+명령의 의미가 최종 결과가 아니라 ‘나머지 계산을 받아 전체 결과를 만드는 함수’가 된다. 순차 합성은 명령들이 같은 계속을 넘겨받는 방식으로 단순해진다.
+
+**English — Continuation semantics:** A command denotes not a final result but a function that accepts the rest of the computation and produces the whole result. Sequencing becomes continuation threading.
+
+### §5.8 · 효과 확장을 계속으로 통합
+
+실패, 입출력, 비지역 제어의 차이는 계속을 호출·버림·변형하는 방식으로 표현된다. 이 관점은 뒤의 함수형 계속과 예외로 이어진다.
+
+**English — Unifying effect extensions with continuations:** Failure, I/O, and nonlocal control differ in how they invoke, discard, or transform continuations. This viewpoint leads to functional continuations and exceptions later.
+
+## 반드시 남겨야 할 핵심
+
+- 관찰 가능한 효과가 늘 때마다 단순 상태 변환 의미론의 결과형이 부족해진다.
+  - EN: Each new observable effect exposes missing structure in plain state-transformer semantics.
+- 재개는 상호작용의 가능한 미래를 데이터 구조로, 계속은 남은 계산을 함수로 나타낸다.
+  - EN: Resumptions represent possible interactive futures as data; continuations represent the remaining computation as a function.
+- 연속성은 수학적 편의뿐 아니라 유한 관찰의 계산 가능성을 표현한다.
+  - EN: Continuity expresses computability of finite observations, not merely mathematical convenience.
+
+> [!warning] 자주 생기는 혼동
+> - fail, 비종료, 산술 오류를 모두 같은 ⊥로 합치면 필요한 관찰을 잃는다.
+>   - EN: Collapsing failure, divergence, and arithmetic error into one bottom loses required observations.
+> - 계속은 단순한 함수 호출 스택이 아니라 관찰하려는 나머지 계산의 의미다.
+>   - EN: A continuation is not merely a runtime call stack; it is the semantic rest of the computation being observed.
+
 ## 1단계 — 실패를 결과로 만들기 — §5.1
 
 `fail`은 정상 상태와 다른 관찰 가능한 종료이며 비종료와도 구별될 수 있다.

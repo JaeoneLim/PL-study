@@ -42,6 +42,52 @@ related:
 - **구조적 귀납법 (structural induction)**
 - **캡처 회피 치환 (capture-avoiding substitution)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 이후 모든 장에서 사용할 세 가지 층위—구문, 의미, 증명—를 분리하고 다시 연결하는 법을 세운다.
+>
+> **English:** Establishes how to separate and reconnect the three layers used throughout the book: syntax, semantics, and proof.
+
+### §1.1 · 추상 구문과 구조적 정의
+
+논리식의 표면 표기 대신 항과 공식의 생성자를 정의한다. 이 구조는 재귀 함수와 구조적 귀납법의 기준이 된다.
+
+**English — Abstract syntax and structural definition:** Defines constructors for terms and formulas independently of surface notation. That structure supports recursive functions and structural induction.
+
+### §1.2 · 환경을 통한 표시적 의미
+
+변수 환경과 기호 해석을 입력으로 받아 항은 값으로, 공식은 진릿값으로 보낸다. 의미 함수의 각 절은 구문 생성자에 대응한다.
+
+**English — Denotational meaning through environments:** Given a variable environment and an interpretation of symbols, terms denote values and formulas denote truth values. Each semantic clause follows a syntax constructor.
+
+### §1.3 · 타당성과 추론
+
+한 해석에서 참인 것, 모든 환경에서 참인 것, 모든 해석에서 타당한 것을 구분한다. 추론 규칙은 전제가 참일 때 결론도 참이라는 건전성 기준으로 평가한다.
+
+**English — Validity and inference:** Distinguishes truth in one interpretation, truth under every environment, and validity across interpretations. Inference rules are judged by sound preservation of truth.
+
+### §1.4 · 바인딩, 이름 변경, 치환
+
+자유·결박 변수를 정의하고 캡처 회피 치환을 구성한다. 대입 보조정리는 구문 치환과 환경 갱신이 같은 의미 효과를 낸다는 연결 고리다.
+
+**English — Binding, renaming, and substitution:** Defines free and bound variables and constructs capture-avoiding substitution. The substitution lemma connects syntactic replacement with semantic environment update.
+
+## 반드시 남겨야 할 핵심
+
+- 추상 구문은 파싱 결과이며, 의미와 증명은 그 트리 위에서 재귀적으로 정의된다.
+  - EN: Abstract syntax is the result of parsing; semantics and proofs are recursively defined over that tree.
+- 의미는 기호 자체가 아니라 해석과 환경에 상대적이다.
+  - EN: Meaning is relative to an interpretation and an environment, not inherent in a symbol.
+- 치환 정리는 이후 선언, 함수 호출, 베타 축약의 정확성을 지탱한다.
+  - EN: Substitution results later support declarations, function calls, and beta-reduction.
+
+> [!warning] 자주 생기는 혼동
+> - 공식이 특정 환경에서 참이라는 말과 논리적으로 타당하다는 말을 혼동하지 않는다.
+>   - EN: Do not confuse truth under one environment with logical validity.
+> - 문자열 치환은 변수를 포획할 수 있으므로 바인더 이름 변경이 필요하다.
+>   - EN: Textual replacement can capture variables, so bound-variable renaming may be required.
+
 ## 1단계 — 표기에서 구조를 떼어내기 — §1.1
 
 추상 문법은 괄호·우선순위 같은 표기상의 우연을 버리고 생성자와 부분구조만 남긴다.

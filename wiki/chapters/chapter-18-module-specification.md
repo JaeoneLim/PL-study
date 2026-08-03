@@ -42,6 +42,46 @@ related:
 - **개봉 (unpacking)**
 - **표현 독립성 (representation independence)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 추상 타입과 실존 타입으로 구현 표현을 숨기고, 공개 연산만을 통해 서로 다른 구현이 같은 모듈 명세를 만족하게 한다.
+>
+> **English:** Uses abstract and existential types to hide representations so different implementations can satisfy the same module specification through public operations alone.
+
+### §18.1 · 타입 정의와 불투명 경계
+
+투명 타입 정의는 새 이름과 표현 타입의 동등성을 공개하지만 불투명 정의는 구현 안에서만 그 관계를 허용한다. 클라이언트는 내보낸 연산으로만 값을 만들고 관찰한다.
+
+**English — Type definitions and opaque boundaries:** Transparent definitions expose equality between a new name and its representation; opaque definitions permit that knowledge only inside the implementation. Clients construct and observe values only through exports.
+
+### §18.2 · 실존 패키지와 모듈
+
+∃α.T는 어떤 표현 타입 α와 그 위의 T 구현이 존재함을 말하되 α를 숨긴다. pack은 구현을 봉인하고 unpack은 신선한 추상 타입으로 열며 표현이 범위 밖으로 새지 못하게 한다.
+
+**English — Existential packages and modules:** ∃α.T states that some representation α and implementation of T exist while hiding α. Pack seals the implementation; unpack opens it under a fresh abstract name that may not escape.
+
+### §18.3 · 추상화 위에 추상화 구현
+
+기존 모듈의 공개 연산만 이용해 새 자료 추상화를 구현하고, 두 표현 사이의 추상 관계가 모든 연산에서 보존됨을 보인다. 타입 일치와 행동 명세 충족을 분리한다.
+
+**English — Implementing abstractions from abstractions:** Builds one data abstraction using only another module’s public operations and proves an abstraction relation is preserved by every operation. Type matching is separated from behavioral specification.
+
+## 반드시 남겨야 할 핵심
+
+- 모듈은 값 묶음뿐 아니라 숨겨진 표현 타입과 그 연산의 패키지다.
+  - EN: A module packages a hidden representation type together with its operations, not merely a record of values.
+- 표현 독립성은 인터페이스를 지키는 모든 클라이언트가 구현 차이를 관찰하지 못한다는 성질이다.
+  - EN: Representation independence means no interface-respecting client can observe the implementation choice.
+- 실존 타입은 정보 은닉을 정적 범위 규칙으로 강제한다.
+  - EN: Existential types enforce information hiding through static scope rules.
+
+> [!warning] 자주 생기는 혼동
+> - unpack된 추상 타입이나 그에 의존하는 값을 허용 범위 밖으로 유출하지 않는다.
+>   - EN: Do not let an unpacked abstract type or values depending on it escape their permitted scope.
+> - 같은 함수 타입을 가진 구현들이 반드시 같은 추상 법칙을 만족하는 것은 아니다.
+>   - EN: Implementations with the same function types do not necessarily satisfy the same abstraction laws.
+
 ## 1단계 — 타입 이름에 경계 세우기 — §18.1
 
 타입 정의는 표현 타입에 이름을 주며, 불투명 정의는 클라이언트가 그 등식을 사용하지 못하게 한다.

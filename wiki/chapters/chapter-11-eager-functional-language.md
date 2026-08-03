@@ -42,6 +42,58 @@ related:
 - **재귀 환경 (recursive environment)**
 - **동적 바인딩 (dynamic binding)**
 
+## 장 전체 내용 지도
+
+> [!abstract] 이 장의 역할
+> 람다 계산을 실제 프로그래밍에 가까운 적극 평가 언어로 확장하고, 환경·클로저·패턴·재귀의 평가와 표시적 의미를 비교한다.
+>
+> **English:** Extends lambda calculus into a practical eager language and compares evaluation and denotational accounts of environments, closures, patterns, and recursion.
+
+### §11.1–11.2 · 구체 구문과 큰 단계 평가
+
+표면 프로그램을 핵심 식으로 파싱하고, 환경 아래 식이 값으로 평가된다는 판단을 규칙으로 정의한다. 함수 값은 코드와 정의 환경을 묶은 클로저다.
+
+**English — Concrete syntax and big-step evaluation:** Parses surface programs into core expressions and defines judgments that evaluate an expression to a value under an environment. Function values are closures pairing code with the defining environment.
+
+### §11.3 · 정의, 패턴, 재귀
+
+패턴 매칭은 값의 구조를 검사하며 성공 시 여러 이름을 동시에 바인딩한다. 상호 재귀 정의는 각 클로저가 자기 자신과 동료 정의를 볼 수 있는 재귀 환경을 만든다.
+
+**English — Definitions, patterns, and recursion:** Pattern matching inspects value structure and binds multiple names on success. Mutually recursive definitions create an environment in which closures see themselves and their peers.
+
+### §11.4–11.5 · 목록과 함수형 예제
+
+목록 생성자와 패턴을 이용해 map, fold류 재귀 처리와 정렬·탐색 예제를 표현한다. 데이터 구조 재귀와 함수 재귀의 모양이 맞물린다.
+
+**English — Lists and functional examples:** List constructors and patterns express recursive processing such as map- and fold-like functions, sorting, and search. Data recursion aligns with function recursion.
+
+### §11.6 · 직접 표시적 의미
+
+평가 규칙과 별도로 식을 환경에서 도메인 값으로 보내는 합성적 함수를 정의한다. 재귀 정의는 다시 환경 방정식의 최소 고정점이 된다.
+
+**English — Direct denotational semantics:** Independently of the evaluation rules, a compositional function maps expressions and environments to domain values. Recursive definitions again become least fixed points of environment equations.
+
+### §11.7 · 정적 바인딩과 동적 바인딩
+
+정적 바인딩은 정의 환경을 클로저에 저장하고, 동적 바인딩은 호출 시점 환경에서 자유 변수를 찾는다. 같은 구문이 호출 문맥에 따라 달라지는 이유를 비교한다.
+
+**English — Static versus dynamic binding:** Static binding stores the defining environment in a closure; dynamic binding resolves free variables in the caller’s environment. The comparison shows how identical syntax can change meaning with call context.
+
+## 반드시 남겨야 할 핵심
+
+- 클로저는 렉시컬 스코프를 런타임 값으로 구현한다.
+  - EN: Closures implement lexical scope as runtime values.
+- 평가 의미론과 표시적 의미론은 같은 언어를 다른 목적에 맞게 설명한다.
+  - EN: Evaluation and denotational semantics describe the same language for different purposes.
+- 재귀 환경은 자기 참조를 값 생성 이전에 연결해야 한다.
+  - EN: Recursive environments must tie self-reference before the values are fully constructed.
+
+> [!warning] 자주 생기는 혼동
+> - 함수 본문의 자유 변수를 호출자 환경에서 찾으면 정적 바인딩이 아니다.
+>   - EN: Resolving a function body’s free variables in the caller’s environment is not static binding.
+> - 패턴 실패와 전체 프로그램 실패의 의미를 구분한다.
+>   - EN: Distinguish failure of one pattern match from failure of the whole program.
+
 ## 1단계 — 구체 프로그램에서 값까지 — §11.1–11.2
 
 큰 단계 판단은 환경에서 표현식이 어떤 값으로 평가되는지를 한 번에 연결한다.
