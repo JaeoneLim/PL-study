@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://theories-of-programming-languages-study.pages.dev"),
+  metadataBase: new URL("https://semantic-atlas-reynolds.jae-one-lim.chatgpt.site"),
   title: {
     default: "Semantic Atlas — Theories of Programming Languages",
     template: "%s · Semantic Atlas",
