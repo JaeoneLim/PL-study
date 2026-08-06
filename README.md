@@ -78,7 +78,7 @@ the course, runs the rendered-page tests, exports every route as static HTML,
 and deploys the result to GitHub Pages. It does not require deployment secrets.
 
 The production site is available at
-`https://jaeonelim.github.io/theories-of-programming-languages-study/`. The
+`https://jaeonelim.github.io/PL-study/`. The
 workflow can also be started manually from **Actions → Deploy GitHub Pages →
 Run workflow**.
 
