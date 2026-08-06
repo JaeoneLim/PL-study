@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+  ?? "https://semantic-atlas-reynolds.jae-one-lim.chatgpt.site";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://semantic-atlas-reynolds.jae-one-lim.chatgpt.site"),
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Semantic Atlas — Theories of Programming Languages",
     template: "%s · Semantic Atlas",
