@@ -92,7 +92,7 @@ C₁ ∥ C₂는 어느 쪽의 다음 원자 단계도 선택할 수 있다. 가
   - EN: Parallel correctness does not follow from isolated thread correctness; interference must be analyzed.
 - 안전성은 나쁜 일이 일어나지 않음을, 생존성은 좋은 일이 결국 일어남을 말한다.
   - EN: Safety says bad things never happen; liveness says good things eventually happen.
-- 공정성은 프로그램 코드가 아니라 허용할 스케줄에 대한 의미론적 가정이다.
+- 공정성은 프로그램 코드가 아니라 허용할 스케줄에 대한 semantic 가정이다.
   - EN: Fairness is a semantic assumption about admitted schedules, not merely a property of program text.
 
 > [!warning] 자주 생기는 혼동
@@ -159,7 +159,7 @@ Weak and strong fairness differ over continuously enabled versus infinitely ofte
 stuttering은 관찰 가능한 변화가 없는 단계를 삽입하고, mumbling은 인접한 내부 단계를 합친다. 이 닫힘 조건은 구성요소 의미를 병렬 문맥에서도 안정적으로 조합하기 위한 추상화다.
 
 > [!question] 책을 덮고 답해 보기
-> 흔적 의미론이 최종 상태 집합보다 병렬 합성에 유리한 이유는?
+> trace semantics이 최종 상태 집합보다 병렬 합성에 유리한 이유는?
 
 ### English companion
 
@@ -175,7 +175,7 @@ What kind of property is mutual exclusion?
 
 - A. 안전성 / Safety
 - B. 종료 시간 / Runtime complexity
-- C. 구문 성질 / Syntax
+- C. syntax 성질 / Syntax
 
 > [!success]- 정답과 해설
 > **A.** 나쁜 동시 진입 상태가 결코 일어나지 않음을 말한다.
@@ -188,7 +188,7 @@ What does fairness primarily restrict?
 
 - A. 변수 이름 / Variable names
 - B. 스케줄 / Schedules
-- C. 타입 생성자 / Type constructors
+- C. 타입 constructor / Type constructors
 
 > [!success]- 정답과 해설
 > **B.** 가능한 인터리빙 중 부당한 기아 실행을 제외한다.

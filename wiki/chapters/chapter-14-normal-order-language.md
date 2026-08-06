@@ -56,7 +56,7 @@ related:
 
 **English — Normal-order evaluation judgments:** Function application passes an unevaluated argument expression with its environment into the body. The argument is evaluated in that environment whenever demanded.
 
-### §14.2–14.3 · 파생 구문과 무한 구조 예제
+### §14.2–14.3 · derived syntax과 무한 구조 예제
 
 조건, 목록, 재귀를 정상 순서 핵심으로 표현하면 사용하지 않는 분기를 피하고 잠재적으로 무한한 목록의 유한 접두사를 소비할 수 있다.
 
@@ -133,10 +133,10 @@ Producer and consumer can be separated while only demanded elements are produced
 
 환경 기반 평가와 치환 기반 정상 축약이 같은 관찰 결과를 준다는 대응을 세운다.
 
-직접 의미론에서는 함수가 인수 의미를 지연된 방식으로 받는다. 축약 관점은 구문 변환을, 평가 의미는 구현 가능한 환경 조작을 강조하므로 두 설명의 일치가 중요하다.
+direct semantics에서는 함수가 인수 의미를 지연된 방식으로 받는다. 축약 관점은 syntax 변환을, 평가 의미는 구현 가능한 환경 조작을 강조하므로 두 설명의 일치가 중요하다.
 
 > [!question] 책을 덮고 답해 보기
-> 치환 기반 의미론과 환경 기반 의미론이 각각 피하는 비용은 무엇인가?
+> substitution-based semantics과 environment-based semantics이 각각 피하는 비용은 무엇인가?
 
 ### English companion
 

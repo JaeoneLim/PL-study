@@ -26,6 +26,13 @@ actual material rather than a nominal estimate.
 - Chapters 2–19 and the appendix: concise guided briefs, labeled `Brief` until
   each receives the same 30+ minute treatment
 
+## Korean terminology policy
+
+The Korean edition preserves `syntax`, `semantics`, `statement`, `assertion`,
+and `constructor` in English so study-group discussion, note-taking, and search
+use the same vocabulary. Standard compounds such as `abstract syntax`,
+`denotational semantics`, and `syntax-directed` remain in English as well.
+
 ## Copyright boundary
 
 The textbook PDF is copyrighted and is **not part of this repository**. Local

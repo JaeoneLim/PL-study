@@ -13,7 +13,7 @@ export default function LanguageGateway() {
           A bilingual, chapter-by-chapter companion to <em>Theories of Programming Languages</em>.
         </p>
         <p className="gateway-ko">
-          의미론의 큰 지도를 따라, 한 장씩 읽고 설명하고 확인하세요.
+          semantics의 큰 지도를 따라, 한 장씩 읽고 설명하고 확인하세요.
         </p>
         <div className="gateway-stats" aria-label="Course summary">
           <span><strong>{units.length}</strong> study units</span>

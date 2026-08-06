@@ -20,18 +20,18 @@ tags:
 
 ## 책의 중심 논지
 
-Reynolds의 중심 생각은 하나의 언어를 이해하려면 구문만 읽어서는 안 된다는 것이다. 어떤 수학적 세계가 의미를 담는지, 프로그램이 그 세계에서 어떻게 행동하는지, 그리고 그 설명으로 무엇을 증명할 수 있는지를 함께 보아야 한다. 책은 같은 작은 언어를 표시적·전이적·논리적 관점으로 거듭 비추며 각 관점의 힘과 한계를 비교한다.
+Reynolds의 중심 생각은 하나의 언어를 이해하려면 syntax만 읽어서는 안 된다는 것이다. 어떤 수학적 세계가 의미를 담는지, 프로그램이 그 세계에서 어떻게 행동하는지, 그리고 그 설명으로 무엇을 증명할 수 있는지를 함께 보아야 한다. 책은 같은 작은 언어를 표시적·전이적·논리적 관점으로 거듭 비추며 각 관점의 힘과 한계를 비교한다.
 
 **English:** Reynolds’s central idea is that syntax alone cannot explain a language. We must also ask which mathematical world carries meaning, how programs behave in that world, and what the account lets us prove. The book repeatedly views small languages through denotational, transition-based, and logical lenses so that the power and limits of each become visible.
 
 > [!question] 책 전체를 관통하는 질문
-> 구문, 의미, 실행, 증명, 타입을 어떻게 하나의 일관된 설명으로 연결할 것인가?
+> syntax, 의미, 실행, 증명, 타입을 어떻게 하나의 일관된 설명으로 연결할 것인가?
 >
 > EN: How can syntax, meaning, execution, proof, and types form one coherent account?
 
 # 네 개의 개념 흐름
 
-## 01. 기초와 명령형 의미론 (Foundations and imperative semantics) — Ch. 1–5 + Appendix
+## 01. 기초와 명령형 semantics (Foundations and imperative semantics) — Ch. 1–5 + Appendix
 
 **핵심 질문:** 프로그램의 뜻을 수학적으로 정의하고 그 올바름을 어떻게 증명할까?
 
@@ -91,13 +91,13 @@ Reynolds의 중심 생각은 하나의 언어를 이해하려면 구문만 읽�
 
 # 반복되는 사고 순서
 
-01. **구문을 분리한다 (Separate the syntax)**
-   - 구체 표기에서 추상 구문을 떼어 내고, 자유 변수와 바인딩 범위를 명시한다.
+01. **syntax을 분리한다 (Separate the syntax)**
+   - 구체 표기에서 abstract syntax을 떼어 내고, 자유 변수와 바인딩 범위를 명시한다.
    - EN: Detach abstract syntax from notation and make free variables and binding scopes explicit.
 02. **의미의 세계를 고른다 (Choose a world of meanings)**
    - 값, 상태 변환, 도메인, 전이, 흔적 중 무엇이 관찰을 담는지 결정한다.
    - EN: Decide whether values, state transformers, domains, transitions, or traces carry the relevant observations.
-03. **구문과 의미를 연결한다 (Connect syntax to meaning)**
+03. **syntax과 의미를 연결한다 (Connect syntax to meaning)**
    - 의미 함수나 전이 규칙을 합성적으로 정의해 복합 구절의 뜻을 부분에서 만든다.
    - EN: Define semantic functions or transition rules compositionally so compound phrases derive meaning from their parts.
 04. **행동을 추론한다 (Reason about behavior)**
@@ -124,18 +124,18 @@ Reynolds의 중심 생각은 하나의 언어를 이해하려면 구문만 읽�
 
 # 전체 장별 여정
 
-### 1부 · 기초 · 명령형 의미론 (Foundations · Imperative Semantics)
+### 1부 · 기초 · 명령형 semantics (Foundations · Imperative Semantics)
 
 - [[chapter-01-predicate-logic|01. 술어 논리]] — 언어를 설명하는 네 가지 도구
 - [[chapter-02-simple-imperative-language|02. 단순 명령형 언어]] — 상태 변환과 최소 고정점
 - [[chapter-03-program-specifications|03. 프로그램 명세와 증명]] — 부분 정확성, 전체 정확성, 불변식
-- [[chapter-04-arrays|04. 배열]] — 업데이트되는 함수와 고차 단언
+- [[chapter-04-arrays|04. 배열]] — 업데이트되는 함수와 higher-order assertion
 - [[chapter-05-failure-io-continuations|05. 실패, 입출력, 계속]] — 결과에서 상호작용 과정으로
 - [[appendix-mathematical-background|A. 수학적 배경]] — 집합, 관계, 함수, 곱과 합의 도구상자
 
 ### 2부 · 연산 · 비결정성 · 동시성 (Operational · Nondeterminism · Concurrency)
 
-- [[chapter-06-transition-semantics|06. 전이 의미론]] — 실행을 작은 단계로 분해하기
+- [[chapter-06-transition-semantics|06. transition semantics]] — 실행을 작은 단계로 분해하기
 - [[chapter-07-nondeterminism|07. 비결정성과 보호 명령]] — 하나의 프로그램, 여러 가능한 결과
 - [[chapter-08-shared-variable-concurrency|08. 공유 변수 동시성]] — 인터리빙, 원자성, 공정성
 - [[chapter-09-csp|09. 통신 순차 프로세스]] — 공유 상태 대신 동기식 메시지
@@ -154,13 +154,13 @@ Reynolds의 중심 생각은 하나의 언어를 이해하려면 구문만 읽�
 - [[chapter-16-subtypes-intersection-types|16. 서브타입과 교차 타입]] — 대체 가능성, 오버로딩, 의미의 일관성
 - [[chapter-17-polymorphism|17. 다형성]] — 타입을 추상화하고 모든 타입에서 재사용하기
 - [[chapter-18-module-specification|18. 모듈 명세]] — 표현을 숨기고 인터페이스만 약속하기
-- [[chapter-19-algol-like-languages|19. Algol 계열 언어]] — 블록 구조와 스택 규율의 의미론
+- [[chapter-19-algol-like-languages|19. Algol 계열 언어]] — 블록 구조와 스택 규율의 semantics
 
 # 권장 학습 순서
 
 1. 먼저 이 개요에서 현재 장이 전체 논증에서 맡은 역할을 찾는다.
    - EN: First locate the chapter’s role in the book’s overall argument on this overview.
-2. 장 페이지의 핵심 질문을 읽고 구문 → 의미 → 증명 순서를 따라간다.
+2. 장 페이지의 핵심 질문을 읽고 syntax → 의미 → 증명 순서를 따라간다.
    - EN: Read the chapter’s driving question and follow the syntax → meaning → proof sequence.
 3. 표기보다 모델의 선택에 집중한다. 무엇을 관찰하고 무엇을 추상화했는지 묻는다.
    - EN: Focus on the choice of model rather than notation: ask what is observed and what is abstracted away.

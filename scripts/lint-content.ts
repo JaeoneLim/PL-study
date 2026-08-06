@@ -1,5 +1,5 @@
 import { readdir, readFile } from "node:fs/promises";
-import { basename, dirname, join } from "node:path";
+import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { bookOverview } from "../content/book-overview";
 import { chapterGuides } from "../content/chapter-guides";
@@ -14,6 +14,32 @@ function assert(condition: unknown, message: string) {
   if (!condition) errors.push(message);
 }
 
+function collectKoreanCopy(value: unknown, output: string[]) {
+  if (Array.isArray(value)) {
+    for (const item of value) collectKoreanCopy(item, output);
+    return;
+  }
+  if (!value || typeof value !== "object") return;
+
+  const record = value as Record<string, unknown>;
+  if (typeof record.ko === "string" && typeof record.en === "string") {
+    output.push(record.ko);
+    return;
+  }
+  for (const item of Object.values(record)) collectKoreanCopy(item, output);
+}
+
+async function collectFiles(path: string): Promise<string[]> {
+  const entries = await readdir(path, { withFileTypes: true });
+  const files: string[] = [];
+  for (const entry of entries) {
+    const entryPath = join(path, entry.name);
+    if (entry.isDirectory()) files.push(...await collectFiles(entryPath));
+    else if (/\.(?:md|ts|tsx)$/.test(entry.name)) files.push(entryPath);
+  }
+  return files;
+}
+
 assert(units.length === 20, `expected 20 units, found ${units.length}`);
 assert(new Set(units.map((unit) => unit.slug)).size === units.length, "unit slugs must be unique");
 assert(new Set(units.map((unit) => unit.number)).size === units.length, "unit numbers must be unique");
@@ -22,6 +48,13 @@ assert(bookOverview.arcs.length === 4, `expected 4 whole-book arcs, found ${book
 assert(bookOverview.semanticSpine.length >= 5, "whole-book overview needs a complete semantic spine");
 assert(bookOverview.recurringLenses.length >= 6, "whole-book overview needs recurring conceptual lenses");
 assert(Boolean(chapterLongforms["predicate-logic"]), "Chapter 1 must have a complete longform lesson");
+
+const koreanCopy: string[] = [];
+collectKoreanCopy({ bookOverview, chapterGuides, chapterLongforms, units }, koreanCopy);
+const koreanCopyText = koreanCopy.join("\n");
+for (const term of ["syntax", "semantics", "statement", "assertion", "constructor"]) {
+  assert(new RegExp(`\\b${term}\\b`, "i").test(koreanCopyText), `Korean edition must preserve the English term ${term}`);
+}
 
 for (const [slug, lesson] of Object.entries(chapterLongforms)) {
   if (!lesson) continue;
@@ -86,6 +119,27 @@ for (const file of wikiFiles) {
   for (const match of body.matchAll(/\[\[([^\]|#]+)(?:[|#][^\]]*)?\]\]/g)) {
     const target = basename(match[1]);
     assert(knownNotes.has(target), `${file.replace(`${root}/`, "")}: broken wikilink [[${match[1]}]]`);
+  }
+}
+
+const terminologyFiles = [
+  join(root, "README.md"),
+  join(root, ".raw/README.md"),
+  join(root, "scripts/build-wiki.ts"),
+  ...await collectFiles(join(root, "content")),
+  ...await collectFiles(join(root, "app")),
+  ...await collectFiles(join(root, "wiki")),
+];
+const forbiddenTranslations = [
+  { translated: "구문", preferred: "syntax" },
+  { translated: "의미론", preferred: "semantics" },
+  { translated: "단언", preferred: "assertion" },
+  { translated: "생성자", preferred: "constructor" },
+];
+for (const file of terminologyFiles) {
+  const body = await readFile(file, "utf8");
+  for (const { translated, preferred } of forbiddenTranslations) {
+    assert(!body.includes(translated), `${relative(root, file)}: use ${preferred} instead of the translated technical term`);
   }
 }
 

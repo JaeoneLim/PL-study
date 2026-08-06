@@ -14,7 +14,7 @@ export const units: StudyUnit[] = [
 ];
 
 export const parts = [
-  { number: 1, ko: "기초 · 명령형 의미론", en: "Foundations · Imperative Semantics", range: "01–05 + A" },
+  { number: 1, ko: "기초 · 명령형 semantics", en: "Foundations · Imperative Semantics", range: "01–05 + A" },
   { number: 2, ko: "연산 · 비결정성 · 동시성", en: "Operational · Nondeterminism · Concurrency", range: "06–09" },
   { number: 3, ko: "함수형 언어와 제어", en: "Functional Languages · Control", range: "10–14" },
   { number: 4, ko: "타입 · 추상화 · Algol", en: "Types · Abstraction · Algol", range: "15–19" },

@@ -39,7 +39,7 @@ related:
 - **도메인 (domain)**
 - **연속 함수 (continuous function)**
 - **최소 고정점 (least fixed point)**
-- **구문 설탕 (syntactic sugar)**
+- **syntactic sugar (syntactic sugar)**
 - **완전 추상성 (full abstraction)**
 
 ## 장 전체 내용 지도
@@ -49,7 +49,7 @@ related:
 >
 > **English:** Turns a small imperative language into a complete mathematical object and introduces the minimum domain theory needed to interpret iteration and recursion.
 
-### §2.1–2.2 · 구문, 상태, 의미 함수
+### §2.1–2.2 · syntax, 상태, 의미 함수
 
 식은 상태에서 값으로, 명령은 상태에서 상태로 가는 부분 함수로 해석된다. 정의되지 않음은 산술 오류가 아니라 비종료를 먼저 나타낸다.
 
@@ -132,7 +132,7 @@ Approximate a while loop by allowing zero, one, two, and more unfoldings. Iterat
 
 지역 변수 선언은 이름을 묶고, 매개 이름을 같은 저장 위치에 대응시키면 별칭이 생긴다.
 
-의미론은 선언 전 값을 저장하고 범위가 끝날 때 복원하는 효과를 모델링한다. 구문 치환은 바인더 이름을 피해야 할 뿐 아니라, 서로 다른 변수를 하나로 합치는 치환이 대입 효과를 바꿀 수 있음을 고려해야 한다.
+semantics은 선언 전 값을 저장하고 범위가 끝날 때 복원하는 효과를 모델링한다. syntactic substitution은 바인더 이름을 피해야 할 뿐 아니라, 서로 다른 변수를 하나로 합치는 치환이 대입 효과를 바꿀 수 있음을 고려해야 한다.
 
 > [!question] 책을 덮고 답해 보기
 > 입력과 출력 매개변수가 같은 변수로 치환될 때 팩토리얼 프로그램이 깨질 수 있는 이유는?
@@ -149,7 +149,7 @@ The semantics models saving the old value and restoring it after the scope. Synt
 
 for 같은 구성은 핵심 언어로 번역할 수 있고, 산술 오류를 넣으면 관찰 가능한 결과 공간이 달라진다.
 
-구문 설탕의 정의는 새 의미 규칙 없이 번역으로 정당화된다. 건전성은 의미적으로 같은 핵심 번역을 보장하고, 완전 추상성은 문맥이 구별하는 프로그램과 의미론이 구별하는 프로그램이 정확히 일치하는지 묻는다.
+syntactic sugar의 정의는 새 의미 규칙 없이 번역으로 정당화된다. 건전성은 의미적으로 같은 핵심 번역을 보장하고, 완전 추상성은 문맥이 구별하는 프로그램과 semantics이 구별하는 프로그램이 정확히 일치하는지 묻는다.
 
 > [!question] 책을 덮고 답해 보기
 > 어떤 두 프로그램의 의미 함수가 다르지만 어떤 언어 문맥도 차이를 관찰하지 못한다면 완전 추상성에 어떤 문제가 생기는가?
@@ -179,7 +179,7 @@ Why choose the least fixed point for a while loop?
 
 What does ⊥ represent in command semantics?
 
-- A. 구문 오류 / A syntax error
+- A. syntax error / A syntax error
 - B. 비종료 또는 아직 없는 정보 / Nontermination or absent information
 - C. 빈 상태 / An empty state
 
@@ -188,22 +188,22 @@ What does ⊥ represent in command semantics?
 >
 > EN: It represents a computation that produces no final state.
 
-### Q3. 구문 설탕의 가장 좋은 설명은?
+### Q3. syntactic sugar의 가장 좋은 설명은?
 
 What best describes syntactic sugar?
 
-- A. 핵심 언어로 의미 보존 번역되는 편의 구문 / Convenient syntax translated meaning-preservingly into a core language
+- A. 핵심 언어로 의미 보존 번역되는 convenience syntax / Convenient syntax translated meaning-preservingly into a core language
 - B. 파서가 무시하는 주석 / A comment ignored by the parser
 - C. 새로운 하드웨어 명령 / A new hardware instruction
 
 > [!success]- 정답과 해설
-> **A.** 편의 구문은 표현력을 반드시 늘리지 않는다.
+> **A.** convenience syntax은 표현력을 반드시 늘리지 않는다.
 >
 > EN: Convenience syntax need not increase expressive power.
 
 ## 다음 개념으로
 
-상태 변환의 의미를 얻었으니, 다음에는 그 변환이 원하는 사양을 만족함을 구문적 규칙으로 증명한다.
+상태 변환의 의미를 얻었으니, 다음에는 그 변환이 원하는 사양을 만족함을 syntactic 규칙으로 증명한다.
 
 **English:** With state-transformer meanings in hand, we next prove syntactically that those transformations meet specifications.
 

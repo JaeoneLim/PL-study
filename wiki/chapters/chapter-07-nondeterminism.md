@@ -51,7 +51,7 @@ related:
 
 ### §7.1 · 가드 명령과 선택
 
-여러 참 가드 중 하나를 선택해 실행하는 조건·반복 구문을 전이 규칙으로 정의한다. 선택 방법은 언어 의미가 의도적으로 정하지 않는다.
+여러 참 가드 중 하나를 선택해 실행하는 조건·반복 syntax을 전이 규칙으로 정의한다. 선택 방법은 언어 의미가 의도적으로 정하지 않는다.
 
 **English — Guarded commands and choice:** Transition rules define conditionals and loops that choose one enabled guard. The language semantics deliberately leaves the choice unresolved.
 
@@ -75,7 +75,7 @@ related:
 
 ### §7.5 · 최약 전제조건
 
-wp(C,Q)는 C가 원하는 종료 의미 아래 Q를 보장하게 하는 가장 약한 시작 조건이다. 구문별 변환 법칙은 프로그램을 논리식으로 역계산한다.
+wp(C,Q)는 C가 원하는 종료 의미 아래 Q를 보장하게 하는 가장 약한 시작 조건이다. syntax별 변환 법칙은 프로그램을 논리식으로 역계산한다.
 
 **English — Weakest preconditions:** wp(C,Q) is the weakest starting condition ensuring that C establishes Q under the chosen termination interpretation. Syntax-directed equations calculate it backward.
 
@@ -85,7 +85,7 @@ wp(C,Q)는 C가 원하는 종료 의미 아래 Q를 보장하게 하는 가장 �
   - EN: Nondeterminism is not randomness; it specifies that multiple behaviors are permitted.
 - may와 must 관찰에 따라 결과 집합의 순서와 프로그램 동치가 달라진다.
   - EN: May- and must-observations induce different orders on result sets and different program equivalences.
-- 최약 전제조건은 의미론과 자동 검증 조건 생성 사이의 다리다.
+- 최약 전제조건은 semantics과 자동 검증 조건 생성 사이의 다리다.
   - EN: Weakest preconditions bridge semantics and automatic verification-condition generation.
 
 > [!warning] 자주 생기는 혼동
@@ -149,7 +149,7 @@ The choice rule proves the specification for each enabled branch, and a guarded-
 
 `wp(c,q)`는 c가 반드시 종료해 q를 만족하게 하는 가장 약한 초기 조건이다.
 
-순차 구성의 wp는 안쪽부터 합성하고, 비결정적 선택은 모든 가능한 분기의 wp를 만족해야 한다. 이렇게 의미론적 사양이 프로그램 구조를 따라 계산되는 단언 변환기로 바뀐다.
+순차 구성의 wp는 안쪽부터 합성하고, 비결정적 선택은 모든 가능한 분기의 wp를 만족해야 한다. 이렇게 semantic 사양이 프로그램 구조를 따라 계산되는 assertion 변환기로 바뀐다.
 
 > [!question] 책을 덮고 답해 보기
 > `wp(c₀;c₁,q)=wp(c₀,wp(c₁,q))`를 실행 순서로 설명하라.

@@ -21,7 +21,7 @@ related:
 # 12. 함수형 언어의 계속 (Continuations in a Functional Language)
 
 > [!abstract] 한눈에 보기
-> 함수형 평가를 CPS로 바꾸고 계속을 일급 값으로 노출한 뒤, defunctionalization을 통해 일차 의미론과 추상 기계를 유도한다.
+> 함수형 평가를 CPS로 바꾸고 계속을 일급 값으로 노출한 뒤, defunctionalization을 통해 일차 semantics과 추상 기계를 유도한다.
 >
 > **English:** Functional evaluation is transformed into CPS, continuations are exposed as first-class values, and defunctionalization derives a first-order semantics and abstract machine.
 
@@ -49,7 +49,7 @@ related:
 >
 > **English:** Makes control flow explicit through continuation passing, exposes continuations as values, and derives a first-order evaluator from them.
 
-### §12.1 · 계속 전달 의미론
+### §12.1 · continuation-passing semantics
 
 식의 의미는 값 하나가 아니라 결과를 받아 다음 계산을 수행할 계속을 인수로 받는다. 평가 순서는 계속이 중첩되는 순서에 명시적으로 나타난다.
 
@@ -63,7 +63,7 @@ related:
 
 ### §12.4 · 비함수화로 일차 상태 만들기
 
-실제로 만들어지는 계속 함수의 유한한 형태를 태그 있는 데이터 생성자로 바꾸고, 이를 해석하는 apply 단계로 분리한다. 고차 의미가 명시적 제어 스택을 가진 기계가 된다.
+실제로 만들어지는 계속 함수의 유한한 형태를 태그 있는 데이터 constructor로 바꾸고, 이를 해석하는 apply 단계로 분리한다. 고차 의미가 명시적 제어 스택을 가진 기계가 된다.
 
 **English — Defunctionalization into first-order states:** Replaces the finite family of continuation functions with tagged data constructors plus an apply operation. The higher-order semantics becomes a machine with an explicit control stack.
 
@@ -73,7 +73,7 @@ related:
 
 **English — Structure of the first-order evaluator:** Evaluation is summarized as transitions among a control expression, environment, and continuation frames. Each frame records the exact pending context.
 
-### §12.6 · 두 의미론의 대응
+### §12.6 · 두 semantics의 대응
 
 일차 프레임을 다시 계속 함수로 해석하는 대응을 정의하고 각 기계 단계가 계속 의미를 보존함을 보여 두 설명의 동치를 정당화한다.
 
@@ -132,7 +132,7 @@ This expresses early return, deep search escape, and coroutine-like control patt
 
 평가기에서 실제로 만들어지는 계속 함수의 모양은 유한하므로 태그된 프레임 자료형으로 바꿀 수 있다.
 
-각 람다 계속을 생성자와 저장 필드로 바꾸고, 하나의 apply-cont 함수가 태그를 해석한다. 고차 정의가 스택을 명시적으로 다루는 일차 인터프리터 또는 추상 기계가 된다.
+각 람다 계속을 constructor와 저장 필드로 바꾸고, 하나의 apply-cont 함수가 태그를 해석한다. 고차 정의가 스택을 명시적으로 다루는 일차 인터프리터 또는 추상 기계가 된다.
 
 > [!question] 책을 덮고 답해 보기
 > 함수 적용 평가에서 '연산자 결과 대기' 프레임이 저장해야 할 정보는?
@@ -145,7 +145,7 @@ Replace each continuation lambda by a constructor with saved fields, and interpr
 
 ---
 
-## 4단계 — 두 의미론의 상태 대응 — §12.6
+## 4단계 — 두 semantics의 상태 대응 — §12.6
 
 CPS 상태와 일차 기계 상태 사이의 표현 관계를 세우면 두 평가기가 같은 답을 냄을 보일 수 있다.
 

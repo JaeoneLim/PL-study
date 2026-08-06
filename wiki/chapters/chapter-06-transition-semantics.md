@@ -1,6 +1,6 @@
 ---
 type: chapter
-title: "06. 전이 의미론"
+title: "06. transition semantics"
 title_en: "Transition Semantics"
 created: 2026-08-03
 updated: 2026-08-03
@@ -18,10 +18,10 @@ related:
   - "[[chapter-09-csp]]"
 ---
 
-# 06. 전이 의미론 (Transition Semantics)
+# 06. transition semantics (Transition Semantics)
 
 > [!abstract] 한눈에 보기
-> 구조적 연산 의미론을 사용해 프로그램 실행을 구성 사이의 한 단계 전이로 정의한다. 실패와 입출력은 종료 구성과 전이 라벨을 확장한다.
+> structural operational semantics을 사용해 프로그램 실행을 구성 사이의 한 단계 전이로 정의한다. 실패와 입출력은 종료 구성과 전이 라벨을 확장한다.
 >
 > **English:** Structural operational semantics defines execution as one-step transitions between configurations. Failure and I/O extend terminal configurations and transition labels.
 
@@ -29,7 +29,7 @@ related:
 
 - 구성, 전이, 실행을 구분한다.
   - EN: Distinguish configurations, transitions, and executions.
-- 프로그램 구문별 전이 규칙을 읽고 유도한다.
+- 프로그램 syntax별 전이 규칙을 읽고 유도한다.
   - EN: Read and derive syntax-directed transition rules.
 - 라벨 있는 전이로 입출력을 표현한다.
   - EN: Represent I/O with labeled transitions.
@@ -37,7 +37,7 @@ related:
 ## 핵심 용어
 
 - **구성 (configuration)**
-- **작은 단계 의미론 (small-step semantics)**
+- **small-step semantics (small-step semantics)**
 - **전이 폐쇄 (transition closure)**
 - **결정성 (determinacy)**
 - **라벨 전이 (labeled transition)**
@@ -57,7 +57,7 @@ related:
 
 ### §6.2 · 구조적 실행 규칙
 
-대입, 순차 합성, 조건, 반복의 실행을 추론 규칙으로 정의한다. 복합 명령의 단계는 직접 하위 명령의 단계에서 유도되므로 구문 구조를 따른다.
+대입, 순차 합성, 조건, 반복의 실행을 추론 규칙으로 정의한다. 복합 명령의 단계는 직접 하위 명령의 단계에서 유도되므로 syntax structure를 따른다.
 
 **English — Structural execution rules:** Inference rules define execution of assignment, sequencing, conditionals, and loops. Steps of a compound command are derived from steps of its immediate subcommands.
 
@@ -75,7 +75,7 @@ related:
 
 ## 반드시 남겨야 할 핵심
 
-- 표시적 의미론은 전체 결과를, 전이 의미론은 결과가 만들어지는 과정을 강조한다.
+- denotational semantics은 전체 결과를, transition semantics은 결과가 만들어지는 과정을 강조한다.
   - EN: Denotational semantics emphasizes whole results; transition semantics emphasizes the process that produces them.
 - 실행기는 전이 규칙을 반복 적용하는 것으로 이해할 수 있다.
   - EN: An interpreter can be understood as repeatedly applying transition rules.
@@ -124,7 +124,7 @@ Sequencing moves to the right command when the left terminates; otherwise it pro
 
 ## 3단계 — 비정상 종료 전파 — §6.3
 
-실패는 `(abort,σ)`라는 별도 종료 구성을 만들고 복합 구문은 이를 바깥으로 전파한다.
+실패는 `(abort,σ)`라는 별도 종료 구성을 만들고 복합 syntax은 이를 바깥으로 전파한다.
 
 정상 상태만 전제로 한 기존 규칙에 실패 전파 규칙을 추가해야 한다. 이 작업은 새 효과를 언어에 넣을 때 기존 모든 평가 문맥을 다시 점검해야 함을 보여 준다.
 
@@ -156,7 +156,7 @@ Input permits a transition for every n supplied by the environment; output deter
 
 ## 자체 점검 퀴즈
 
-### Q1. 작은 단계 의미론의 기본 판단은?
+### Q1. small-step semantics의 기본 판단은?
 
 What is the basic judgment of small-step semantics?
 
@@ -169,7 +169,7 @@ What is the basic judgment of small-step semantics?
 >
 > EN: Multi-step execution is built by iterating the one-step relation.
 
-### Q2. 결정적 전이 의미론에서 가능한 다음 구성의 수는?
+### Q2. 결정적 transition semantics에서 가능한 다음 구성의 수는?
 
 In deterministic transition semantics, how many next configurations are possible?
 

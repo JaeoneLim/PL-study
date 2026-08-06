@@ -58,13 +58,13 @@ related:
 
 ### §13.2–13.3 · 상태를 통과시키는 평가와 계속
 
-평가 판단은 값과 함께 갱신된 저장소를 반환한다. 계속 의미론에서는 계속이 값과 저장소를 함께 받아 평가 순서와 부작용 순서를 동시에 고정한다.
+평가 판단은 값과 함께 갱신된 저장소를 반환한다. continuation semantics에서는 계속이 값과 저장소를 함께 받아 평가 순서와 부작용 순서를 동시에 고정한다.
 
 **English — State-threaded evaluation and continuations:** Evaluation returns an updated store along with a value. In continuation semantics, continuations consume both value and store, fixing evaluation order and effect order together.
 
 ### §13.4–13.6 · 문법 설탕, 일차 기계, 예제
 
-대입·블록·반복 같은 편의 구문을 핵심 참조 연산으로 번역하고, 계속을 비함수화해 환경-저장소-제어 스택 기반 평가기를 얻는다.
+대입·블록·반복 같은 convenience syntax을 핵심 참조 연산으로 번역하고, 계속을 비함수화해 환경-저장소-제어 스택 기반 평가기를 얻는다.
 
 **English — Derived forms, first-order machine, and examples:** Translates assignment, blocks, loops, and other conveniences into core reference operations, then defunctionalizes continuations into an evaluator with environment, store, and control stack.
 

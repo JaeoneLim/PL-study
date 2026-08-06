@@ -49,7 +49,7 @@ related:
 >
 > **English:** Composes processes through synchronous communication instead of shared variables and analyzes communication, deadlock, and fairness through events.
 
-### §9.1–9.2 · 프로세스 구문과 동기 전이
+### §9.1–9.2 · 프로세스 syntax과 동기 전이
 
 입력·출력 가드와 병렬 프로세스를 정의한다. 대응하는 송신과 수신이 동시에 준비될 때 하나의 통신 전이가 일어나며 값 전달과 두 프로세스의 진행이 함께 발생한다.
 
@@ -188,7 +188,7 @@ How do deadlock and starvation differ?
 
 - A. 교착은 진행 가능한 전이가 없고, 기아는 있지만 특정 참여자가 계속 제외됨 / Deadlock has no possible progress; starvation has progress but indefinitely excludes a participant
 - B. 둘은 완전히 같다 / They are identical
-- C. 기아는 구문 오류다 / Starvation is a syntax error
+- C. 기아는 syntax error다 / Starvation is a syntax error
 
 > [!success]- 정답과 해설
 > **A.** 시스템 전체의 정지와 개별 진행의 부재를 구분한다.

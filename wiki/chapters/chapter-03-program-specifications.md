@@ -21,7 +21,7 @@ related:
 # 03. 프로그램 명세와 증명 (Program Specifications and Their Proofs)
 
 > [!abstract] 한눈에 보기
-> Hoare식 명세를 의미론으로 정의한 뒤, 프로그램 구조를 따라 증명하는 추론 규칙을 세운다. 피보나치와 빠른 거듭제곱이 불변식 설계의 사례가 된다.
+> Hoare식 명세를 semantics으로 정의한 뒤, 프로그램 구조를 따라 증명하는 추론 규칙을 세운다. 피보나치와 빠른 거듭제곱이 불변식 설계의 사례가 된다.
 >
 > **English:** Hoare-style specifications are defined semantically and then proved by syntax-directed rules. Fibonacci and fast exponentiation serve as case studies in invariant design.
 
@@ -57,7 +57,7 @@ Hoare 삼중항은 사전조건을 만족하는 상태에서 명령이 종료하
 
 ### §3.3–3.5 · 대입, 순차 합성, 반복 규칙
 
-대입 규칙은 사후조건에 역치환하고, 순차 합성은 중간 단언을 연결한다. while 규칙의 핵심은 반복 전후에 보존되는 불변식이며 결과 조건은 불변식과 가드의 거짓을 결합한다.
+대입 규칙은 사후조건에 역치환하고, 순차 합성은 중간 assertion을 연결한다. while 규칙의 핵심은 반복 전후에 보존되는 불변식이며 결과 조건은 불변식과 가드의 거짓을 결합한다.
 
 **English — Rules for assignment, sequencing, and iteration:** Assignment reasons backward by substitution in the postcondition; sequencing links an intermediate assertion. The while rule centers on an invariant preserved by the body, with exit combining the invariant and false guard.
 
@@ -75,7 +75,7 @@ Hoare 삼중항은 사전조건을 만족하는 상태에서 명령이 종료하
 
 ### §3.8 · 복잡성, 종료, 표현력의 한계
 
-부분 정확성과 전체 정확성을 구분하고, 종료 함수와 단언 언어의 표현력이 추가로 필요함을 확인한다. 규칙의 건전성과 상대적 완전성도 별개의 질문이다.
+부분 정확성과 전체 정확성을 구분하고, 종료 함수와 assertion language의 표현력이 추가로 필요함을 확인한다. 규칙의 건전성과 상대적 완전성도 별개의 질문이다.
 
 **English — Complications, termination, and limits:** Separates partial from total correctness and identifies the extra need for variants and an expressive assertion language. Soundness and relative completeness of the rules are distinct questions.
 
@@ -113,9 +113,9 @@ Partial correctness promises the result if execution terminates; total correctne
 
 ## 2단계 — 프로그램을 따라 증명하기 — §3.2–3.3
 
-각 구문 생성자에는 그 동작을 반영하는 증명 규칙이 대응한다.
+각 syntax constructor에는 그 동작을 반영하는 증명 규칙이 대응한다.
 
-대입 규칙은 사후조건 q에서 v를 e로 치환해 필요한 사전조건을 계산한다. 순차 규칙은 중간 단언을 찾는 문제이며, 결과 규칙은 사전조건을 강화하거나 사후조건을 약화한다.
+대입 규칙은 사후조건 q에서 v를 e로 치환해 필요한 사전조건을 계산한다. 순차 규칙은 중간 assertion을 찾는 문제이며, 결과 규칙은 사전조건을 강화하거나 사후조건을 약화한다.
 
 > [!question] 책을 덮고 답해 보기
 > `{?} x:=x+1 {x>0}`의 가장 직접적인 사전조건을 계산하라.
@@ -149,7 +149,7 @@ Partial correctness proves that the body preserves I under I∧b. Total correctn
 
 피보나치와 빠른 거듭제곱은 중간 변수들이 최종 수학 관계를 어떻게 분해해 유지하는지 보여 준다.
 
-좋은 불변식은 사후조건의 일부를 반복 중에도 참이 되도록 일반화한다. 증명 규칙의 한계는 어떤 유용한 규칙이 비합성적이거나, 단언 언어가 필요한 성질을 표현하지 못할 수 있다는 점이다.
+좋은 불변식은 사후조건의 일부를 반복 중에도 참이 되도록 일반화한다. 증명 규칙의 한계는 어떤 유용한 규칙이 비합성적이거나, assertion language가 필요한 성질을 표현하지 못할 수 있다는 점이다.
 
 > [!question] 책을 덮고 답해 보기
 > 빠른 거듭제곱에서 `acc × base^exp = 원래 값` 형태가 왜 좋은 불변식인가?

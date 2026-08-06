@@ -21,7 +21,7 @@ related:
 # 10. 람다 계산 (The Lambda Calculus)
 
 > [!abstract] 한눈에 보기
-> 순수한 비타입 람다 계산의 구문과 β-축약을 정의하고 정상 순서·적극 평가·표시적 의미·함수형 프로그래밍 인코딩을 연결한다.
+> 순수한 비타입 람다 계산의 syntax과 β-축약을 정의하고 정상 순서·적극 평가·표시적 의미·함수형 프로그래밍 인코딩을 연결한다.
 >
 > **English:** The pure untyped lambda calculus is developed through syntax, beta-reduction, normal-order and eager evaluation, denotational semantics, and functional encodings.
 
@@ -49,7 +49,7 @@ related:
 >
 > **English:** Builds a minimal language of function definition and application, connecting reduction strategy, denotational meaning, and data encodings.
 
-### §10.1–10.2 · 람다 구문과 축약
+### §10.1–10.2 · 람다 syntax과 축약
 
 변수, 추상화, 적용으로 항을 만들고 자유 변수와 α-동치를 정의한다. β-축약은 함수 적용을 캡처 회피 치환으로 계산하며 여러 redex 중 어디를 줄일지 선택할 수 있다.
 
@@ -194,7 +194,7 @@ What happens to `(λx.1) Ω` under eager evaluation?
 
 - A. 즉시 1 / Immediately 1
 - B. Ω 평가 때문에 발산 / It diverges while evaluating Ω
-- C. 구문 오류 / Syntax error
+- C. syntax error / Syntax error
 
 > [!success]- 정답과 해설
 > **B.** 적극 평가는 사용 여부와 무관하게 인수를 먼저 평가한다.
@@ -203,7 +203,7 @@ What happens to `(λx.1) Ω` under eager evaluation?
 
 ## 다음 개념으로
 
-순수 계산 핵심을 얻었으니, 다음 장은 이를 구체 구문·패턴·재귀·리스트를 갖춘 실용적 적극 함수형 언어로 확장한다.
+순수 계산 핵심을 얻었으니, 다음 장은 이를 concrete syntax·패턴·재귀·리스트를 갖춘 실용적 적극 함수형 언어로 확장한다.
 
 **English:** With the pure core established, the next chapter grows it into a practical eager functional language with concrete syntax, patterns, recursion, and lists.
 

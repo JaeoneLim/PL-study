@@ -40,7 +40,7 @@ export default async function CourseHome({ params }: Props) {
             <p className="kicker">{locale === "ko" ? "JOHN C. REYNOLDS · 단계별 학습 동반자" : "JOHN C. REYNOLDS · A GUIDED STUDY COMPANION"}</p>
             <h1>{locale === "ko" ? <>계산에 관한 <em>아름다운 이야기</em>를<br />하나의 지도로 읽다.</> : <>Read the <em>beautiful stories</em><br />of computation as one map.</>}</h1>
             <p className="hero-lead">{locale === "ko"
-              ? "추상 구문에서 Algol의 스택 규율까지. 장마다 핵심 질문, 의미 흐름, 손으로 풀어 보는 점검 문제를 연결했습니다."
+              ? "abstract syntax에서 Algol의 스택 규율까지. 장마다 핵심 질문, 의미 흐름, 손으로 풀어 보는 점검 문제를 연결했습니다."
               : "From abstract syntax to Algol's stack discipline. Every chapter connects a driving question, semantic dataflow, and retrieval practice."}</p>
             <div className="hero-actions">
               <Link className="button primary" href={`/${locale}/overview`}>{locale === "ko" ? "책 전체 개요부터" : "Start with the overview"}<span aria-hidden="true">→</span></Link>
@@ -63,14 +63,14 @@ export default async function CourseHome({ params }: Props) {
           <div><span>00</span><p className="kicker">{locale === "ko" ? "장별 학습 전에" : "BEFORE THE CHAPTERS"}</p></div>
           <h2>{locale === "ko" ? "먼저 책 전체가 무엇을 설명하려는지 읽어 보세요." : "First see what the book is trying to explain as a whole."}</h2>
           <p>{locale === "ko"
-            ? "네 개의 개념 흐름, 반복되는 의미론적 도구, 19개 장의 역할을 한 페이지에서 연결합니다."
+            ? "네 개의 개념 흐름, 반복되는 semantic 도구, 19개 장의 역할을 한 페이지에서 연결합니다."
             : "Connect the four conceptual arcs, recurring semantic tools, and the role of all 19 chapters on one page."}</p>
           <Link href={`/${locale}/overview`}>{locale === "ko" ? "책 전체 개요 읽기" : "Read the whole-book overview"}<span aria-hidden="true">→</span></Link>
         </section>
 
         <section className="method-strip" aria-label={locale === "ko" ? "학습 방법" : "Study method"}>
           <p><span>01</span><strong>{locale === "ko" ? "방향 잡기" : "Orient"}</strong>{locale === "ko" ? "이 장이 해결하는 질문을 먼저 읽습니다." : "Start with the question the chapter solves."}</p>
-          <p><span>02</span><strong>{locale === "ko" ? "단계 따라가기" : "Trace"}</strong>{locale === "ko" ? "구문 → 의미 → 증명의 흐름을 따라갑니다." : "Follow syntax → meaning → proof."}</p>
+          <p><span>02</span><strong>{locale === "ko" ? "단계 따라가기" : "Trace"}</strong>{locale === "ko" ? "syntax → 의미 → 증명의 흐름을 따라갑니다." : "Follow syntax → meaning → proof."}</p>
           <p><span>03</span><strong>{locale === "ko" ? "인출하기" : "Retrieve"}</strong>{locale === "ko" ? "책을 덮고 체크포인트와 퀴즈를 풉니다." : "Close the book and answer checkpoints."}</p>
           <p><span>04</span><strong>{locale === "ko" ? "연결하기" : "Connect"}</strong>{locale === "ko" ? "다음 장으로 이어지는 개념 다리를 확인합니다." : "Use the bridge into the next chapter."}</p>
         </section>

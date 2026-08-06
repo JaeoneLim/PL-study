@@ -21,7 +21,7 @@ related:
 # 11. 적극 함수형 언어 (An Eager Functional Language)
 
 > [!abstract] 한눈에 보기
-> 엄격 평가 함수형 언어를 구체 구문과 평가 판단으로 정의하고, 정의·패턴·재귀·리스트·트리·직접 의미론·동적 바인딩을 살핀다.
+> 엄격 평가 함수형 언어를 concrete syntax과 평가 판단으로 정의하고, 정의·패턴·재귀·리스트·트리·direct semantics·동적 바인딩을 살핀다.
 >
 > **English:** A strict functional language is defined with concrete syntax and evaluation judgments, then extended with definitions, patterns, recursion, lists, trees, direct semantics, and dynamic binding.
 
@@ -36,7 +36,7 @@ related:
 
 ## 핵심 용어
 
-- **평가 의미론 (evaluation semantics)**
+- **evaluation semantics (evaluation semantics)**
 - **클로저 (closure)**
 - **패턴 매칭 (pattern matching)**
 - **재귀 환경 (recursive environment)**
@@ -49,7 +49,7 @@ related:
 >
 > **English:** Extends lambda calculus into a practical eager language and compares evaluation and denotational accounts of environments, closures, patterns, and recursion.
 
-### §11.1–11.2 · 구체 구문과 큰 단계 평가
+### §11.1–11.2 · concrete syntax과 큰 단계 평가
 
 표면 프로그램을 핵심 식으로 파싱하고, 환경 아래 식이 값으로 평가된다는 판단을 규칙으로 정의한다. 함수 값은 코드와 정의 환경을 묶은 클로저다.
 
@@ -63,7 +63,7 @@ related:
 
 ### §11.4–11.5 · 목록과 함수형 예제
 
-목록 생성자와 패턴을 이용해 map, fold류 재귀 처리와 정렬·탐색 예제를 표현한다. 데이터 구조 재귀와 함수 재귀의 모양이 맞물린다.
+목록 constructor와 패턴을 이용해 map, fold류 재귀 처리와 정렬·탐색 예제를 표현한다. 데이터 구조 재귀와 함수 재귀의 모양이 맞물린다.
 
 **English — Lists and functional examples:** List constructors and patterns express recursive processing such as map- and fold-like functions, sorting, and search. Data recursion aligns with function recursion.
 
@@ -75,7 +75,7 @@ related:
 
 ### §11.7 · 정적 바인딩과 동적 바인딩
 
-정적 바인딩은 정의 환경을 클로저에 저장하고, 동적 바인딩은 호출 시점 환경에서 자유 변수를 찾는다. 같은 구문이 호출 문맥에 따라 달라지는 이유를 비교한다.
+정적 바인딩은 정의 환경을 클로저에 저장하고, 동적 바인딩은 호출 시점 환경에서 자유 변수를 찾는다. 같은 syntax이 호출 문맥에 따라 달라지는 이유를 비교한다.
 
 **English — Static versus dynamic binding:** Static binding stores the defining environment in a closure; dynamic binding resolves free variables in the caller’s environment. The comparison shows how identical syntax can change meaning with call context.
 
@@ -83,7 +83,7 @@ related:
 
 - 클로저는 렉시컬 스코프를 런타임 값으로 구현한다.
   - EN: Closures implement lexical scope as runtime values.
-- 평가 의미론과 표시적 의미론은 같은 언어를 다른 목적에 맞게 설명한다.
+- evaluation semantics과 denotational semantics은 같은 언어를 다른 목적에 맞게 설명한다.
   - EN: Evaluation and denotational semantics describe the same language for different purposes.
 - 재귀 환경은 자기 참조를 값 생성 이전에 연결해야 한다.
   - EN: Recursive environments must tie self-reference before the values are fully constructed.
@@ -130,7 +130,7 @@ A nonrecursive definition evaluates its right side before extending the environm
 
 ## 3단계 — 리스트와 트리로 재귀 연습 — §11.4–11.5
 
-생성자와 패턴이 대수적 자료를 만들고 구조적 재귀가 그 자료를 소비한다.
+constructor와 패턴이 대수적 자료를 만들고 구조적 재귀가 그 자료를 소비한다.
 
 map, reduce, append와 트리 순회는 기본 사례다. 종료 논증은 입력 자료의 구조가 작아지는지 확인하고, 축약 순서가 결합 법칙이나 결과에 미치는 영향도 구분한다.
 
@@ -145,9 +145,9 @@ Map, reduce, append, and tree traversals are central examples. Termination follo
 
 ---
 
-## 4단계 — 직접 의미론과 바인딩 규율 — §11.6–11.7
+## 4단계 — direct semantics과 바인딩 규율 — §11.6–11.7
 
-직접 표시적 의미론은 평가 규칙과 같은 결과를 함수로 주며, 동적 바인딩은 호출 환경에서 자유 변수를 찾는다.
+direct denotational semantics은 평가 규칙과 같은 결과를 함수로 주며, 동적 바인딩은 호출 환경에서 자유 변수를 찾는다.
 
 정적 바인딩은 이름변경과 지역 추론을 안정적으로 보존하지만, 동적 바인딩은 호출 경로가 자유 변수의 의미를 바꾼다. 그래서 단순한 α-이름변경조차 동작을 바꿀 수 있다.
 
@@ -175,7 +175,7 @@ What does a closure store?
 >
 > EN: It preserves lexical bindings of free variables.
 
-### Q2. 큰 단계 의미론의 특징은?
+### Q2. big-step semantics의 특징은?
 
 What characterizes big-step semantics?
 

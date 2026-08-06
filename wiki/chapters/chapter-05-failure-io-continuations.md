@@ -21,7 +21,7 @@ related:
 # 05. 실패, 입출력, 계속 (Failure, Input-Output, and Continuations)
 
 > [!abstract] 한눈에 보기
-> 실패와 중간 입출력을 추가하면 최종 상태 하나만으로는 동작을 설명할 수 없다. 시퀀스·재개·재귀 도메인·계속 의미론으로 관찰 가능한 실행 과정을 모델링한다.
+> 실패와 중간 입출력을 추가하면 최종 상태 하나만으로는 동작을 설명할 수 없다. 시퀀스·재개·재귀 도메인·continuation semantics으로 관찰 가능한 실행 과정을 모델링한다.
 >
 > **English:** Failure and intermediate I/O cannot be described by one final state. Sequences, resumptions, recursive domains, and continuation semantics model the observable course of execution.
 
@@ -31,7 +31,7 @@ related:
   - EN: Read result domains that distinguish normal termination, failure, and divergence.
 - 유한 관찰과 연속성의 물리적 논증을 설명한다.
   - EN: Explain the physical argument from finite observation to continuity.
-- 직접 의미론과 계속 의미론의 정보 흐름을 비교한다.
+- direct semantics과 continuation semantics의 정보 흐름을 비교한다.
   - EN: Compare information flow in direct and continuation semantics.
 
 ## 핵심 용어
@@ -73,7 +73,7 @@ fail은 정상 종료나 비종료와 다른 관찰이다. 의미 결과에 실�
 
 **English — Input and resumptions:** A computation requesting input has not finished; it awaits a continuation for each possible input. A resumption is a tree-like meaning containing output, input requests, and termination step by step.
 
-### §5.7 · 계속 의미론
+### §5.7 · continuation semantics
 
 명령의 의미가 최종 결과가 아니라 ‘나머지 계산을 받아 전체 결과를 만드는 함수’가 된다. 순차 합성은 명령들이 같은 계속을 넘겨받는 방식으로 단순해진다.
 
@@ -87,7 +87,7 @@ fail은 정상 종료나 비종료와 다른 관찰이다. 의미 결과에 실�
 
 ## 반드시 남겨야 할 핵심
 
-- 관찰 가능한 효과가 늘 때마다 단순 상태 변환 의미론의 결과형이 부족해진다.
+- 관찰 가능한 효과가 늘 때마다 단순 state-transformer semantics의 결과형이 부족해진다.
   - EN: Each new observable effect exposes missing structure in plain state-transformer semantics.
 - 재개는 상호작용의 가능한 미래를 데이터 구조로, 계속은 남은 계산을 함수로 나타낸다.
   - EN: Resumptions represent possible interactive futures as data; continuations represent the remaining computation as a function.
@@ -138,7 +138,7 @@ Prefix order represents growing output information. Products and disjoint unions
 
 입력 명령은 한 값이 아니라 가능한 각 입력 뒤의 나머지 계산을 가진 재개 노드다.
 
-재개 도메인은 종료, 실패, 출력 후 계속, 입력별 계속 같은 생성자를 재귀적으로 묶는다. 프로그램 의미는 최종 결과가 아니라 환경과 주고받는 잠재적으로 무한한 트리다.
+재개 도메인은 종료, 실패, 출력 후 계속, 입력별 계속 같은 constructor를 재귀적으로 묶는다. 프로그램 의미는 최종 결과가 아니라 환경과 주고받는 잠재적으로 무한한 트리다.
 
 > [!question] 책을 덮고 답해 보기
 > 출력은 하나의 다음 재개를 갖지만 입력은 함수 형태의 여러 다음 재개를 갖는 이유는?
@@ -153,9 +153,9 @@ A resumption domain recursively combines termination, failure, output-and-contin
 
 ## 4단계 — 나머지 계산을 매개변수로 — §5.7–5.8
 
-계속은 현재 명령 뒤에 무엇을 할지 나타내는 함수이며, 각 구문의 의미가 그 계속을 받아 전체 결과를 만든다.
+계속은 현재 명령 뒤에 무엇을 할지 나타내는 함수이며, 각 syntax의 의미가 그 계속을 받아 전체 결과를 만든다.
 
-순차 구성에서 `c₀;c₁`은 c₁의 의미를 현재 계속과 결합한 뒤 c₀에 넘긴다. 실패는 정상 계속을 무시하고 실패 경로로 빠지므로 예외·탈출·제어 효과를 직접 의미론보다 자연스럽게 표현한다.
+순차 구성에서 `c₀;c₁`은 c₁의 의미를 현재 계속과 결합한 뒤 c₀에 넘긴다. 실패는 정상 계속을 무시하고 실패 경로로 빠지므로 예외·탈출·제어 효과를 direct semantics보다 자연스럽게 표현한다.
 
 > [!question] 책을 덮고 답해 보기
 > CPS에서 순차 구성의 계산 순서가 계속의 중첩 순서로 어떻게 나타나는가?
@@ -168,7 +168,7 @@ For `c₀;c₁`, combine c₁ with the current continuation and pass that to c�
 
 ## 자체 점검 퀴즈
 
-### Q1. 재개 의미론이 최종 상태 의미론보다 필요한 경우는?
+### Q1. resumption semantics이 final-state semantics보다 필요한 경우는?
 
 When is resumption semantics needed beyond final-state semantics?
 
@@ -209,7 +209,7 @@ What is the intuition for a continuation?
 
 ## 다음 개념으로
 
-도메인 방정식으로 계산 과정을 기술했으니, 다음에는 한 번의 실행 단계를 추론 규칙으로 직접 정의하는 전이 의미론으로 관점을 바꾼다.
+도메인 방정식으로 계산 과정을 기술했으니, 다음에는 한 번의 실행 단계를 추론 규칙으로 직접 정의하는 transition semantics으로 관점을 바꾼다.
 
 **English:** Having described processes denotationally, we next switch to transition semantics, defining one execution step directly by inference rules.
 

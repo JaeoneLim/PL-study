@@ -135,7 +135,7 @@ An array variable can be viewed as mapping indices to variable phrases. A declar
 
 ---
 
-## 3단계 — 의미론에 스택 수명 넣기 — §19.5
+## 3단계 — semantics에 스택 수명 넣기 — §19.5
 
 지역 저장이 범위 밖으로 탈출하지 못하게 하면 할당과 해제가 후입선출 규율을 따른다.
 

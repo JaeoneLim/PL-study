@@ -218,11 +218,11 @@ tags:
 
 ## 저자의 문제 설정
 
-기존 자료가 의미론·검증의 한 접근만 깊게 다루거나 언어의 피상적 차이를 나열하는 경향을 보인다는 문제에서 출발한다. 이 책은 기본 원리를 일관된 용어와 표기로 연결하는 폭넓은 대학원 수준의 입문을 목표로 한다.
+기존 자료가 semantics·검증의 한 접근만 깊게 다루거나 언어의 피상적 차이를 나열하는 경향을 보인다는 문제에서 출발한다. 이 책은 기본 원리를 일관된 용어와 표기로 연결하는 폭넓은 대학원 수준의 입문을 목표로 한다.
 
 ## 논지의 흐름
 
-1. 술어 논리에서 추상 구문, 의미 함수, 추론 규칙, 바인딩을 분리한다.
+1. 술어 논리에서 abstract syntax, 의미 함수, 추론 규칙, 바인딩을 분리한다.
 2. 작은 명령형 언어를 상태 변환, 도메인, 고정점, 프로그램 논리로 확장한다.
 3. 실패·입출력·비결정성·동시성을 계속, 재개, 전이, 흔적으로 설명한다.
 4. 람다 계산에서 적극/정상 순서 함수형 언어와 평가 기계를 유도한다.
@@ -231,14 +231,14 @@ tags:
 
 ## 이 학습 저장소의 판단
 
-- 강점: 동일한 작은 언어를 여러 의미론으로 반복 해석해 관점 간 대응을 드러낸다.
+- 강점: 동일한 작은 언어를 여러 semantics로 반복 해석해 관점 간 대응을 드러낸다.
 - 주의: 표기와 일부 언어 예시는 역사적이며, 현대 도구의 표준 표기와 다를 수 있다.
 - 범위 밖: Hindley–Milner 알고리즘, 논리적 관계와 parametricity, propositions-as-types, temporal logic, π-calculus, logic programming, linear logic 등은 후속 학습 주제다.
 
 ## 파트 지도
 
 - [[chapter-01-predicate-logic|01 술어 논리]] → [[chapter-05-failure-io-continuations|05 계속과 I/O]]
-- [[chapter-06-transition-semantics|06 전이 의미론]] → [[chapter-09-csp|09 CSP]]
+- [[chapter-06-transition-semantics|06 transition semantics]] → [[chapter-09-csp|09 CSP]]
 - [[chapter-10-lambda-calculus|10 람다 계산]] → [[chapter-14-normal-order-language|14 정상 순서]]
 - [[chapter-15-simple-type-system|15 단순 타입]] → [[chapter-19-algol-like-languages|19 Algol]]
 - [[appendix-mathematical-background|수학 부록]]
@@ -353,10 +353,12 @@ await write("wiki/log.md", `# Wiki log
 
 await write("wiki/glossary.md", `# Glossary
 
-| 한국어 | English | 학습 메모 |
+> 한국어 학습 노트에서도 syntax, semantics, statement, assertion, constructor와 그 표준 파생 표현은 영문으로 쓴다.
+
+| 스터디 표기 | English | 학습 메모 |
 |---|---|---|
-| 추상 구문 | abstract syntax | 표기와 독립된 구문 트리 |
-| 표시적 의미론 | denotational semantics | 구문을 수학적 의미로 보내는 함수 |
+| abstract syntax | abstract syntax | 표기와 독립된 syntax tree |
+| denotational semantics | denotational semantics | syntax을 수학적 의미로 보내는 함수 |
 | 합성성 | compositionality | 전체 의미가 부분 의미로 결정됨 |
 | 바인딩 | binding | 이름과 범위를 연결하는 구조 |
 | 캡처 회피 치환 | capture-avoiding substitution | 자유 변수의 의도치 않은 결박 방지 |
@@ -366,7 +368,7 @@ await write("wiki/glossary.md", `# Glossary
 | 전체 정확성 | total correctness | 종료와 결과 정확성 |
 | 계속 | continuation | 현재 계산 뒤에 할 일 |
 | 재개 | resumption | 상호작용하는 계산의 다음 단계 구조 |
-| 전이 의미론 | transition semantics | 한 단계 실행 관계 기반 의미론 |
+| transition semantics | transition semantics | 한 단계 실행 관계 기반 semantics |
 | 비결정성 | nondeterminism | 여러 허용 실행 중 선택이 미지정됨 |
 | 공정성 | fairness | 계속 가능한 참여자가 영원히 배제되지 않는 스케줄 가정 |
 | 클로저 | closure | 함수 코드와 정의 환경의 묶음 |

@@ -53,13 +53,13 @@ related:
 
 ### §15.1–15.2 · 타입, 문맥, 판단, 규칙
 
-Γ ⊢ e : τ는 문맥 Γ가 자유 변수 타입을 가정할 때 e가 τ형이라는 유도 가능한 주장이다. 변수·함수·적용·곱·합 규칙이 구문 구조를 따른다.
+Γ ⊢ e : τ는 문맥 Γ가 자유 변수 타입을 가정할 때 e가 τ형이라는 유도 가능한 주장이다. 변수·함수·적용·곱·합 규칙이 syntax structure를 따른다.
 
 **English — Types, contexts, judgments, and rules:** Γ ⊢ e : τ is a derivable claim that e has type τ under assumptions Γ for free variables. Rules for variables, functions, application, products, and sums follow syntax structure.
 
 ### §15.3 · 명시적 타입 표기
 
-람다 매개변수와 재귀 지점에 타입을 기록하면 타입 검사 규칙의 선택이 구문에 드러난다. 암시적 추론과 달리 유도 탐색의 모호성이 줄어든다.
+람다 매개변수와 재귀 지점에 타입을 기록하면 타입 검사 규칙의 선택이 syntax에 드러난다. 암시적 추론과 달리 유도 탐색의 모호성이 줄어든다.
 
 **English — Explicit typing:** Annotating lambda parameters and recursive points exposes typing choices in syntax and reduces ambiguity compared with implicit inference.
 
@@ -71,7 +71,7 @@ related:
 
 ### §15.5 · 내재적 관점
 
-타입 유도 자체를 프로그램 구문의 일부로 보아 잘 타입된 항만 언어에 존재하게 한다. 같은 표면 항도 서로 다른 유도에 따라 다른 내재 객체가 될 수 있다.
+타입 유도 자체를 프로그램 syntax의 일부로 보아 잘 타입된 항만 언어에 존재하게 한다. 같은 표면 항도 서로 다른 유도에 따라 다른 내재 객체가 될 수 있다.
 
 **English — Intrinsic view:** Treats typing derivations as part of program syntax so only well-typed terms inhabit the language. One surface term may correspond to different intrinsic objects through different derivations.
 
@@ -106,7 +106,7 @@ related:
 
 `Γ ⊢ e : τ`는 문맥 Γ의 가정 아래 e가 타입 τ를 가진다는 유도 가능한 주장이다.
 
-변수 규칙은 문맥을 조회하고, 추상화는 매개변수 가정을 추가하며, 적용은 연산자가 `τ→τ′`, 인수가 τ인지 맞춘다. 타입 유도 트리는 구문 트리를 따라 국소 제약을 조합한다.
+변수 규칙은 문맥을 조회하고, 추상화는 매개변수 가정을 추가하며, 적용은 연산자가 `τ→τ′`, 인수가 τ인지 맞춘다. 타입 유도 트리는 syntax tree를 따라 국소 제약을 조합한다.
 
 > [!question] 책을 덮고 답해 보기
 > `λx. x`에 가능한 단순 타입의 일반 모양은?
@@ -136,7 +136,7 @@ Type checking and type inference are different tasks. With enough annotations, r
 
 ---
 
-## 3단계 — 타입은 부분집합인가, 구문 자체인가 — §15.4–15.6
+## 3단계 — 타입은 부분집합인가, syntax 자체인가 — §15.4–15.6
 
 외재적 관점은 비타입 항 중 잘 타입된 항을 고르고, 내재적 관점은 애초에 타입별 항 집합을 만든다.
 
@@ -187,8 +187,8 @@ When is application `f a` typable?
 
 What is the extrinsic view of typing?
 
-- A. 비타입 구문에 타입 성질을 부여 / Assign a typing property to untyped syntax
-- B. 타입마다 별도 구문만 생성 / Construct only type-indexed syntax
+- A. 비타입 syntax에 타입 성질을 부여 / Assign a typing property to untyped syntax
+- B. 타입마다 별도 syntax만 생성 / Construct only type-indexed syntax
 - C. 실행 후 타입 결정 / Determine type only after execution
 
 > [!success]- 정답과 해설

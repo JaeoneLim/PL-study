@@ -21,7 +21,7 @@ related:
 # A. 수학적 배경 (Mathematical Background)
 
 > [!abstract] 한눈에 보기
-> 책의 의미론과 증명에서 쓰는 집합론 표기, 관계, 함수, 곱, 분리합, 폐쇄 연산을 한곳에 정리한다.
+> 책의 semantics과 증명에서 쓰는 집합론 표기, 관계, 함수, 곱, 분리합, 폐쇄 연산을 한곳에 정리한다.
 >
 > **English:** The appendix consolidates the set-theoretic notation, relations, functions, products, disjoint unions, and closure operations used in the semantics and proofs.
 
@@ -52,7 +52,7 @@ related:
 
 ### §A.1 · 집합과 멱집합
 
-원소, 부분집합, 합집합, 교집합, 차집합, 멱집합을 정의한다. 구문 범주·상태 공간·가능 결과 집합을 읽는 기본 표기다.
+원소, 부분집합, 합집합, 교집합, 차집합, 멱집합을 정의한다. syntax category·상태 공간·가능 결과 집합을 읽는 기본 표기다.
 
 **English — Sets and powersets:** Defines membership, subset, union, intersection, difference, and powerset—the base notation for syntax categories, state spaces, and sets of outcomes.
 
@@ -76,7 +76,7 @@ related:
 
 ## 반드시 남겨야 할 핵심
 
-- 의미론 표기는 대부분 집합 사이의 함수와 관계를 정밀하게 조합한 것이다.
+- semantics 표기는 대부분 집합 사이의 함수와 관계를 정밀하게 조합한 것이다.
   - EN: Most semantic notation precisely combines functions and relations between sets.
 - 부분 함수와 관계는 각각 결정적 계산과 여러 가능한 계산의 자연스러운 모델이다.
   - EN: Partial functions and relations naturally model deterministic and multiply possible computations, respectively.
@@ -93,7 +93,7 @@ related:
 
 원소, 부분집합, 합집합, 교집합, 차집합, 멱집합을 이후 의미 도메인의 기본 문법으로 사용한다.
 
-타입이나 구문 범주를 집합으로, 의미를 그 집합 사이의 함수로 읽는다. 포함 순서가 정보 순서로 재사용될 수 있으므로 원소 관계와 부분집합 관계를 혼동하지 않는다.
+타입이나 syntax category를 집합으로, 의미를 그 집합 사이의 함수로 읽는다. 포함 순서가 정보 순서로 재사용될 수 있으므로 원소 관계와 부분집합 관계를 혼동하지 않는다.
 
 > [!question] 책을 덮고 답해 보기
 > `x∈P(S)`와 `x⊆S`가 동치인 이유를 설명하라.
@@ -110,7 +110,7 @@ Types and syntax categories are treated as sets, with meanings as functions betw
 
 이항 관계는 비결정적 한 단계 이동을 표현하고 합성·폐쇄는 여러 단계 실행을 만든다.
 
-역관계는 화살표 방향을 바꾸고, 반사·추이 폐쇄 R*는 0회 이상의 R 단계를, 추이 폐쇄 R+는 1회 이상을 나타낸다. 전이 의미론 표기의 수학적 기반이다.
+역관계는 화살표 방향을 바꾸고, 반사·추이 폐쇄 R*는 0회 이상의 R 단계를, 추이 폐쇄 R+는 1회 이상을 나타낸다. transition semantics 표기의 수학적 기반이다.
 
 > [!question] 책을 덮고 답해 보기
 > R*가 항상 항등 관계를 포함하는 이유는?
@@ -127,7 +127,7 @@ Converse reverses arrows; reflexive-transitive closure R* means zero or more R s
 
 함수는 각 입력에 정확히 하나의 출력을 대응시키는 관계이며 부분 함수는 일부 입력에서만 정의된다.
 
-함수 합성의 순서, 제한, 갱신 표기는 상태와 환경 의미론에서 반복된다. 고차 함수 공간은 함수 자체를 원소로 다루며 도메인 이론과 람다 의미의 기반이 된다.
+함수 합성의 순서, 제한, 갱신 표기는 상태와 환경 semantics에서 반복된다. 고차 함수 공간은 함수 자체를 원소로 다루며 도메인 이론과 람다 의미의 기반이 된다.
 
 > [!question] 책을 덮고 답해 보기
 > 상태 갱신 `σ[x↦v]`가 원래 σ와 어디에서 다른지 정의하라.
@@ -179,7 +179,7 @@ How do product and disjoint union differ?
 - C. 곱만 함수를 포함 / Only products may contain functions
 
 > [!success]- 정답과 해설
-> **A.** 동시 구성과 대안 선택을 구분하는 기본 생성자다.
+> **A.** 동시 구성과 대안 선택을 구분하는 기본 constructor다.
 >
 > EN: They are basic constructors for combination versus alternatives.
 

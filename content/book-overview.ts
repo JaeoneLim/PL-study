@@ -10,18 +10,18 @@ export const bookOverview = {
     "This is not a catalog of languages or a collection of grammars. It is a map of how programs become mathematical objects, how their meaning and execution are described, and how theories of correctness and abstraction connect.",
   ),
   thesis: b(
-    "Reynolds의 중심 생각은 하나의 언어를 이해하려면 구문만 읽어서는 안 된다는 것이다. 어떤 수학적 세계가 의미를 담는지, 프로그램이 그 세계에서 어떻게 행동하는지, 그리고 그 설명으로 무엇을 증명할 수 있는지를 함께 보아야 한다. 책은 같은 작은 언어를 표시적·전이적·논리적 관점으로 거듭 비추며 각 관점의 힘과 한계를 비교한다.",
+    "Reynolds의 중심 생각은 하나의 언어를 이해하려면 syntax만 읽어서는 안 된다는 것이다. 어떤 수학적 세계가 의미를 담는지, 프로그램이 그 세계에서 어떻게 행동하는지, 그리고 그 설명으로 무엇을 증명할 수 있는지를 함께 보아야 한다. 책은 같은 작은 언어를 표시적·전이적·논리적 관점으로 거듭 비추며 각 관점의 힘과 한계를 비교한다.",
     "Reynolds’s central idea is that syntax alone cannot explain a language. We must also ask which mathematical world carries meaning, how programs behave in that world, and what the account lets us prove. The book repeatedly views small languages through denotational, transition-based, and logical lenses so that the power and limits of each become visible.",
   ),
   drivingQuestion: b(
-    "구문, 의미, 실행, 증명, 타입을 어떻게 하나의 일관된 설명으로 연결할 것인가?",
+    "syntax, 의미, 실행, 증명, 타입을 어떻게 하나의 일관된 설명으로 연결할 것인가?",
     "How can syntax, meaning, execution, proof, and types form one coherent account?",
   ),
   arcs: [
     {
       number: "01",
       chapters: "1–5 + Appendix",
-      title: b("기초와 명령형 의미론", "Foundations and imperative semantics"),
+      title: b("기초와 명령형 semantics", "Foundations and imperative semantics"),
       question: b(
         "프로그램의 뜻을 수학적으로 정의하고 그 올바름을 어떻게 증명할까?",
         "How can we define a program’s meaning mathematically and prove it correct?",
@@ -78,8 +78,8 @@ export const bookOverview = {
   semanticSpine: [
     {
       number: "01",
-      title: b("구문을 분리한다", "Separate the syntax"),
-      detail: b("구체 표기에서 추상 구문을 떼어 내고, 자유 변수와 바인딩 범위를 명시한다.", "Detach abstract syntax from notation and make free variables and binding scopes explicit."),
+      title: b("syntax을 분리한다", "Separate the syntax"),
+      detail: b("구체 표기에서 abstract syntax을 떼어 내고, 자유 변수와 바인딩 범위를 명시한다.", "Detach abstract syntax from notation and make free variables and binding scopes explicit."),
     },
     {
       number: "02",
@@ -88,7 +88,7 @@ export const bookOverview = {
     },
     {
       number: "03",
-      title: b("구문과 의미를 연결한다", "Connect syntax to meaning"),
+      title: b("syntax과 의미를 연결한다", "Connect syntax to meaning"),
       detail: b("의미 함수나 전이 규칙을 합성적으로 정의해 복합 구절의 뜻을 부분에서 만든다.", "Define semantic functions or transition rules compositionally so compound phrases derive meaning from their parts."),
     },
     {
@@ -130,7 +130,7 @@ export const bookOverview = {
   ],
   studyMethod: [
     b("먼저 이 개요에서 현재 장이 전체 논증에서 맡은 역할을 찾는다.", "First locate the chapter’s role in the book’s overall argument on this overview."),
-    b("장 페이지의 핵심 질문을 읽고 구문 → 의미 → 증명 순서를 따라간다.", "Read the chapter’s driving question and follow the syntax → meaning → proof sequence."),
+    b("장 페이지의 핵심 질문을 읽고 syntax → 의미 → 증명 순서를 따라간다.", "Read the chapter’s driving question and follow the syntax → meaning → proof sequence."),
     b("표기보다 모델의 선택에 집중한다. 무엇을 관찰하고 무엇을 추상화했는지 묻는다.", "Focus on the choice of model rather than notation: ask what is observed and what is abstracted away."),
     b("체크포인트와 퀴즈를 책 없이 풀고, 틀린 개념만 원문 정의와 증명으로 돌아가 확인한다.", "Answer checkpoints and quizzes without the book, then return to the original definitions and proofs only for weak concepts."),
   ],
