@@ -3,7 +3,10 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { bookOverview } from "../content/book-overview";
 import { chapterGuides } from "../content/chapter-guides";
+import { chapterLongforms } from "../content/chapter-longforms";
 import { parts, units } from "../content/course";
+import type { LessonBlock } from "../content/longform-types";
+import type { Locale } from "../content/types";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const date = "2026-08-03";
@@ -38,6 +41,71 @@ async function write(relative: string, body: string) {
   await writeFile(target, `${body.trim()}\n`, "utf8");
 }
 
+function asCallout(type: string, title: string, body: string) {
+  return `> [!${type}] ${title}\n${body.split("\n").map((line) => line ? `> ${line}` : ">").join("\n")}`;
+}
+
+function longformBlockMarkdown(block: LessonBlock, locale: Locale) {
+  if (block.kind === "prose") {
+    return block.paragraphs.map((paragraph) => paragraph[locale]).join("\n\n");
+  }
+
+  if (block.kind === "list") {
+    const heading = block.title ? `### ${block.title[locale]}\n\n` : "";
+    return `${heading}${block.items.map((item) => `- ${item[locale]}`).join("\n")}`;
+  }
+
+  if (block.kind === "notation") {
+    return `### ${block.title[locale]}\n\n\`\`\`text\n${block.notation}\n\`\`\`\n\n${block.explanation[locale]}`;
+  }
+
+  if (block.kind === "example") {
+    const body = `${block.setup[locale]}\n\n${block.steps.map((step, index) => `${index + 1}. ${step[locale]}`).join("\n")}\n\n**${locale === "ko" ? "결론" : "Conclusion"}:** ${block.conclusion[locale]}`;
+    return asCallout("example", block.title[locale], body);
+  }
+
+  const type = block.tone === "warning" ? "warning" : block.tone === "proof" ? "abstract" : "tip";
+  return asCallout(type, block.title[locale], block.paragraphs.map((paragraph) => paragraph[locale]).join("\n\n"));
+}
+
+function longformMarkdown(slug: string) {
+  const lesson = chapterLongforms[slug];
+  if (!lesson) return "";
+
+  const sections = lesson.sections.map((lessonSection, index) => {
+    const koreanBlocks = lessonSection.blocks.map((block) => longformBlockMarkdown(block, "ko")).join("\n\n");
+    const englishBlocks = lessonSection.blocks.map((block) => longformBlockMarkdown(block, "en")).join("\n\n");
+    const koreanChecks = lessonSection.checkpoints.map((checkpoint, checkIndex) => `${checkIndex + 1}. ${checkpoint.ko}`).join("\n");
+    const englishChecks = lessonSection.checkpoints.map((checkpoint, checkIndex) => `${checkIndex + 1}. ${checkpoint.en}`).join("\n");
+
+    return `## ${String(index + 1).padStart(2, "0")}. ${lessonSection.title.ko} — ${lessonSection.covers} · ${lessonSection.minutes}분
+
+> [!abstract] 이 절의 중심
+> ${lessonSection.lead.ko}
+
+${koreanBlocks}
+
+${asCallout("question", "이 절을 덮고 확인하기", koreanChecks)}
+
+### English companion — ${lessonSection.title.en}
+
+*${lessonSection.lead.en}*
+
+${englishBlocks}
+
+${asCallout("question", "Retrieval check", englishChecks)}`;
+  }).join("\n\n---\n\n");
+
+  return `# ${lesson.title.ko} (${lesson.readingMinutes}분 읽기)
+
+${lesson.introduction.map((paragraph) => paragraph.ko).join("\n\n")}
+
+> [!info] English introduction
+${lesson.introduction.map((paragraph) => `> ${paragraph.en}`).join("\n>\n")}
+
+${sections}`;
+}
+
 function chapterNote(unit: (typeof units)[number]) {
   const guide = chapterGuides[unit.slug];
   const related = units
@@ -50,6 +118,7 @@ function chapterNote(unit: (typeof units)[number]) {
   const detailedContents = guide.sections.map((item) => `### ${item.covers} · ${item.title.ko}\n\n${item.detail.ko}\n\n**English — ${item.title.en}:** ${item.detail.en}`).join("\n\n");
   const takeaways = guide.takeaways.map((item) => `- ${item.ko}\n  - EN: ${item.en}`).join("\n");
   const cautions = guide.cautions.map((item) => `- ${item.ko}\n  - EN: ${item.en}`).join("\n");
+  const completeLesson = longformMarkdown(unit.slug);
   const steps = unit.steps.map((step) => `## ${step.title.ko} — ${step.covers}\n\n${step.summary.ko}\n\n${step.detail.ko}\n\n> [!question] 책을 덮고 답해 보기\n> ${step.checkpoint.ko}\n\n### English companion\n\n${step.summary.en}\n\n${step.detail.en}`).join("\n\n---\n\n");
   const quiz = unit.quiz.map((question, index) => {
     const options = question.options.map((option, optionIndex) => `- ${String.fromCharCode(65 + optionIndex)}. ${option.ko} / ${option.en}`).join("\n");
@@ -105,7 +174,7 @@ ${takeaways}
 > [!warning] 자주 생기는 혼동
 ${cautions.split("\n").map((line) => `> ${line}`).join("\n")}
 
-${steps}
+${completeLesson ? `${completeLesson}\n\n# 압축 복습\n\n` : ""}${steps}
 
 ## 자체 점검 퀴즈
 

@@ -16,6 +16,16 @@ units: Chapters 1–19 plus the mathematical appendix.
 - An Obsidian-compatible `wiki/` generated from the same course content
 - Source manifest, ingestion log, glossary, overview, and hot context
 
+## Longform expansion status
+
+The course is being expanded sequentially so displayed reading times reflect
+actual material rather than a nominal estimate.
+
+- Chapter 1: complete 60+ minute lesson, worked examples, proof sketches,
+  retrieval checks, and practice workshop
+- Chapters 2–19 and the appendix: concise guided briefs, labeled `Brief` until
+  each receives the same 30+ minute treatment
+
 ## Copyright boundary
 
 The textbook PDF is copyrighted and is **not part of this repository**. Local

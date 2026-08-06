@@ -3,7 +3,9 @@ import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { bookOverview } from "../content/book-overview";
 import { chapterGuides } from "../content/chapter-guides";
+import { chapterLongforms } from "../content/chapter-longforms";
 import { units } from "../content/course";
+import { longformReadingMinutes } from "../content/longform-status";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const errors: string[] = [];
@@ -19,6 +21,23 @@ assert(Object.keys(chapterGuides).length === units.length, `expected ${units.len
 assert(bookOverview.arcs.length === 4, `expected 4 whole-book arcs, found ${bookOverview.arcs.length}`);
 assert(bookOverview.semanticSpine.length >= 5, "whole-book overview needs a complete semantic spine");
 assert(bookOverview.recurringLenses.length >= 6, "whole-book overview needs recurring conceptual lenses");
+assert(Boolean(chapterLongforms["predicate-logic"]), "Chapter 1 must have a complete longform lesson");
+
+for (const [slug, lesson] of Object.entries(chapterLongforms)) {
+  if (!lesson) continue;
+  const koreanCharacterCount = (JSON.stringify(lesson).match(/[가-힣]/g) ?? []).length;
+  const plannedMinutes = lesson.sections.reduce((total, section) => total + section.minutes, 0);
+  assert(lesson.readingMinutes >= 30, `${slug}: longform lesson must be at least a 30-minute read`);
+  assert(longformReadingMinutes[slug] === lesson.readingMinutes, `${slug}: longform status reading time is out of sync`);
+  assert(plannedMinutes >= lesson.readingMinutes, `${slug}: section reading times do not support the chapter estimate`);
+  assert(koreanCharacterCount >= lesson.minimumKoreanCharacters, `${slug}: longform Korean body is too short (${koreanCharacterCount}/${lesson.minimumKoreanCharacters} characters)`);
+  assert(lesson.sections.length >= 8, `${slug}: expected at least 8 longform sections`);
+  assert(new Set(lesson.sections.map((section) => section.id)).size === lesson.sections.length, `${slug}: longform section ids must be unique`);
+  for (const [index, section] of lesson.sections.entries()) {
+    assert(section.blocks.length >= 2, `${slug} longform section ${index + 1}: expected multiple explanation blocks`);
+    assert(section.checkpoints.length >= 2, `${slug} longform section ${index + 1}: expected at least 2 retrieval checks`);
+  }
+}
 
 for (const unit of units) {
   const guide = chapterGuides[unit.slug];

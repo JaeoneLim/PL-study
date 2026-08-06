@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CompletionButton } from "../../../components/CompletionButton";
+import { LongformLesson } from "../../../components/LongformLesson";
 import { QuizPanel } from "../../../components/QuizPanel";
 import { SiteHeader } from "../../../components/SiteHeader";
 import { chapterGuides } from "../../../../content/chapter-guides";
+import { chapterLongforms } from "../../../../content/chapter-longforms";
 import { getUnit, getUnitNeighbors, isLocale, units } from "../../../../content/course";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
@@ -33,6 +35,7 @@ export default async function ChapterPage({ params }: Props) {
   const locale = localeParam;
   const guide = chapterGuides[slug];
   if (!guide) notFound();
+  const longform = chapterLongforms[slug];
   const { previous, next } = getUnitNeighbors(slug);
 
   return (
@@ -43,7 +46,9 @@ export default async function ChapterPage({ params }: Props) {
           <div className="chapter-breadcrumb"><Link href={`/${locale}`}>{locale === "ko" ? "과정 지도" : "Course map"}</Link><span>/</span><span>{unit.number}</span></div>
           <div className="chapter-hero-grid">
             <div>
-              <p className="kicker">PART {unit.part} · PP. {unit.pages} · {unit.minutes} MIN</p>
+              <p className="kicker">
+                PART {unit.part} · PP. {unit.pages} · {longform ? `${longform.readingMinutes} MIN+` : (locale === "ko" ? "요약본" : "GUIDED BRIEF")}
+              </p>
               <h1><span>{unit.number}</span>{unit.title[locale]}</h1>
               <p className="chapter-eyebrow">{unit.eyebrow[locale]}</p>
               <p className="chapter-overview">{unit.overview[locale]}</p>
@@ -61,7 +66,14 @@ export default async function ChapterPage({ params }: Props) {
             <p>{locale === "ko" ? "학습 단계" : "ON THIS PAGE"}</p>
             <nav aria-label={locale === "ko" ? "장 목차" : "Chapter contents"}>
               <a href="#contents"><span>00</span>{locale === "ko" ? "상세 내용 지도" : "Detailed contents"}</a>
-              {unit.steps.map((step, index) => <a href={`#${step.id}`} key={step.id}><span>{String(index + 1).padStart(2, "0")}</span>{step.title[locale].replace(/^.*?—\s*/, "")}</a>)}
+              {longform
+                ? longform.sections.map((section, index) => (
+                  <a href={`#${section.id}`} key={section.id}>
+                    <span>{String(index + 1).padStart(2, "0")}</span>{section.title[locale]}
+                  </a>
+                ))
+                : unit.steps.map((step, index) => <a href={`#${step.id}`} key={step.id}><span>{String(index + 1).padStart(2, "0")}</span>{step.title[locale].replace(/^.*?—\s*/, "")}</a>)}
+              {longform && <a href="#review"><span>R</span>{locale === "ko" ? "압축 복습" : "Condensed review"}</a>}
               <a href="#quiz"><span>✓</span>{locale === "ko" ? "개념 확인" : "Concept check"}</a>
             </nav>
             <div className="toc-terms"><p>{locale === "ko" ? "핵심 용어" : "KEY TERMS"}</p>{unit.keyTerms.map((term) => <span key={term.en}>{term[locale]}<small>{locale === "ko" ? term.en : term.ko}</small></span>)}</div>
@@ -92,18 +104,29 @@ export default async function ChapterPage({ params }: Props) {
               </div>
             </section>
 
-            {unit.steps.map((step, index) => (
-              <section className="study-step" id={step.id} key={step.id}>
-                <div className="step-meta"><span>{String(index + 1).padStart(2, "0")}</span><small>{step.covers}</small></div>
-                <div className="step-body">
-                  <h2>{step.title[locale]}</h2>
-                  <p className="step-summary">{step.summary[locale]}</p>
-                  <p>{step.detail[locale]}</p>
-                  {step.notation && <div className="notation" aria-label={locale === "ko" ? "핵심 표기" : "Key notation"}><span>NOTATION</span><code>{step.notation}</code></div>}
-                  <div className="checkpoint"><span aria-hidden="true">?</span><div><strong>{locale === "ko" ? "책을 덮고 답해 보기" : "Close the book and answer"}</strong><p>{step.checkpoint[locale]}</p></div></div>
-                </div>
-              </section>
-            ))}
+            {longform && <LongformLesson lesson={longform} locale={locale} />}
+
+            <section className={longform ? "lesson-review" : undefined} id={longform ? "review" : undefined}>
+              {longform && (
+                <header className="lesson-review-header">
+                  <p className="section-index">R · {locale === "ko" ? "압축 복습" : "CONDENSED REVIEW"}</p>
+                  <h2>{locale === "ko" ? "네 단계로 다시 잡는 1장" : "Chapter 1 again in four steps"}</h2>
+                  <p>{locale === "ko" ? "장문 본문을 읽은 뒤 핵심 연결을 빠르게 회상하는 구간입니다." : "Use this section to retrieve the central connections after the complete lesson."}</p>
+                </header>
+              )}
+              {unit.steps.map((step, index) => (
+                <section className="study-step" id={step.id} key={step.id}>
+                  <div className="step-meta"><span>{String(index + 1).padStart(2, "0")}</span><small>{step.covers}</small></div>
+                  <div className="step-body">
+                    <h2>{step.title[locale]}</h2>
+                    <p className="step-summary">{step.summary[locale]}</p>
+                    <p>{step.detail[locale]}</p>
+                    {step.notation && <div className="notation" aria-label={locale === "ko" ? "핵심 표기" : "Key notation"}><span>NOTATION</span><code>{step.notation}</code></div>}
+                    <div className="checkpoint"><span aria-hidden="true">?</span><div><strong>{locale === "ko" ? "책을 덮고 답해 보기" : "Close the book and answer"}</strong><p>{step.checkpoint[locale]}</p></div></div>
+                  </div>
+                </section>
+              ))}
+            </section>
 
             <section className="bridge-card">
               <p className="kicker">{locale === "ko" ? "개념 다리" : "CONCEPTUAL BRIDGE"}</p>

@@ -32,6 +32,8 @@ test("renders the Korean course map with every unit", async () => {
   assert.match(html, /Algol 계열 언어/);
   assert.match(html, /수학적 배경/);
   assert.match(html, /책 전체 개요부터/);
+  assert.match(html, /60 min\+/);
+  assert.match(html, /요약본/);
 });
 
 test("renders a whole-book overview in both languages", async () => {
@@ -58,6 +60,19 @@ test("renders an English chapter lesson and quiz", async () => {
   assert.match(html, /What this chapter actually covers/);
   assert.match(html, /Normal-order evaluation/);
   assert.match(html, /COMMON CONFUSIONS/);
+});
+
+test("renders Chapter 1 as a complete longform lesson", async () => {
+  const response = await render("/ko/chapter/predicate-logic");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /1장 완전 학습 본문/);
+  assert.match(html, /60.*분 읽기/s);
+  assert.match(html, /운반집합·생성자·초기 대수/);
+  assert.match(html, /일치 정리\(Coincidence Theorem\)/);
+  assert.match(html, /치환 정리\(Substitution Theorem\)/);
+  assert.match(html, /정의에서 손으로 계산하고 증명하기/);
+  assert.match(html, /압축 복습/);
 });
 
 test("keeps copyrighted source material out of the tracked surface", async () => {

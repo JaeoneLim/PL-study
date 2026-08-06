@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { parts, units, type Locale } from "../../content/course";
+import { longformReadingMinutes } from "../../content/longform-status";
 
 const STORAGE_KEY = "semantic-atlas-completed-v1";
 
@@ -75,11 +76,18 @@ export function CourseBrowser({ locale }: { locale: Locale }) {
       <div className="chapter-grid">
         {visible.map((unit) => {
           const done = completed.includes(unit.slug);
+          const longformMinutes = longformReadingMinutes[unit.slug];
           return (
             <Link className={`chapter-card ${done ? "is-complete" : ""}`} href={`/${locale}/chapter/${unit.slug}`} key={unit.slug}>
               <div className="chapter-card-top">
                 <span className="chapter-number">{unit.number}</span>
-                <span className="chapter-status">{done ? (locale === "ko" ? "완료 ✓" : "Done ✓") : `${unit.minutes} min`}</span>
+                <span className="chapter-status">
+                  {done
+                    ? (locale === "ko" ? "완료 ✓" : "Done ✓")
+                    : longformMinutes
+                      ? `${longformMinutes} min+`
+                      : (locale === "ko" ? "요약본" : "Brief")}
+                </span>
               </div>
               <p className="chapter-part">{locale === "ko" ? `${unit.part}부` : `PART ${unit.part}`} · pp. {unit.pages}</p>
               <h3>{unit.title[locale]}</h3>
