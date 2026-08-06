@@ -71,6 +71,23 @@ Regenerate the Obsidian notes after editing `content/`:
 npm run content:wiki
 ```
 
+## Automatic deployment
+
+Pushing to `main` runs `.github/workflows/deploy.yml`. The workflow validates
+the course, builds it, runs the rendered-page tests, and deploys the generated
+Worker bundle to Cloudflare Workers.
+
+Before the first deployment, add these repository secrets under **Settings →
+Secrets and variables → Actions**:
+
+- `CLOUDFLARE_API_TOKEN`: a token with permission to edit Cloudflare Workers
+- `CLOUDFLARE_ACCOUNT_ID`: the Cloudflare account that owns the Worker
+
+The workflow can also be started manually from **Actions → Deploy to
+Cloudflare Workers → Run workflow**. Its job summary contains the deployed
+URL. This deployment is separate from the private `chatgpt.site` preview,
+which does not provide a permanent GitHub Actions credential.
+
 ## Repository map
 
 ```text
