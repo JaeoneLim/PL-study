@@ -8,7 +8,7 @@ export default function LanguageGateway() {
       <section className="gateway-panel">
         <p className="kicker">REYNOLDS · 1998 / 2009</p>
         <div className="gateway-mark" aria-hidden="true">λ</div>
-        <h1>Semantic Atlas</h1>
+        <h1>Theories of PL</h1>
         <p className="gateway-lead">
           A bilingual, chapter-by-chapter companion to <em>Theories of Programming Languages</em>.
         </p>

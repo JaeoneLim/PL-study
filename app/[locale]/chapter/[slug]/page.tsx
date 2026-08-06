@@ -143,7 +143,7 @@ export default async function ChapterPage({ params }: Props) {
           {next ? <Link className="next" href={`/${locale}/chapter/${next.slug}`}><span>{locale === "ko" ? "다음" : "NEXT"} →</span><strong>{next.number}. {next.title[locale]}</strong></Link> : <Link className="next" href={`/${locale}`}><span>{locale === "ko" ? "완료" : "FINISH"} →</span><strong>{locale === "ko" ? "과정 지도" : "Course map"}</strong></Link>}
         </nav>
       </main>
-      <footer className="site-footer"><span>Semantic Atlas</span><p>{locale === "ko" ? "독립 학습 노트 · 원문 미수록" : "Independent study notes · textbook not included"}</p><Link href={`/${locale}`}>{locale === "ko" ? "과정 지도" : "Course map"}</Link></footer>
+      <footer className="site-footer"><span>Theories of PL</span><p>{locale === "ko" ? "독립 학습 노트 · 원문 미수록" : "Independent study notes · textbook not included"}</p><Link href={`/${locale}`}>{locale === "ko" ? "과정 지도" : "Course map"}</Link></footer>
     </div>
   );
 }

@@ -87,7 +87,7 @@ export default async function CourseHome({ params }: Props) {
             : "This site contains independent summaries, explanations, and original quizzes organized around John C. Reynolds' Theories of Programming Languages (1998; digitally printed 2009). Page references follow the print edition. It does not reproduce the text or full exercises; consult your copy for exact definitions and proofs."}</p>
         </section>
       </main>
-      <footer className="site-footer"><span>Semantic Atlas</span><p>{locale === "ko" ? "의미를 따라, 증명하고, 연결하기." : "Trace meaning. Prove behavior. Connect ideas."}</p><Link href="/">KO / EN</Link></footer>
+      <footer className="site-footer"><span>Theories of PL</span><p>{locale === "ko" ? "의미를 따라, 증명하고, 연결하기." : "Trace meaning. Prove behavior. Connect ideas."}</p><Link href="/">KO / EN</Link></footer>
     </div>
   );
 }

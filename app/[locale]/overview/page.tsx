@@ -168,7 +168,7 @@ export default async function BookOverviewPage({ params }: Props) {
           </article>
         </div>
       </main>
-      <footer className="site-footer"><span>Semantic Atlas</span><p>{locale === "ko" ? "전체 지도를 보고, 한 장씩 깊게." : "See the whole map, then go deep one chapter at a time."}</p><Link href={`/${locale}#course-map`}>{locale === "ko" ? "과정 지도" : "Course map"}</Link></footer>
+      <footer className="site-footer"><span>Theories of PL</span><p>{locale === "ko" ? "전체 지도를 보고, 한 장씩 깊게." : "See the whole map, then go deep one chapter at a time."}</p><Link href={`/${locale}#course-map`}>{locale === "ko" ? "과정 지도" : "Course map"}</Link></footer>
     </div>
   );
 }

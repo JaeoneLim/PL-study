@@ -17,7 +17,7 @@ test("renders the bilingual language gateway", async () => {
   const response = await render("/");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /Semantic Atlas/);
+  assert.match(html, /Theories of PL/);
   assert.match(html, /한국어로 공부하기/);
   assert.match(html, /Study in English/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);

@@ -1,4 +1,4 @@
-# Semantic Atlas
+# Theories of PL
 
 A Korean–English study companion for John C. Reynolds’ *Theories of
 Programming Languages*. The course reorganizes the textbook into 20 guided

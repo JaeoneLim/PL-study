@@ -9,9 +9,9 @@ type Props = {
 export function SiteHeader({ locale, alternateHref }: Props) {
   return (
     <header className="site-header">
-      <Link className="wordmark" href={`/${locale}`} aria-label="Semantic Atlas home">
+      <Link className="wordmark" href={`/${locale}`} aria-label="Theories of PL home">
         <span className="wordmark-glyph" aria-hidden="true">λ</span>
-        <span>Semantic Atlas</span>
+        <span>Theories of PL</span>
       </Link>
       <nav className="header-nav" aria-label={locale === "ko" ? "주요 탐색" : "Primary navigation"}>
         <Link href={`/${locale}/overview`}>{locale === "ko" ? "책 전체 개요" : "Book overview"}</Link>
