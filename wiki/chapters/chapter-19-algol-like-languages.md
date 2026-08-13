@@ -43,6 +43,91 @@ related:
 - **스택 규율 (stack discipline)**
 - **Algol (Algol)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 구절 타입 (phrase type)
+
+저장되는 데이터의 종류가 아니라 expression, 쓰기 대상, command, procedure처럼 프로그램 조각이 제공하는 계산 능력을 분류하는 타입이다.
+
+> [!example] 엔지니어 관점
+> 같은 32-bit data라도 source-only port, sink-only port, 양방향 register interface가 다른 capability type을 갖는 것과 같다.
+
+**English definition:** A type classifying the computational capability provided by a program phrase—expression, writable target, command, or procedure—rather than the kind of stored data.
+
+> [!example] Engineering view
+> It is like giving different capability types to a source-only port, sink-only port, and bidirectional register interface even though all carry 32-bit data.
+
+### acceptor
+
+주어진 타입의 값을 받아 저장하거나 반영할 수 있는 쓰기 능력을 나타내는 구절이다. 값을 읽어 내는 expression과 반대 방향이다.
+
+> [!example] 엔지니어 관점
+> write-only register port나 ready를 가진 data sink와 같다. 값을 어디서 읽는지는 제공하지 않고 값을 보낼 수 있는 endpoint만 제공한다.
+
+**English definition:** A phrase representing the capability to accept and store or otherwise act on a value of a given type. Its direction contrasts with an expression that produces a value.
+
+> [!example] Engineering view
+> It is like a write-only register port or a data sink with ready. It provides an endpoint for sending a value, not a way to read one back.
+
+```text
+acc[τ]
+```
+
+### variable
+
+같은 저장 대상을 읽는 expression 능력과 쓰는 acceptor 능력을 함께 제공하는 구절이다.
+
+> [!example] 엔지니어 관점
+> read data port와 write data/enable port가 한 register abstraction을 이루는 것과 같다. 단순 값이 아니라 읽기와 쓰기라는 두 동작을 묶는다.
+
+**English definition:** A phrase combining an expression capability for reading a storage object with an acceptor capability for writing it.
+
+> [!example] Engineering view
+> It is like the read-data and write-data/enable ports together forming one register abstraction. A variable packages two operations, not just a value.
+
+```text
+var[τ] ≈ exp[τ] × acc[τ]
+```
+
+### 선언자 (declarator)
+
+새 저장 공간과 그 이름 또는 능력을 만들고, 정해진 본문 범위에 제공한 뒤 범위가 끝나면 회수하는 프로그램 구성이다.
+
+> [!example] 엔지니어 관점
+> submodule 진입 시 local scratchpad를 할당해 내부 datapath에만 연결하고 작업이 끝나면 재사용 가능하게 만드는 lifetime controller와 비슷하다.
+
+**English definition:** A program construct that allocates fresh storage and a name or capability for it, supplies it within a body scope, and reclaims it when that scope ends.
+
+> [!example] Engineering view
+> It resembles a lifetime controller allocating a local scratchpad for one submodule operation, wiring it only to the internal datapath, then reclaiming it afterward.
+
+### 스택 규율 (stack discipline)
+
+나중에 할당된 지역 저장이 먼저 해제되고, 지역 위치가 그 범위보다 오래 살아남지 못하도록 하는 LIFO 수명 규칙이다.
+
+> [!example] 엔지니어 관점
+> nested procedure마다 stack frame을 push하고 return 때 pop하는 CPU runtime과 같다. local address가 밖으로 escape하면 pop 뒤 dangling reference가 생겨 규율이 깨진다.
+
+**English definition:** A LIFO lifetime rule under which later local allocations are released first and no local location survives beyond its scope.
+
+> [!example] Engineering view
+> It is the CPU runtime pattern of pushing a stack frame for each nested procedure and popping it on return. An escaping local address would become a dangling reference after the pop.
+
+### Algol
+
+block structure, lexical scope, 지역 변수, procedure를 현대적 형태로 정립한 초기 언어 계열이다. 이 장에서는 그 설계 원리를 의미와 타입으로 분석한다.
+
+> [!example] 엔지니어 관점
+> 현대 HDL의 nested scope, automatic variable, task/function 같은 기능의 역사적 조상 중 하나로 볼 수 있다. 특정 최신 언어 문법을 배우는 장은 아니다.
+
+**English definition:** An early language family that established modern forms of block structure, lexical scope, local variables, and procedures. This chapter studies its design principles semantically and through types.
+
+> [!example] Engineering view
+> It can be viewed as one historical ancestor of nested scope, automatic variables, and task/function concepts found in modern HDLs. The chapter is not a tutorial for one modern language.
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

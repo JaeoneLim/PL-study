@@ -44,6 +44,111 @@ related:
 - **내재적 의미 (intrinsic semantics)**
 - **재귀 타입 (recursive type)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 타입 문맥 (typing context)
+
+현재 범위에서 각 자유 변수에 어떤 타입이 약속되어 있는지 기록한 지도다.
+
+> [!example] 엔지니어 관점
+> elaboration symbol table이 signal 이름을 bit width, signedness, interface type에 연결하는 것과 같다. 문맥은 값 자체가 아니라 정적 분류 정보를 담는다.
+
+**English definition:** A map recording the type promised for every free variable currently in scope.
+
+> [!example] Engineering view
+> It is like an elaboration symbol table mapping signal names to bit widths, signedness, and interface types. It stores static classification, not runtime values.
+
+```text
+Γ = x₁:τ₁, …, xₙ:τₙ
+```
+
+### 타입 판단 (typing judgment)
+
+타입 문맥 Γ 아래에서 식 e가 타입 τ를 가진다고 증명 규칙으로 유도할 수 있다는 형식적 statement다.
+
+> [!example] 엔지니어 관점
+> lint나 elaboration이 주어진 port 선언 아래 연결식의 width와 kind가 맞다고 판정하는 정적 확인과 비슷하다.
+
+**English definition:** A formal statement, derivable by typing rules, that expression e has type τ under typing context Γ.
+
+> [!example] Engineering view
+> It resembles a linter or elaborator proving that a connection expression has the right width and kind under the declared ports.
+
+```text
+Γ ⊢ e : τ
+```
+
+### 보존 (preservation)
+
+잘 타입된 항이 한 단계 계산한 뒤에도 같은 타입을 유지한다는 성질이다.
+
+> [!example] 엔지니어 관점
+> 정상적인 pipeline 변환을 한 단계 거쳐도 packet format이나 bus interface contract가 깨지지 않는다는 단계별 invariant와 같다.
+
+**English definition:** The property that when a well-typed term takes one computation step, the resulting term still has the same type.
+
+> [!example] Engineering view
+> It is a stepwise invariant saying a valid pipeline transformation does not corrupt the packet format or bus-interface contract.
+
+```text
+e:τ and e→e′ implies e′:τ
+```
+
+### 진행 (progress)
+
+닫혀 있고 잘 타입된 항은 이미 값이거나 적어도 한 단계 계산할 수 있으며, 타입 오류 때문에 막히지 않는다는 성질이다.
+
+> [!example] 엔지니어 관점
+> protocol과 width가 정적으로 올바른 FSM이 적어도 합법적인 완료 상태이거나 다음 transition을 가진다는 조건과 비슷하다. deadlock 같은 다른 원인까지 모두 없애 주지는 않는다.
+
+**English definition:** The property that a closed, well-typed term is either already a value or can take a computation step; it is not stuck because of a type mismatch.
+
+> [!example] Engineering view
+> It resembles saying a statically protocol- and width-correct FSM is either in a legal completed state or has a next transition. It does not rule out every other source of deadlock.
+
+### 외재적 의미 (extrinsic semantics)
+
+먼저 타입 없는 전체 항의 의미 공간을 만들고, 타입 규칙을 그중 안전한 항을 골라내는 별도 predicate로 보는 접근이다.
+
+> [!example] 엔지니어 관점
+> 모든 raw bit-vector netlist를 같은 simulator가 실행하고 별도 lint pass가 합법적인 interface 연결만 표시하는 구조와 비슷하다.
+
+**English definition:** An approach that first gives meaning to all untyped terms, then treats typing as a separate predicate selecting the safe subset.
+
+> [!example] Engineering view
+> It resembles one simulator running every raw bit-vector netlist while a separate lint pass marks only the interface-correct designs.
+
+### 내재적 의미 (intrinsic semantics)
+
+타입마다 별도의 의미 공간을 두어 애초에 잘 타입된 항만 표현되도록 만드는 접근이다.
+
+> [!example] 엔지니어 관점
+> port type이 다른 신호는 연결 객체 자체를 만들 수 없게 한 strongly typed hardware IR과 같다. 잘못된 설계를 나중에 거르는 대신 표현 단계에서 배제한다.
+
+**English definition:** An approach that gives each type its own semantic space so only well-typed terms can be represented in the first place.
+
+> [!example] Engineering view
+> It resembles a strongly typed hardware IR in which a connection object cannot even be constructed for incompatible port types. Invalid designs are excluded by representation.
+
+### 재귀 타입 (recursive type)
+
+자기 자신의 타입을 정의 안에 다시 포함하는 타입이다. fold와 unfold를 통해 유한 syntax로 재귀 데이터 구조를 표현한다.
+
+> [!example] 엔지니어 관점
+> linked-list node가 data와 같은 node 타입의 next를 포함하거나, tree node가 child tree들을 포함하는 타입 선언과 같다.
+
+**English definition:** A type whose definition refers back to itself. Folding and unfolding let finite syntax describe recursive data structures.
+
+> [!example] Engineering view
+> It is the familiar type pattern where a linked-list node contains data plus a next node, or a tree node contains child trees.
+
+```text
+μ α. F(α)
+```
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

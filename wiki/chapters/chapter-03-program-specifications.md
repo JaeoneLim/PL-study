@@ -42,6 +42,75 @@ related:
 - **결과 규칙 (rule of consequence)**
 - **건전성 (soundness)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### Hoare 삼중항 (Hoare triple)
+
+`{p} c {q}` 형태로, 전제조건 p를 만족하는 상태에서 명령 c를 실행해 종료하면 사후조건 q가 성립한다는 명세다.
+
+> [!example] 엔지니어 관점
+> IP 블록의 입력 가정, 동작, 출력 보장을 세 칸으로 나눈 계약과 비슷하다. 기본 형태는 종료 자체까지 보장하지 않는다는 점이 중요하다.
+
+**English definition:** A specification `{p} c {q}` saying that if command c starts in a state satisfying precondition p and terminates, its final state satisfies postcondition q.
+
+> [!example] Engineering view
+> It resembles an assume–operation–guarantee contract for an IP block. Importantly, the basic form does not by itself guarantee termination.
+
+```text
+{p} c {q}
+```
+
+### 루프 불변식 (loop invariant)
+
+루프에 들어가기 전 참이고, 본문을 한 번 실행해도 보존되며, 루프 종료 시 원하는 결과를 끌어내는 assertion이다.
+
+> [!example] 엔지니어 관점
+> 순차 회로에서 매 클록 유지되는 프로토콜 속성과 같다. 초기화에서 성립하고 한 사이클 전이가 보존하면 모든 도달 가능한 사이클에서 성립한다.
+
+**English definition:** An assertion that is true before entering a loop, preserved by one body iteration, and strong enough to imply the desired result when the loop exits.
+
+> [!example] Engineering view
+> It is like a protocol property maintained on every clock: establish it at reset and prove one transition preserves it, then it holds for every reachable cycle.
+
+### 변량 함수 (variant function)
+
+루프가 반복될 때마다 엄격히 감소하고 0 아래로 내려갈 수 없는 자연수 값이다. 무한 반복이 불가능함을 증명하는 데 쓴다.
+
+> [!example] 엔지니어 관점
+> 카운터가 매 사이클 1씩 줄어 0에서 완료되는 FSM의 remaining-count와 같다. 불변식은 안전을, 변량은 결국 끝난다는 진행을 설명한다.
+
+**English definition:** A natural-number measure that strictly decreases on every loop iteration and cannot fall below zero. It is used to prove that infinite iteration is impossible.
+
+> [!example] Engineering view
+> It is the remaining-count of an FSM that decrements every cycle and completes at zero. An invariant explains safety; a variant explains eventual completion.
+
+### 결과 규칙 (rule of consequence)
+
+이미 증명한 Hoare 삼중항의 전제조건을 더 강하게 하거나 사후조건을 더 약하게 하여 다른 유효한 명세를 얻는 규칙이다.
+
+> [!example] 엔지니어 관점
+> 블록이 1.0V±10% 입력에서 동작하면 더 좁은 1.0V±5% 조건에서도 동작하고, 2ns 이내 응답을 보장하면 3ns 이내라는 약한 보장도 만족하는 것과 같다.
+
+**English definition:** A rule that derives another valid Hoare triple by strengthening the precondition or weakening the postcondition of one already proved.
+
+> [!example] Engineering view
+> If a block works for 1.0V±10%, it also works under the stronger 1.0V±5% assumption; if it guarantees 2 ns, it also meets the weaker 3 ns guarantee.
+
+### 건전성 (soundness)
+
+증명 규칙으로 유도할 수 있는 모든 결론이 실제 semantics에서도 참이라는 성질이다. 잘못된 프로그램을 규칙만으로 ‘증명’하지 못하게 한다.
+
+> [!example] 엔지니어 관점
+> 형식 검증 도구가 PASS를 냈다면 실제 수학적 모델에서도 속성이 성립해야 한다는 신뢰 조건이다. 건전성은 도구가 모든 참을 찾는다는 완전성과 다르다.
+
+**English definition:** The property that every conclusion derivable by the proof rules is also true in the semantics. It prevents the rules from proving incorrect programs correct.
+
+> [!example] Engineering view
+> It is the trust condition that a PASS from a formal method must imply the property really holds in the mathematical model. Soundness differs from finding every truth.
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

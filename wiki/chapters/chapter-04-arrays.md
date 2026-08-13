@@ -42,6 +42,75 @@ related:
 - **이진 탐색 (binary search)**
 - **higher-order assertion (higher-order assertion)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 함수 갱신 (functional update)
+
+기존 배열을 직접 바꾸는 대신 한 인덱스에서만 새 값을 돌려주고 나머지에서는 기존 값과 같은 새 함수를 만드는 관점이다.
+
+> [!example] 엔지니어 관점
+> 레지스터 파일의 next-state 함수를 생각하면 된다. write address와 일치하는 엔트리만 새 data를 받고 나머지 엔트리는 이전 값을 유지한다.
+
+**English definition:** A view of array update that creates a new function returning the new value at one index and the old values everywhere else, rather than mutating the old array in place.
+
+> [!example] Engineering view
+> Think of a register file’s next-state function: only the entry matching the write address receives new data; every other entry retains its previous value.
+
+```text
+a[i ↦ v](j) = if i=j then v else a(j)
+```
+
+### 정의역 (domain)
+
+함수가 입력으로 받을 수 있도록 정의된 값들의 집합이다. 배열을 함수로 보면 유효한 인덱스 집합이 정의역이 된다.
+
+> [!example] 엔지니어 관점
+> 깊이 16인 메모리의 유효 주소가 0부터 15까지인 것과 같다. ‘도메인 이론’의 도메인과 같은 영어 단어지만 여기서는 단순히 입력 범위를 뜻한다.
+
+**English definition:** The set of inputs on which a function is defined. When an array is viewed as a function, its valid index set is the domain.
+
+> [!example] Engineering view
+> It is the valid address set 0 through 15 for a depth-16 memory. This use of “domain” means input set, not the domain-theory structure from Chapter 2.
+
+### 범위 오류 (bounds error)
+
+배열의 정의역 밖 인덱스로 읽거나 쓰려고 할 때 생기는 오류다. semantics은 이를 실패, 중단, 또는 미정의 동작 중 하나로 명시해야 한다.
+
+> [!example] 엔지니어 관점
+> 실제 SRAM에 없는 주소를 내거나 버스 address decoder의 빈 구간을 접근하는 상황과 비슷하다. 모델이 어떤 응답을 내는지 정하지 않으면 검증 결과도 모호해진다.
+
+**English definition:** An error caused by reading or writing an index outside an array’s domain. A semantics must say whether this means failure, abort, or undefined behavior.
+
+> [!example] Engineering view
+> It resembles addressing beyond a physical SRAM or hitting an unmapped bus region. Verification becomes ambiguous unless the model specifies the response.
+
+### 이진 탐색 (binary search)
+
+정렬된 배열에서 중간 원소와 비교해 후보 구간을 매 단계 절반으로 줄이는 탐색 알고리즘이다.
+
+> [!example] 엔지니어 관점
+> successive-approximation ADC가 비교 결과로 탐색 범위를 절반씩 줄이는 과정과 닮았다. 정확성 증명에서는 목표가 아직 남아 있는 구간을 불변식으로 둔다.
+
+**English definition:** A search algorithm for sorted arrays that compares the middle element and halves the candidate interval at every step.
+
+> [!example] Engineering view
+> It resembles a successive-approximation ADC narrowing its search range by half after each comparison. A proof keeps “the target is still inside this interval” as an invariant.
+
+### higher-order assertion
+
+값뿐 아니라 함수나 predicate 자체를 변수로 받아 그 성질을 표현하는 assertion이다.
+
+> [!example] 엔지니어 관점
+> 특정 메모리 내용 하나가 아니라 ‘어떤 주소 변환 함수가 주어져도 이 인터페이스 법칙을 만족한다’고 쓰는 상위 수준 검증 계약에 가깝다.
+
+**English definition:** An assertion that can quantify over or otherwise describe functions and predicates themselves, not only ordinary data values.
+
+> [!example] Engineering view
+> It is like a higher-level verification contract saying “for any address-mapping function, this interface law holds,” rather than checking one concrete memory image.
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

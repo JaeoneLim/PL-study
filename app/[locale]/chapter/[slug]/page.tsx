@@ -52,7 +52,12 @@ export default async function ChapterPage({ params }: Props) {
               <h1><span>{unit.number}</span>{unit.title[locale]}</h1>
               <p className="chapter-eyebrow">{unit.eyebrow[locale]}</p>
               <p className="chapter-overview">{unit.overview[locale]}</p>
-              <CompletionButton locale={locale} slug={slug} />
+              <div className="chapter-actions">
+                <CompletionButton locale={locale} slug={slug} />
+                <Link className="chapter-glossary-button" href={`/${locale}/chapter/${slug}/glossary`}>
+                  <span aria-hidden="true">Aa</span>{locale === "ko" ? "이 장의 용어집" : "Chapter glossary"}<span aria-hidden="true">→</span>
+                </Link>
+              </div>
             </div>
             <aside className="learning-goals">
               <p>{locale === "ko" ? "이 장을 마치면" : "AFTER THIS UNIT"}</p>
@@ -74,6 +79,7 @@ export default async function ChapterPage({ params }: Props) {
                 ))
                 : unit.steps.map((step, index) => <a href={`#${step.id}`} key={step.id}><span>{String(index + 1).padStart(2, "0")}</span>{step.title[locale].replace(/^.*?—\s*/, "")}</a>)}
               {longform && <a href="#review"><span>R</span>{locale === "ko" ? "압축 복습" : "Condensed review"}</a>}
+              <Link href={`/${locale}/chapter/${slug}/glossary`}><span>G</span>{locale === "ko" ? "장별 용어집" : "Chapter glossary"}</Link>
               <a href="#quiz"><span>✓</span>{locale === "ko" ? "개념 확인" : "Concept check"}</a>
             </nav>
             <div className="toc-terms"><p>{locale === "ko" ? "핵심 용어" : "KEY TERMS"}</p>{unit.keyTerms.map((term) => <span key={term.en}>{term[locale]}<small>{locale === "ko" ? term.en : term.ko}</small></span>)}</div>

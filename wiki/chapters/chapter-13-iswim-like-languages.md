@@ -43,6 +43,87 @@ related:
 - **예외 처리기 (exception handler)**
 - **백트래킹 (backtracking)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 위치 (location)
+
+저장소에서 값을 넣어 둘 수 있는 식별 가능한 자리다. 위치 자체와 그 위치에 현재 저장된 값은 구분된다.
+
+> [!example] 엔지니어 관점
+> SRAM의 address가 위치이고 그 address에서 읽히는 bit pattern이 값인 것과 같다. write 후 값은 달라져도 address 정체성은 유지된다.
+
+**English definition:** An identifiable place in the store where a value can reside. The location itself is distinct from the value currently stored there.
+
+> [!example] Engineering view
+> It is exactly the distinction between an SRAM address and the bit pattern currently read from that address. A write changes the value but not the address identity.
+
+### 참조 (reference)
+
+저장소의 위치를 가리키는 일급 값이다. 역참조하면 현재 값을 읽고, 대입하면 그 위치의 값을 바꾼다.
+
+> [!example] 엔지니어 관점
+> memory-mapped register의 address를 data로 전달하는 포인터와 같다. 참조를 복사하면 register 값이 복사되는 것이 아니라 같은 address를 가리키는 값이 복사된다.
+
+**English definition:** A first-class value that designates a location in the store. Dereferencing reads its current content; assignment changes the content at that location.
+
+> [!example] Engineering view
+> It is like passing the address of a memory-mapped register as data. Copying the reference copies the address, not the register’s contents.
+
+### 저장소 (store)
+
+각 위치를 그 위치에 현재 들어 있는 값으로 보내는 전체 메모리 상태다.
+
+> [!example] 엔지니어 관점
+> 특정 시점의 RAM과 register file 내용을 address-to-data map으로 나타낸 것과 같다. 환경이 이름을 위치에 연결한다면 저장소는 위치를 값에 연결한다.
+
+**English definition:** The complete memory state, modeled as a map from every allocated location to the value currently stored there.
+
+> [!example] Engineering view
+> It is the contents of RAM and register files at one instant represented as an address-to-data map. An environment maps names to locations; a store maps locations to values.
+
+```text
+μ : Location → Value
+```
+
+### 별칭 (aliasing)
+
+서로 다른 두 이름이나 참조가 같은 저장 위치를 가리키는 현상이다. 한 경로로 쓴 값이 다른 경로의 읽기에도 보인다.
+
+> [!example] 엔지니어 관점
+> CPU와 DMA가 같은 physical buffer를 서로 다른 virtual address나 interface 이름으로 접근하는 경우와 같다. 독립된 값이라 생각하면 coherency bug가 생긴다.
+
+**English definition:** The situation where two distinct names or references designate the same storage location. A write through one path is visible through the other.
+
+> [!example] Engineering view
+> It is like a CPU and DMA accessing the same physical buffer through different virtual addresses or interface names. Treating them as independent causes coherency bugs.
+
+### 예외 처리기 (exception handler)
+
+정상 계산 중 특정 예외가 발생하면 일반 계속 대신 제어를 넘겨받아 복구하거나 다른 결과를 만드는 코드다.
+
+> [!example] 엔지니어 관점
+> error interrupt vector와 recovery FSM을 합친 것과 비슷하다. 오류가 발생한 위치의 정상 datapath 대신 등록된 처리 경로가 선택된다.
+
+**English definition:** Code that receives control when a particular exception occurs during normal computation, replacing the ordinary continuation to recover or produce another result.
+
+> [!example] Engineering view
+> It resembles an error interrupt vector combined with a recovery FSM. The registered handler path replaces the normal datapath continuation at the fault point.
+
+### 백트래킹 (backtracking)
+
+한 선택 뒤 계산이 실패하면 이전 선택 지점의 상태와 남은 대안을 복원해 다른 경로를 시도하는 제어 방식이다.
+
+> [!example] 엔지니어 관점
+> speculative execution checkpoint로 돌아가 register rename과 control state를 복원한 뒤 다른 branch를 실행하는 과정과 닮았다.
+
+**English definition:** A control strategy that, after a chosen path fails, restores an earlier choice point and tries a remaining alternative.
+
+> [!example] Engineering view
+> It resembles rolling back to a speculative-execution checkpoint, restoring renamed registers and control state, and executing a different branch.
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

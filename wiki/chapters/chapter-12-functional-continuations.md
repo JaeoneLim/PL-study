@@ -42,6 +42,75 @@ related:
 - **비지역 탈출 (nonlocal exit)**
 - **비함수화 (defunctionalization)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 계속 전달 방식 (continuation-passing style)
+
+모든 함수가 정상 반환 대신 ‘다음에 할 일’을 나타내는 계속을 명시적 인수로 받도록 프로그램 전체를 쓰거나 변환하는 방식이다.
+
+> [!example] 엔지니어 관점
+> 각 datapath stage가 결과와 함께 다음 state ID 또는 downstream enable을 명시적으로 전달하도록 control을 배선한 구조와 닮았다.
+
+**English definition:** A style or transformation in which every function receives an explicit continuation representing what to do next instead of returning normally.
+
+> [!example] Engineering view
+> It resembles wiring control so every datapath stage explicitly forwards a next-state ID or downstream enable together with its result.
+
+### 일급 계속 (first-class continuation)
+
+현재 남은 계산을 보통 값처럼 저장하고, 전달하고, 나중에 다시 호출할 수 있게 만든 계속이다.
+
+> [!example] 엔지니어 관점
+> PC와 필요한 control state를 checkpoint record로 저장해 다른 곳에 전달하고 나중에 복원할 수 있게 한 것과 비슷하다. 단순 return address보다 넓은 제어 문맥을 담는다.
+
+**English definition:** A continuation made into an ordinary value that can be stored, passed, and invoked later to resume the remaining computation.
+
+> [!example] Engineering view
+> It resembles packaging the PC and required control state into a checkpoint record that can be passed around and restored later. It captures more context than a simple return address.
+
+### call/cc
+
+현재 계속을 일급 값으로 함수에 넘기는 제어 연산이다. 받은 계속을 호출하면 현재 흐름을 버리고 캡처한 지점 이후로 이동한다.
+
+> [!example] 엔지니어 관점
+> 현재 control checkpoint를 callback으로 노출해 오류나 성공 조건에서 즉시 그 state로 복귀하게 하는 강력한 escape mechanism과 비슷하다.
+
+**English definition:** A control operator that passes the current continuation to a function as a first-class value. Invoking it abandons the current flow and resumes after the capture point.
+
+> [!example] Engineering view
+> It resembles exposing the current control checkpoint as a callback that can immediately restore that state on an error or success condition.
+
+```text
+call/cc : ((A → R) → A) → A
+```
+
+### 비지역 탈출 (nonlocal exit)
+
+현재 함수 하나만 반환하는 것이 아니라 여러 겹의 호출 문맥을 한 번에 건너뛰어 바깥 처리 지점으로 제어를 옮기는 동작이다.
+
+> [!example] 엔지니어 관점
+> 깊은 submodule 처리 중 fatal error가 나면 중간 완료 상태를 거치지 않고 top-level recovery FSM으로 바로 전이하는 것과 같다.
+
+**English definition:** A control transfer that skips several nested call contexts at once and resumes at an outer handler rather than returning from only the current function.
+
+> [!example] Engineering view
+> It is like a fatal error deep in submodule processing transferring directly to a top-level recovery FSM without passing through ordinary intermediate completion states.
+
+### 비함수화 (defunctionalization)
+
+가능한 함수 값들을 유한한 data constructor들로 바꾸고, 하나의 apply dispatcher가 각 경우를 실행하도록 만드는 변환이다.
+
+> [!example] 엔지니어 관점
+> 여러 callback 회로를 직접 들고 다니는 대신 opcode와 payload record로 바꾸고 중앙 FSM의 case 문이 실행하게 하는 것과 같다.
+
+**English definition:** A transformation that replaces possible function values with a finite set of data constructors and one apply dispatcher that interprets each case.
+
+> [!example] Engineering view
+> It is like replacing a collection of callback circuits with opcode-plus-payload records interpreted by a central FSM case statement.
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

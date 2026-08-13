@@ -42,6 +42,83 @@ related:
 - **System F (System F)**
 - **다형적 인코딩 (polymorphic encoding)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 전칭 다형성 (universal polymorphism)
+
+하나의 항이 모든 타입 α에 대해 같은 구조로 동작함을 `∀α.T`로 표현하는 타입 체계 기능이다.
+
+> [!example] 엔지니어 관점
+> data width나 payload type을 parameter로 받되 control 구조는 동일한 재사용 IP와 비슷하다. 특정 타입 내부 표현에 의존하면 진정한 전칭 동작이 아니다.
+
+**English definition:** A type-system feature, written `∀α.T`, stating that one term works uniformly for every choice of type α.
+
+> [!example] Engineering view
+> It resembles reusable IP parameterized by data width or payload type while keeping the same control structure. Depending on a specific type’s representation would violate uniformity.
+
+```text
+∀α. T
+```
+
+### 타입 추상화 (type abstraction)
+
+타입 변수를 매개변수로 묶어, 나중에 어떤 타입을 넣을지 정하는 다형적 값을 만드는 항이다.
+
+> [!example] 엔지니어 관점
+> 아직 WIDTH를 정하지 않은 parameterized module definition과 같다. 정의 안에서는 특정 폭에만 가능한 연산을 가정할 수 없다.
+
+**English definition:** A term that binds a type variable as a parameter, creating a polymorphic value whose concrete type argument will be chosen later.
+
+> [!example] Engineering view
+> It is like a parameterized module definition before WIDTH has been chosen. Its body cannot assume operations available only at one concrete width.
+
+```text
+Λα. e
+```
+
+### 타입 적용 (type application)
+
+다형적 값의 타입 매개변수에 구체 타입을 넣어 해당 인스턴스로 사용하는 항이다.
+
+> [!example] 엔지니어 관점
+> parameterized IP를 `WIDTH=32`로 elaborate해 32-bit 인스턴스를 얻는 것과 같다. 실행 데이터 인수를 넣는 일반 함수 적용과는 구분된다.
+
+**English definition:** A term that supplies a concrete type argument to a polymorphic value, selecting an instance for that type.
+
+> [!example] Engineering view
+> It is like elaborating parameterized IP with `WIDTH=32` to obtain a 32-bit instance. This differs from supplying ordinary runtime data.
+
+```text
+e [τ]
+```
+
+### System F
+
+타입 추상화와 타입 적용을 명시적으로 포함하는, 전칭 다형성의 핵심 람다 계산이다. 2차 람다 계산이라고도 한다.
+
+> [!example] 엔지니어 관점
+> typed IR에서 data operand뿐 아니라 type parameter의 binding과 instantiation까지 노드로 드러낸 최소 intermediate language에 가깝다.
+
+**English definition:** The core lambda calculus of universal polymorphism, with explicit type abstraction and type application. It is also called the second-order lambda calculus.
+
+> [!example] Engineering view
+> It resembles a minimal typed IR in which binding and instantiation of type parameters are explicit nodes alongside ordinary data operands.
+
+### 다형적 인코딩 (polymorphic encoding)
+
+별도 primitive data type 없이 전칭 다형 함수의 사용 규칙만으로 Boolean, pair, list 같은 구조를 표현하는 방법이다.
+
+> [!example] 엔지니어 관점
+> 새 storage primitive를 추가하지 않고 표준 ready/valid 조합 패턴만으로 queue나 selector protocol을 표현하는 구조적 encoding과 비슷하다.
+
+**English definition:** A method of representing structures such as Booleans, pairs, or lists using only the behavior of universally polymorphic functions, without primitive data types.
+
+> [!example] Engineering view
+> It resembles structurally encoding a queue or selector protocol from standard ready/valid composition patterns without adding a new storage primitive.
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

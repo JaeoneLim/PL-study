@@ -42,6 +42,79 @@ related:
 - **재귀 환경 (recursive environment)**
 - **동적 바인딩 (dynamic binding)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### evaluation semantics
+
+식이 여러 작은 단계를 거치는 대신 어떤 값으로 평가되는지를 직접 나타내는 판단 규칙 체계다. 환경과 식에서 시작해 값으로 끝나는 큰 단계 설명으로 자주 쓴다.
+
+> [!example] 엔지니어 관점
+> 조합 논리의 내부 gate 전파를 모두 기록하지 않고 입력 벡터와 안정된 출력값 사이의 관계만 적는 behavioral model과 비슷하다.
+
+**English definition:** A system of judgment rules that directly relates an expression to the value it evaluates to, often as a big-step description from environment and expression to value.
+
+> [!example] Engineering view
+> It resembles a behavioral model that relates an input vector directly to the stable output without recording every internal gate-propagation step.
+
+```text
+ρ ⊢ e ⇓ v
+```
+
+### 클로저 (closure)
+
+함수의 코드와 그 함수가 정의될 때 자유 변수 값을 찾을 환경을 함께 묶은 실행 값이다.
+
+> [!example] 엔지니어 관점
+> parameterized IP 인스턴스가 공통 RTL 본문뿐 아니라 자기 parameter 설정값도 함께 가져야 정확히 동작하는 것과 비슷하다. 코드만 복사하면 정의 당시 문맥을 잃는다.
+
+**English definition:** A runtime value pairing function code with the environment used to resolve the function’s free variables when it was defined.
+
+> [!example] Engineering view
+> It resembles an instantiated parameterized IP needing both shared RTL and its own parameter settings. Copying only the code loses the context captured at definition time.
+
+```text
+⟨λx.e, ρ⟩
+```
+
+### 패턴 매칭 (pattern matching)
+
+값의 constructor 모양을 검사하고 그 안의 구성 요소에 이름을 붙여 알맞은 분기를 선택하는 연산이다.
+
+> [!example] 엔지니어 관점
+> packet header의 opcode를 decode해 형식별 datapath로 보내고 field를 뽑는 것과 같다. 단순 비교를 넘어 구조 분해와 이름 연결을 함께 한다.
+
+**English definition:** An operation that inspects a value’s constructor shape, binds names to its components, and selects the corresponding branch.
+
+> [!example] Engineering view
+> It is like decoding a packet opcode, routing to a format-specific datapath, and extracting fields. Pattern matching combines selection with structural unpacking and name binding.
+
+### 재귀 환경 (recursive environment)
+
+함수 이름이 자기 자신이나 같은 그룹의 다른 함수를 가리킬 수 있도록 고정점으로 묶인 환경이다.
+
+> [!example] 엔지니어 관점
+> 서로 연결된 FSM 블록의 symbolic name을 먼저 마련한 뒤 feedback 연결을 닫는 것과 비슷하다. 정의가 완성되기 전에 이름을 참조할 수 있어야 한다.
+
+**English definition:** An environment tied as a fixed point so a function name can refer to itself or to other functions in the same recursive group.
+
+> [!example] Engineering view
+> It resembles allocating symbolic names for mutually connected FSM blocks before closing their feedback wiring. Names must be referable while the definitions are being completed.
+
+### 동적 바인딩 (dynamic binding)
+
+자유 변수의 값을 함수가 정의된 위치가 아니라 함수가 호출된 시점의 호출 환경에서 찾는 이름 해석 방식이다.
+
+> [!example] 엔지니어 관점
+> 고정된 module hierarchy의 parameter를 쓰는 대신 현재 debug context나 호출 stack에서 같은 이름의 설정을 찾아 쓰는 것에 가깝다. 호출자에 따라 함수 동작이 바뀔 수 있다.
+
+**English definition:** A name-resolution strategy that looks up a function’s free variables in the caller’s environment at call time rather than where the function was defined.
+
+> [!example] Engineering view
+> It is closer to reading a same-named setting from the current debug context or call stack than using a fixed module-hierarchy parameter. Behavior may change with the caller.
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

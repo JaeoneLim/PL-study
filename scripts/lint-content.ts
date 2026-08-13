@@ -3,6 +3,7 @@ import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { bookOverview } from "../content/book-overview";
 import { chapterGuides } from "../content/chapter-guides";
+import { chapterGlossaries } from "../content/chapter-glossaries";
 import { chapterLongforms } from "../content/chapter-longforms";
 import { units } from "../content/course";
 import { longformReadingMinutes } from "../content/longform-status";
@@ -44,13 +45,14 @@ assert(units.length === 20, `expected 20 units, found ${units.length}`);
 assert(new Set(units.map((unit) => unit.slug)).size === units.length, "unit slugs must be unique");
 assert(new Set(units.map((unit) => unit.number)).size === units.length, "unit numbers must be unique");
 assert(Object.keys(chapterGuides).length === units.length, `expected ${units.length} detailed chapter guides, found ${Object.keys(chapterGuides).length}`);
+assert(Object.keys(chapterGlossaries).length === units.length, `expected ${units.length} chapter glossaries, found ${Object.keys(chapterGlossaries).length}`);
 assert(bookOverview.arcs.length === 4, `expected 4 whole-book arcs, found ${bookOverview.arcs.length}`);
 assert(bookOverview.semanticSpine.length >= 5, "whole-book overview needs a complete semantic spine");
 assert(bookOverview.recurringLenses.length >= 6, "whole-book overview needs recurring conceptual lenses");
 assert(Boolean(chapterLongforms["predicate-logic"]), "Chapter 1 must have a complete longform lesson");
 
 const koreanCopy: string[] = [];
-collectKoreanCopy({ bookOverview, chapterGuides, chapterLongforms, units }, koreanCopy);
+collectKoreanCopy({ bookOverview, chapterGlossaries, chapterGuides, chapterLongforms, units }, koreanCopy);
 const koreanCopyText = koreanCopy.join("\n");
 for (const term of ["syntax", "semantics", "statement", "assertion", "constructor"]) {
   assert(new RegExp(`\\b${term}\\b`, "i").test(koreanCopyText), `Korean edition must preserve the English term ${term}`);
@@ -74,12 +76,25 @@ for (const [slug, lesson] of Object.entries(chapterLongforms)) {
 
 for (const unit of units) {
   const guide = chapterGuides[unit.slug];
+  const glossary = chapterGlossaries[unit.slug];
   assert(Boolean(guide), `${unit.slug}: missing detailed chapter guide`);
+  assert(Boolean(glossary), `${unit.slug}: missing chapter glossary`);
   assert(unit.title.ko.length > 0 && unit.title.en.length > 0, `${unit.slug}: missing bilingual title`);
   assert(unit.overview.ko.length > 38 && unit.overview.en.length > 72, `${unit.slug}: overview is too thin`);
   assert(unit.goals.length >= 3, `${unit.slug}: expected at least 3 goals`);
   assert(unit.steps.length >= 4, `${unit.slug}: expected at least 4 guided steps`);
   assert(unit.quiz.length >= 3, `${unit.slug}: expected at least 3 quiz questions`);
+  if (glossary) {
+    assert(glossary.length >= unit.keyTerms.length, `${unit.slug}: glossary is thinner than the key-term list`);
+    assert(new Set(glossary.map((entry) => entry.id)).size === glossary.length, `${unit.slug}: glossary entry ids must be unique`);
+    for (const term of unit.keyTerms) {
+      assert(glossary.some((entry) => entry.term.en === term.en), `${unit.slug}: glossary is missing key term ${term.en}`);
+    }
+    for (const entry of glossary) {
+      assert(entry.definition.ko.length > 35 && entry.definition.en.length > 55, `${unit.slug}/${entry.id}: glossary definition is too thin`);
+      assert(entry.engineerView.ko.length > 35 && entry.engineerView.en.length > 55, `${unit.slug}/${entry.id}: engineering explanation is too thin`);
+    }
+  }
   if (guide) {
     assert(guide.purpose.ko.length > 45 && guide.purpose.en.length > 70, `${unit.slug}: detailed guide purpose is too thin`);
     assert(guide.sections.length >= 3, `${unit.slug}: expected at least 3 section-map entries`);
@@ -99,6 +114,10 @@ for (const unit of units) {
     assert(quiz.correct >= 0 && quiz.correct < quiz.options.length, `${unit.slug} quiz ${index + 1}: invalid answer index`);
     assert(quiz.explanation.ko.length > 15 && quiz.explanation.en.length > 15, `${unit.slug} quiz ${index + 1}: thin explanation`);
   }
+}
+
+for (const foundation of ["predicate logic", "syntax", "semantics", "assertion", "constructor"]) {
+  assert(chapterGlossaries["predicate-logic"]?.some((entry) => entry.term.en === foundation), `predicate-logic glossary must explain ${foundation}`);
 }
 
 const wikiRoot = join(root, "wiki");
@@ -155,5 +174,6 @@ if (errors.length) {
 } else {
   const quizCount = units.reduce((total, unit) => total + unit.quiz.length, 0);
   const sectionCount = Object.values(chapterGuides).reduce((total, guide) => total + guide.sections.length, 0);
-  console.log(`Content lint passed: ${units.length} units, ${sectionCount} detailed section briefs, ${chapterFiles.length} wiki pages, ${quizCount} quizzes, 0 broken wikilinks.`);
+  const glossaryCount = Object.values(chapterGlossaries).reduce((total, glossary) => total + glossary.length, 0);
+  console.log(`Content lint passed: ${units.length} units, ${sectionCount} detailed section briefs, ${glossaryCount} glossary entries, ${chapterFiles.length} wiki pages, ${quizCount} quizzes, 0 broken wikilinks.`);
 }

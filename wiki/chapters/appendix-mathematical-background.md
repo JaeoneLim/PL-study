@@ -43,6 +43,103 @@ related:
 - **분리합 (disjoint union)**
 - **반사·추이 폐쇄 (reflexive-transitive closure)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 멱집합 (powerset)
+
+집합 S에서 만들 수 있는 모든 부분집합을 원소로 갖는 집합이다. 빈 집합과 S 자체도 포함한다.
+
+> [!example] 엔지니어 관점
+> 가능한 interrupt source 집합 S가 있을 때, 한 순간 활성화될 수 있는 모든 source 조합의 집합이 `P(S)`다. source가 n개면 멱집합 원소는 2ⁿ개다.
+
+**English definition:** The set of every subset that can be formed from S, including the empty set and S itself.
+
+> [!example] Engineering view
+> If S is the set of possible interrupt sources, `P(S)` is the set of every combination that could be active at one instant. For n sources it has 2ⁿ elements.
+
+```text
+P(S) = { X | X ⊆ S }
+```
+
+### 관계 합성 (relational composition)
+
+관계 R로 한 번 이동하고 이어서 관계 S로 이동할 수 있을 때 시작과 끝을 직접 연결하는 새 관계를 만드는 연산이다.
+
+> [!example] 엔지니어 관점
+> 한 클록의 next-state relation을 두 번 합성해 2클록 뒤 가능한 상태 관계를 얻는 것과 같다. 함수 합성과 달리 중간값이 여러 개일 수 있다.
+
+**English definition:** An operation forming a new relation between start and end points whenever one can first follow relation R and then relation S through an intermediate point.
+
+> [!example] Engineering view
+> It is like composing a one-clock next-state relation with itself to obtain possible states two clocks later. Unlike function composition, several intermediate states may exist.
+
+### 부분 함수 (partial function)
+
+정의역의 일부 입력에서는 결과가 존재하지 않을 수 있는 함수다. 결과가 존재하는 입력에서는 여전히 하나의 결과만 갖는다.
+
+> [!example] 엔지니어 관점
+> 일부 opcode나 address에서만 유효한 decoder table과 비슷하다. 프로그램 semantics에서는 비종료나 오류 때문에 최종 결과가 없는 경우를 나타낼 수 있다.
+
+**English definition:** A function that may have no result for some inputs in its intended input set. Wherever it is defined, it still has only one result.
+
+> [!example] Engineering view
+> It resembles a decoder table valid only for selected opcodes or addresses. In program semantics, undefinedness can represent nontermination or failure to produce a final result.
+
+```text
+f : A ⇀ B
+```
+
+### 데카르트 곱 (Cartesian product)
+
+A의 원소 하나와 B의 원소 하나를 순서쌍으로 함께 담는 모든 경우의 집합이다.
+
+> [!example] 엔지니어 관점
+> address 집합 A와 data 집합 D의 곱 `A×D`는 가능한 모든 address-data pair의 type과 같다. 둘 중 하나를 고르는 것이 아니라 둘을 동시에 담는다.
+
+**English definition:** The set of every ordered pair containing one element from A together with one element from B.
+
+> [!example] Engineering view
+> The product `A×D` of address set A and data set D is the type of every possible address–data pair. It contains both components, not a choice between them.
+
+```text
+A × B = { (a,b) | a∈A, b∈B }
+```
+
+### 분리합 (disjoint union)
+
+A의 값 또는 B의 값 중 하나를, 어느 쪽에서 왔는지 나타내는 tag와 함께 담는 집합이다.
+
+> [!example] 엔지니어 관점
+> packet payload를 `{tag, normal_data}` 또는 `{tag, error_code}` 형식으로 보내는 tagged union과 같다. 양쪽 bit pattern이 같아도 tag 덕분에 경우를 구분한다.
+
+**English definition:** A set containing either a value from A or a value from B together with a tag recording which side it came from.
+
+> [!example] Engineering view
+> It is a tagged union carrying either `{tag, normal_data}` or `{tag, error_code}`. The tag preserves the case even when both sides could use the same bit pattern.
+
+```text
+A + B
+```
+
+### 반사·추이 폐쇄 (reflexive-transitive closure)
+
+관계 R을 0회 이상 이어서 도달할 수 있는 모든 쌍을 포함하는 가장 작은 관계다. 0회 경로 때문에 각 원소는 자기 자신과도 관계된다.
+
+> [!example] 엔지니어 관점
+> 한 사이클 전이 R에서 임의의 사이클 수 뒤 도달 가능성을 구한 `R*`와 같다. reset 직후 그대로 있는 0사이클 경우도 반드시 포함한다.
+
+**English definition:** The smallest relation containing every pair reachable by following R zero or more times. Zero-length paths make every element related to itself.
+
+> [!example] Engineering view
+> It is `R*`, reachability after any number of cycles from a one-cycle relation R. It necessarily includes the zero-cycle case of remaining in the current state.
+
+```text
+R* = I ∪ R ∪ R² ∪ …
+```
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

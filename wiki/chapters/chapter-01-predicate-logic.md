@@ -42,6 +42,159 @@ related:
 - **구조적 귀납법 (structural induction)**
 - **캡처 회피 치환 (capture-avoiding substitution)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 술어 논리 (predicate logic)
+
+대상의 값과 관계를 변수, 논리 연산자, 그리고 ‘모든’·‘어떤’ 같은 수량자로 표현하는 논리 체계다. 명제가 한 비트의 참·거짓이라면, predicate는 입력값에 따라 참·거짓이 달라지는 조건이다.
+
+> [!example] 엔지니어 관점
+> SystemVerilog assertion에서 `req |-> ack`가 신호에 대한 조건을 쓰듯, `x < y`는 x와 y가 정해질 때 판정되는 조건이다. `∀x`는 가능한 모든 x를 검사한다는 수학적 표현이다.
+
+**English definition:** A logic for expressing values and relationships with variables, logical connectives, and quantifiers such as “for every” and “there exists.” If a proposition is one true/false bit, a predicate is a condition whose bit depends on its inputs.
+
+> [!example] Engineering view
+> Like a SystemVerilog assertion such as `req |-> ack`, `x < y` states a condition on signals or values. The quantifier `∀x` says the condition must pass for every possible x.
+
+```text
+∀x. P(x)    ∃x. P(x)
+```
+
+### syntax
+
+어떤 표현이 언어의 올바른 모양인지 정하는 규칙이다. 아직 그 표현이 무엇을 계산하는지는 말하지 않는다.
+
+> [!example] 엔지니어 관점
+> HDL 문법이 `always_ff` 블록의 허용 형태를 정하지만 실제 회로 동작은 별도로 정의되는 것과 같다. 파서가 받아들인다는 사실과 설계가 원하는 동작을 한다는 사실은 다르다.
+
+**English definition:** The rules that determine which expressions are well-formed in a language. Syntax alone does not say what those expressions compute.
+
+> [!example] Engineering view
+> An HDL grammar determines the legal shape of an `always_ff` block, while circuit behavior is defined separately. Being accepted by a parser is not the same as behaving as intended.
+
+### semantics
+
+올바른 syntax에 정확한 의미를 부여하는 규칙 또는 수학적 함수다. 프로그램이 어떤 결과, 상태 변화, 또는 관찰 가능한 동작을 만드는지 설명한다.
+
+> [!example] 엔지니어 관점
+> RTL 텍스트가 주어졌을 때 시뮬레이터가 시간에 따른 신호 값을 정하는 규칙에 가깝다. 같은 syntax라도 선택한 semantics이 다르면 초기화나 동시 실행을 다르게 해석할 수 있다.
+
+**English definition:** Rules or mathematical functions that assign precise meanings to well-formed syntax. They explain the result, state change, or observable behavior produced by a program.
+
+> [!example] Engineering view
+> Think of the rules a simulator uses to turn RTL into signal values over time. The same-looking syntax can behave differently under different semantic rules for initialization or concurrency.
+
+```text
+⟦syntax⟧ = meaning
+```
+
+### 상태 (state)
+
+특정 순간에 각 변수에 저장된 값을 한꺼번에 나타낸 지도다. 식의 의미는 대개 상태를 입력받아 값을 내놓는 함수로 정의된다.
+
+> [!example] 엔지니어 관점
+> 한 클록 경계에서 레지스터 파일 전체를 찍은 스냅샷을 떠올리면 된다. `σ(x)=3`은 상태 σ에서 변수 x의 값이 3이라는 뜻이다.
+
+**English definition:** A map containing the value stored in every variable at one instant. The meaning of an expression is often defined as a function from a state to a value.
+
+> [!example] Engineering view
+> Picture a snapshot of the complete register file at a clock boundary. `σ(x)=3` says that variable x contains 3 in state σ.
+
+```text
+σ : Variable → Value
+```
+
+### assertion
+
+상태가 만족해야 하는 참·거짓 조건이다. 프로그램 명령이 아니라 프로그램이나 상태에 관해 우리가 확인하려는 주장이다.
+
+> [!example] 엔지니어 관점
+> `fifo_count <= DEPTH` 같은 설계 속성에 해당한다. assertion 자체가 FIFO를 제어하지는 않지만, 현재 상태가 안전 조건을 지키는지 판정한다.
+
+**English definition:** A true-or-false condition that a state may satisfy. It is a claim about a program or state, not a command executed by the program.
+
+> [!example] Engineering view
+> It corresponds to a design property such as `fifo_count <= DEPTH`. The assertion does not control the FIFO; it checks whether the current state obeys a safety condition.
+
+### abstract syntax
+
+괄호, 공백, 우선순위처럼 표기에만 필요한 부분을 버리고 표현의 실제 트리 구조만 남긴 것이다.
+
+> [!example] 엔지니어 관점
+> 회로도에서 선의 색이나 블록 배치를 지우고 인스턴스와 연결 관계만 남긴 netlist와 비슷하다. `x+y*z`는 Add(x, Mul(y,z))라는 구조로 보존된다.
+
+**English definition:** The tree structure of an expression after discarding notational details such as parentheses, whitespace, and precedence conventions.
+
+> [!example] Engineering view
+> It resembles a netlist that keeps instances and connectivity while discarding drawing layout and wire colors. `x+y*z` becomes the structure Add(x, Mul(y,z)).
+
+### constructor
+
+abstract syntax 트리에서 한 종류의 노드를 만드는 기본 형식이다. 상수, 덧셈, 수량자 등이 각각 constructor가 된다.
+
+> [!example] 엔지니어 관점
+> netlist의 AND 게이트나 플립플롭 셀 종류처럼, constructor는 노드가 무엇이며 몇 개의 하위 부품을 받는지 정한다. Add는 두 하위 식을 받는다.
+
+**English definition:** A basic form that creates one kind of node in an abstract syntax tree. Constants, addition, and quantification are examples of constructors.
+
+> [!example] Engineering view
+> Like AND-gate or flip-flop cell kinds in a netlist, a constructor determines what a node is and how many children it takes. Add takes two subexpressions.
+
+### 합성성 (compositionality)
+
+전체 표현의 의미가 바로 아래 부분 표현들의 의미와 현재 constructor만으로 결정되는 성질이다.
+
+> [!example] 엔지니어 관점
+> 계층형 하드웨어 검증에서 각 IP 블록의 계약과 연결만으로 상위 모듈 동작을 설명하는 방식과 닮았다. 내부 소스 문자열을 다시 들여다볼 필요가 없어야 한다.
+
+**English definition:** The property that the meaning of a whole expression is determined solely by its constructor and the meanings of its immediate parts.
+
+> [!example] Engineering view
+> It resembles hierarchical hardware verification: explain a top module from each IP block’s contract and the wiring between them, without reopening their source text.
+
+### 타당성 (validity)
+
+assertion이 특정 상태 하나가 아니라 고려하는 모든 상태에서 참인 성질이다. ‘증명 규칙으로 증명했다’는 유도 가능성과는 별개의 semantic 개념이다.
+
+> [!example] 엔지니어 관점
+> 테스트 벡터 몇 개가 통과한 것이 아니라 모든 합법적인 입력과 상태에서 속성이 성립한다는 요구와 같다. 형식 검증은 이 전칭 요구를 다룬다.
+
+**English definition:** The property that an assertion is true in every state under consideration, not merely one state. It is a semantic notion distinct from derivability by proof rules.
+
+> [!example] Engineering view
+> It is the demand that a property hold for all legal inputs and states, rather than just passing a few test vectors. Formal verification targets this universal claim.
+
+```text
+⊨ P
+```
+
+### 구조적 귀납법 (structural induction)
+
+숫자의 크기가 아니라 syntax 트리가 만들어지는 방식에 따라 성질을 증명한다. 각 기본 constructor와 각 재귀 constructor를 처리하면 모든 유한 트리를 다룬다.
+
+> [!example] 엔지니어 관점
+> 모든 계층형 설계에 대한 속성을 보이기 위해 leaf 셀을 확인하고, 속성을 만족하는 하위 모듈을 조합한 상위 모듈도 만족함을 확인하는 패턴과 같다.
+
+**English definition:** A proof method that follows how syntax trees are built rather than the size of a number. Cover every base constructor and every recursive constructor to cover all finite trees.
+
+> [!example] Engineering view
+> It is like proving a property for every hierarchical design by checking leaf cells and then checking that each composition preserves the property when its submodules have it.
+
+### 캡처 회피 치환 (capture-avoiding substitution)
+
+자유 변수를 다른 식으로 바꿀 때 새 식의 자유 이름이 주변 바인더에 우연히 묶이지 않도록 먼저 충돌하는 이름을 바꾸는 치환이다.
+
+> [!example] 엔지니어 관점
+> 계층을 평탄화할 때 서로 다른 모듈의 내부 신호 이름이 충돌하지 않도록 신호를 고유하게 바꾸는 것과 비슷하다. 텍스트만 복사하면 연결 대상이 달라질 수 있다.
+
+**English definition:** Substitution that first renames conflicting binders so that free names in the inserted expression do not accidentally become bound.
+
+> [!example] Engineering view
+> It resembles uniquely renaming internal signals while flattening hierarchy so names from different modules do not collide. Blind textual copying can silently change connectivity.
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

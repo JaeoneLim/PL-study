@@ -42,6 +42,71 @@ related:
 - **동기식 통신 (synchronous communication)**
 - **통신 교착 (communication deadlock)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### CSP (communicating sequential processes)
+
+독립적인 순차 process들이 공유 변수 대신 이름 붙은 통신 사건으로 상호작용하도록 모델링하는 동시성 체계다.
+
+> [!example] 엔지니어 관점
+> 각 IP가 내부 상태를 숨기고 channel handshake만으로 연결되는 SoC 모델과 가깝다. 시스템 동작은 각 process의 순서와 통신 동기화로 정해진다.
+
+**English definition:** A concurrency model in which independent sequential processes interact through named communication events instead of shared variables.
+
+> [!example] Engineering view
+> It is close to an SoC model where each IP hides its internal state and connects only through channel handshakes. Behavior follows process order plus communication synchronization.
+
+### 랑데부 (rendezvous)
+
+보내는 process와 받는 process가 모두 준비된 바로 그때 하나의 통신 사건이 발생하는 동기화다.
+
+> [!example] 엔지니어 관점
+> buffer가 없는 ready/valid 연결에서 valid와 ready가 동시에 참인 사이클에만 transfer가 일어나는 것과 같다.
+
+**English definition:** A synchronization in which one communication event occurs exactly when both the sending and receiving processes are ready.
+
+> [!example] Engineering view
+> It is like an unbuffered ready/valid link where a transfer occurs only on a cycle in which both valid and ready are asserted.
+
+### 채널 (channel)
+
+process 사이의 통신 사건을 식별하고 전달 방향과 값의 종류를 정하는 이름 붙은 연결이다.
+
+> [!example] 엔지니어 관점
+> module port나 on-chip link의 논리적 이름과 비슷하다. 채널은 공유 메모리 위치가 아니라 두 process가 동기화하는 경계다.
+
+**English definition:** A named connection that identifies communication events between processes and determines direction and the kind of values transferred.
+
+> [!example] Engineering view
+> It resembles the logical name of a module port or on-chip link. A channel is a synchronization boundary between processes, not a shared memory location.
+
+### 동기식 통신 (synchronous communication)
+
+송신과 수신이 같은 사건으로 함께 일어나며, 상대가 준비되지 않으면 준비된 쪽도 기다리는 통신 방식이다.
+
+> [!example] 엔지니어 관점
+> 중간 FIFO 없이 직접 연결된 blocking handshake와 같다. asynchronous FIFO에 값을 넣고 송신자가 먼저 진행하는 buffered 통신과 대비된다.
+
+**English definition:** Communication where send and receive occur together as one event, and a ready participant waits if its counterpart is not ready.
+
+> [!example] Engineering view
+> It is like a blocking handshake with no intermediate FIFO. This contrasts with buffered communication, where a sender can enqueue data and proceed first.
+
+### 통신 교착 (communication deadlock)
+
+각 process가 상대가 먼저 수행해야 하는 통신을 기다리며 전체 시스템에 가능한 통신 사건이 사라진 상태다.
+
+> [!example] 엔지니어 관점
+> 두 인터페이스가 모두 상대의 ready를 본 뒤에만 valid를 올리도록 설계해 아무도 먼저 신호를 내지 않는 경우와 같다.
+
+**English definition:** A state where every process waits for communication that another process must perform first, leaving the whole system with no possible communication event.
+
+> [!example] Engineering view
+> It is like two interfaces each waiting to see the other’s ready before asserting valid, so neither side ever initiates the handshake.
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

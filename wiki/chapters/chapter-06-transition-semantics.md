@@ -42,6 +42,87 @@ related:
 - **결정성 (determinacy)**
 - **라벨 전이 (labeled transition)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 구성 (configuration)
+
+실행의 한 순간을 완전히 설명하는 정보 묶음이다. 보통 남은 프로그램, 현재 상태, 저장소처럼 다음 단계를 결정하는 모든 요소를 담는다.
+
+> [!example] 엔지니어 관점
+> 프로세서의 PC, 레지스터, 메모리, pipeline 상태를 함께 찍은 microarchitectural snapshot과 같다. 이 중 하나라도 빠지면 다음 사이클을 결정하지 못할 수 있다.
+
+**English definition:** A bundle containing everything needed to describe one instant of execution and determine its next step, such as the remaining program, state, and store.
+
+> [!example] Engineering view
+> It is like a microarchitectural snapshot containing the PC, registers, memory, and pipeline state. Omitting any required component may make the next cycle impossible to determine.
+
+```text
+⟨command, state⟩
+```
+
+### small-step semantics
+
+프로그램 실행을 한 번에 최종 결과로 보내지 않고, 원자적인 한 단계 전이들의 연속으로 정의하는 방식이다.
+
+> [!example] 엔지니어 관점
+> RTL 시뮬레이션을 한 클록 또는 한 delta-cycle씩 진행하며 각 중간 상태를 보는 것과 가깝다. 동시성이나 비종료처럼 중간 동작이 중요한 경우에 유용하다.
+
+**English definition:** A style of semantics that defines execution as a sequence of atomic transitions rather than mapping a whole program directly to its final result.
+
+> [!example] Engineering view
+> It is close to advancing an RTL simulation one clock or delta cycle at a time and observing each intermediate state. This is useful when concurrency or divergence makes intermediate behavior important.
+
+```text
+C → C′
+```
+
+### 전이 폐쇄 (transition closure)
+
+한 단계 전이 관계를 0회 이상 또는 1회 이상 이어 붙여 여러 단계 실행 관계를 만드는 연산이다.
+
+> [!example] 엔지니어 관점
+> 한 사이클 next-state 관계에서 임의 개수의 사이클 뒤 도달 가능한 상태를 계산하는 것과 같다. 별표 `→*`는 아무 일도 하지 않은 0단계도 포함한다.
+
+**English definition:** The operation that chains a one-step transition relation zero or more times, or one or more times, to obtain multi-step execution.
+
+> [!example] Engineering view
+> It is like deriving all states reachable after any number of cycles from a one-cycle next-state relation. The star in `→*` includes the zero-step case.
+
+```text
+→*  = zero or more steps
+```
+
+### 결정성 (determinacy)
+
+같은 구성에서 가능한 다음 구성 또는 최종 관찰이 하나로 정해지는 성질이다.
+
+> [!example] 엔지니어 관점
+> 동일한 현재 레지스터와 입력이 주어졌을 때 next-state logic이 하나의 다음 값을 내는 정상적인 동기 회로와 같다. 중재 선택이 명시되지 않으면 결정성이 깨질 수 있다.
+
+**English definition:** The property that a given configuration determines a unique next configuration or a unique final observation.
+
+> [!example] Engineering view
+> It matches ordinary synchronous next-state logic producing one next value from the same registers and inputs. An unspecified arbitration choice can break determinacy.
+
+### 라벨 전이 (labeled transition)
+
+상태 사이의 전이에 입력, 출력, 통신 같은 관찰 가능한 사건 이름을 붙인 관계다.
+
+> [!example] 엔지니어 관점
+> FSM 다이어그램의 edge에 `req/ack` 같은 조건과 동작을 적는 것과 같다. 상태뿐 아니라 어떤 외부 사건으로 이동했는지를 trace에 남긴다.
+
+**English definition:** A transition relation whose edges carry labels for observable events such as inputs, outputs, or communications.
+
+> [!example] Engineering view
+> It is like labeling FSM edges with conditions and actions such as `req/ack`. A trace records not only states but the external events that caused transitions.
+
+```text
+C —event→ C′
+```
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

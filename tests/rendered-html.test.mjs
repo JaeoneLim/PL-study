@@ -13,6 +13,29 @@ async function render(pathname) {
   );
 }
 
+const chapterSlugs = [
+  "predicate-logic",
+  "simple-imperative-language",
+  "program-specifications",
+  "arrays",
+  "failure-io-continuations",
+  "transition-semantics",
+  "nondeterminism",
+  "shared-variable-concurrency",
+  "communicating-sequential-processes",
+  "lambda-calculus",
+  "eager-functional-language",
+  "functional-continuations",
+  "iswim-like-languages",
+  "normal-order-language",
+  "simple-type-system",
+  "subtypes-intersection-types",
+  "polymorphism",
+  "module-specification",
+  "algol-like-languages",
+  "mathematical-background",
+];
+
 test("renders the bilingual language gateway", async () => {
   const response = await render("/");
   assert.equal(response.status, 200);
@@ -60,6 +83,39 @@ test("renders an English chapter lesson and quiz", async () => {
   assert.match(html, /What this chapter actually covers/);
   assert.match(html, /Normal-order evaluation/);
   assert.match(html, /COMMON CONFUSIONS/);
+});
+
+test("renders engineer-friendly chapter glossaries in both languages", async () => {
+  const [koResponse, enResponse] = await Promise.all([
+    render("/ko/chapter/predicate-logic/glossary"),
+    render("/en/chapter/predicate-logic/glossary"),
+  ]);
+  assert.equal(koResponse.status, 200);
+  assert.equal(enResponse.status, 200);
+  const [ko, en] = await Promise.all([koResponse.text(), enResponse.text()]);
+  assert.match(ko, /술어 논리 용어집/);
+  assert.match(ko, /엔지니어 관점/);
+  assert.match(ko, /하드웨어 예시는 첫 mental model/);
+  assert.match(ko, /semantics/);
+  assert.match(en, /Predicate Logic glossary/);
+  assert.match(en, /ENGINEERING VIEW/);
+  assert.match(en, /simulator uses to turn RTL into signal values/);
+  assert.match(en, /capture-avoiding substitution/);
+});
+
+test("links every Korean and English chapter lesson to its glossary", async () => {
+  for (const locale of ["ko", "en"]) {
+    for (const slug of chapterSlugs) {
+      const response = await render(`/${locale}/chapter/${slug}`);
+      assert.equal(response.status, 200, `${locale}/${slug} should render`);
+      const html = await response.text();
+      assert.match(
+        html,
+        new RegExp(`href="/${locale}/chapter/${slug}/glossary"`),
+        `${locale}/${slug} should link to its glossary`,
+      );
+    }
+  }
 });
 
 test("renders Chapter 1 as a complete longform lesson", async () => {

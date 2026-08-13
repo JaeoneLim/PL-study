@@ -43,6 +43,83 @@ related:
 - **공정성 (fairness)**
 - **말더듬/뭉개기 (stuttering/mumbling)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 인터리빙 (interleaving)
+
+여러 실행 주체의 원자 단계를 각각의 내부 순서는 유지한 채 하나의 전체 순서로 섞어 동시 실행을 모델링하는 방식이다.
+
+> [!example] 엔지니어 관점
+> 두 bus master의 transaction이 시간축에서 번갈아 나타나는 모든 합법적 schedule을 열거하는 것과 같다. 실제 병렬 동작을 가능한 직렬 순서들의 집합으로 본다.
+
+**English definition:** A model of concurrency that mixes atomic steps from several participants into one total order while preserving each participant’s internal order.
+
+> [!example] Engineering view
+> It is like enumerating every legal schedule in which transactions from two bus masters alternate on a timeline. Real parallel activity is represented by a set of possible serial orders.
+
+### 임계 구역 (critical region)
+
+공유 자원의 일관성을 지키기 위해 다른 경쟁 실행과 섞이지 않고 원자적으로 수행되어야 하는 코드 구간이다.
+
+> [!example] 엔지니어 관점
+> 공유 control register의 read-modify-write가 다른 master의 접근 사이에 끼어들지 못하도록 bus lock을 거는 구간과 같다.
+
+**English definition:** A section of code that must execute atomically, without interleaving with competitors, to preserve a shared resource’s consistency.
+
+> [!example] Engineering view
+> It is like locking a bus around a shared control-register read–modify–write so another master cannot intervene between the read and write.
+
+### 상호 배제 (mutual exclusion)
+
+한 시점에 최대 하나의 실행 주체만 특정 임계 구역에 들어갈 수 있다는 안전 성질이다.
+
+> [!example] 엔지니어 관점
+> one-hot grant가 보장되어 두 master가 동시에 단일-port SRAM을 구동하지 않는 조건이다. 누군가 언젠가 grant를 받는다는 공정성과는 별개다.
+
+**English definition:** A safety property stating that at most one participant can occupy a particular critical region at any time.
+
+> [!example] Engineering view
+> It is the one-hot-grant condition preventing two masters from driving a single-port SRAM simultaneously. It is separate from fairness, which concerns eventual service.
+
+### 교착 (deadlock)
+
+둘 이상의 실행 주체가 서로가 가진 자원이나 사건을 기다려 어느 쪽도 다음 단계로 갈 수 없는 상태다.
+
+> [!example] 엔지니어 관점
+> master A가 lock X를 잡고 Y를 기다리며, master B가 Y를 잡고 X를 기다리는 순환 대기와 같다. 단순히 오래 걸리는 상태와 구분해야 한다.
+
+**English definition:** A state where two or more participants wait on resources or events held by one another, so none can take a next step.
+
+> [!example] Engineering view
+> It is the circular wait where master A holds lock X and waits for Y while master B holds Y and waits for X. This differs from a merely slow state.
+
+### 공정성 (fairness)
+
+계속 실행 가능하거나 반복해서 요청하는 참여자가 scheduler에 의해 영원히 무시되지 않는다는 실행 가정이다.
+
+> [!example] 엔지니어 관점
+> round-robin arbiter가 지속되는 request에 결국 grant를 준다는 보장과 같다. mutual exclusion은 동시에 둘을 허용하지 않는 안전이고, 공정성은 starvation을 막는 진행 조건이다.
+
+**English definition:** An assumption that a participant which remains enabled, or requests repeatedly, is not ignored forever by the scheduler.
+
+> [!example] Engineering view
+> It is the guarantee that a round-robin arbiter eventually grants a persistent request. Mutual exclusion is safety; fairness is the progress condition that prevents starvation.
+
+### 말더듬/뭉개기 (stuttering/mumbling)
+
+말더듬은 관찰상 변화 없는 단계를 trace에 추가하는 것이고, 뭉개기는 여러 내부 단계를 하나의 큰 단계로 합치는 것이다.
+
+> [!example] 엔지니어 관점
+> waveform에 idle cycle을 더 넣어도 protocol 의미가 같다고 보거나, 여러 micro-operation을 하나의 architectural transaction으로 묶어 보는 추상화와 같다.
+
+**English definition:** Stuttering inserts steps with no observable change into a trace; mumbling combines several internal steps into one larger step.
+
+> [!example] Engineering view
+> It resembles treating extra idle cycles as protocol-equivalent, or abstracting several micro-operations into one architectural transaction.
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

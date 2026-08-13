@@ -42,6 +42,79 @@ related:
 - **계속 (continuation)**
 - **CPS (continuation-passing style)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 시퀀스 도메인 (sequence domain)
+
+유한 또는 무한한 관찰 순서를 원소로 삼고, 짧은 prefix가 긴 실행의 근사가 되도록 순서를 둔 도메인이다.
+
+> [!example] 엔지니어 관점
+> logic analyzer trace를 앞의 10사이클, 100사이클, 계속된 전체 trace 순으로 점점 더 많이 아는 것으로 보는 방식이다. 비종료 실행도 무한 trace로 표현할 수 있다.
+
+**English definition:** A domain whose elements are finite or infinite observation sequences, ordered so that a shorter prefix approximates a longer execution.
+
+> [!example] Engineering view
+> Think of knowing a logic-analyzer trace for 10 cycles, then 100 cycles, then the entire ongoing trace. An infinite trace can represent a nonterminating interaction.
+
+### 재귀 도메인 동형 (recursive domain isomorphism)
+
+정의하려는 의미 공간이 자기 자신을 포함하는 방정식의 해라는 뜻이다. 펼쳤다가 다시 접을 수 있는 구조적 대응으로 재귀 데이터를 엄밀히 만든다.
+
+> [!example] 엔지니어 관점
+> linked-list 노드 타입이 payload와 다음 노드 포인터를 포함하는 것과 비슷하다. 여기서는 단순 주소 대신 수학적 공간 자체가 재귀 방정식을 만족한다.
+
+**English definition:** A meaning space defined as a solution to an equation that contains the space itself. A structural correspondence for unfolding and folding makes recursive data precise.
+
+> [!example] Engineering view
+> It resembles a linked-list node type containing a payload and a pointer to another node. Here, the mathematical space itself satisfies a recursive equation.
+
+```text
+D ≅ F(D)
+```
+
+### 재개 (resumption)
+
+입출력 하나를 내보낸 뒤 환경의 응답에 따라 계산을 이어 가는 나머지 동작을 담은 재귀적 의미 구조다.
+
+> [!example] 엔지니어 관점
+> 버스 요청을 낸 뒤 응답 데이터에 따라 다음 상태로 이동하는 정지된 FSM 상태와 닮았다. 단순 결과가 아니라 상호작용 후 계속할 방법까지 보존한다.
+
+**English definition:** A recursive semantic structure that emits one interaction and contains the remaining computation to resume after the environment responds.
+
+> [!example] Engineering view
+> It resembles a paused FSM after issuing a bus request, with the next state determined by response data. It stores how to continue, not just a final result.
+
+### 계속 (continuation)
+
+현재 계산이 값을 만든 뒤 수행할 나머지 계산을 함수나 데이터로 나타낸 것이다.
+
+> [!example] 엔지니어 관점
+> 파이프라인 단계가 결과와 함께 다음 단계의 destination과 제어 정보를 넘기거나, CPU가 return address를 보관하는 것과 비슷하다.
+
+**English definition:** A representation, as a function or data structure, of the rest of the computation to perform after the current computation produces a value.
+
+> [!example] Engineering view
+> It resembles a pipeline stage forwarding destination/control metadata with its result, or a CPU saving a return address that says where execution continues.
+
+```text
+k : Result → Answer
+```
+
+### CPS (continuation-passing style)
+
+함수가 결과를 직접 반환하지 않고, 그 결과를 받을 계속 함수를 명시적 인수로 받아 호출하는 프로그램 형태다.
+
+> [!example] 엔지니어 관점
+> 모듈이 출력값만 반환하는 대신 `done` 핸드셰이크와 다음 처리 블록을 명시적으로 구동하도록 인터페이스를 바꾼 것과 닮았다. 제어 흐름이 데이터 경로처럼 드러난다.
+
+**English definition:** A program form in which a function does not return directly; instead it receives an explicit continuation function and calls it with the result.
+
+> [!example] Engineering view
+> It resembles changing a module interface so that it explicitly drives a `done` handshake and the next processing stage instead of merely returning a value. Control flow becomes explicit like a datapath.
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

@@ -42,6 +42,83 @@ related:
 - **적극 평가 (eager evaluation)**
 - **고정점 결합자 (fixed-point combinator)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 람다 추상화 (lambda abstraction)
+
+입력 매개변수 하나와 그 매개변수를 사용하는 본문을 묶어 익명 함수를 만드는 항이다.
+
+> [!example] 엔지니어 관점
+> 이름을 붙이지 않은 parameterized combinational block을 값처럼 다루는 추상화로 생각할 수 있다. `λx. x+1`은 입력 x를 받아 1을 더하는 계산이다.
+
+**English definition:** A term that creates an anonymous function by pairing one input parameter with a body that may use that parameter.
+
+> [!example] Engineering view
+> Think of an unnamed parameterized combinational block treated as a value. `λx. x+1` is a computation that accepts x and adds one.
+
+```text
+λx. e
+```
+
+### β-축약 (beta-reduction)
+
+함수 적용 `(λx.e) v`에서 본문의 자유로운 x를 인수 v로 안전하게 치환하여 `e[x↦v]`로 바꾸는 계산 단계다.
+
+> [!example] 엔지니어 관점
+> 모듈 parameter를 실제 값으로 바꾸어 specialize하거나 inline하는 elaboration과 닮았다. 이름 충돌을 피해야 한다는 점도 같다.
+
+**English definition:** The computation step that turns an application `(λx.e) v` into `e[x↦v]` by safely substituting argument v for free occurrences of x in the body.
+
+> [!example] Engineering view
+> It resembles elaborating or inlining a parameterized module with an actual value. The transformation must likewise avoid name collisions.
+
+```text
+(λx.e) v →β e[x ↦ v]
+```
+
+### 정상 순서 (normal order)
+
+항의 가장 바깥쪽, 가장 왼쪽에 있는 β-redex를 먼저 줄이는 평가 순서다. 정상형이 존재한다면 이 전략은 결국 그것을 찾는다.
+
+> [!example] 엔지니어 관점
+> 필요한 출력 cone부터 펼쳐 내부 블록은 실제로 요구될 때만 계산하는 demand-driven 접근과 비슷하다. 쓰이지 않는 인수 계산은 건너뛸 수 있다.
+
+**English definition:** An evaluation order that reduces the leftmost, outermost beta redex first. If a normal form exists, this strategy eventually finds it.
+
+> [!example] Engineering view
+> It resembles a demand-driven approach that expands the output cone first and computes internal blocks only when needed. An unused argument computation may be skipped.
+
+### 적극 평가 (eager evaluation)
+
+함수 본문에 들어가기 전에 인수를 먼저 값으로 계산하는 평가 전략이다. call-by-value가 대표적인 형태다.
+
+> [!example] 엔지니어 관점
+> downstream block이 결과를 사용할지와 관계없이 upstream 연산을 먼저 완료하고 register에 넣는 pipeline과 닮았다.
+
+**English definition:** An evaluation strategy that computes a function’s argument to a value before entering the function body. Call-by-value is the standard example.
+
+> [!example] Engineering view
+> It resembles a pipeline that completes and registers an upstream computation before the downstream block runs, whether or not it will ultimately use that result.
+
+### 고정점 결합자 (fixed-point combinator)
+
+함수 F를 받아 `F(f)=f`를 만족하는 고정점 f를 만들어 이름 없는 람다 계산 안에서 재귀를 표현하게 하는 항이다.
+
+> [!example] 엔지니어 관점
+> 명시적 자기 인스턴스 이름 없이 피드백 경로를 구성해 블록 출력이 다시 블록 입력 정의에 들어가게 만드는 것과 비슷하다. 계산 semantics에서는 비종료 가능성도 함께 생긴다.
+
+**English definition:** A lambda term that takes a function F and produces a fixed point f satisfying `F(f)=f`, enabling recursion without named recursive definitions.
+
+> [!example] Engineering view
+> It resembles constructing a feedback path without an explicitly named self-instance, so a block’s output re-enters its own definition. In computation this also introduces possible nontermination.
+
+```text
+Y F = F (Y F)
+```
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

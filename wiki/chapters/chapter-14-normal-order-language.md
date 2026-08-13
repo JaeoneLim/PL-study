@@ -43,6 +43,83 @@ related:
 - **메모화 (memoization)**
 - **무한 리스트 (infinite list)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 이름에 의한 호출 (call-by-name)
+
+인수 식을 먼저 계산하지 않고 함수 본문에 전달하며, 매개변수가 사용될 때마다 그 식을 다시 계산하는 호출 방식이다.
+
+> [!example] 엔지니어 관점
+> 실제 신호값을 sample해 넘기기보다 상위 조합식에 대한 연결을 넘겨 각 사용 지점에서 다시 읽는 macro-like 연결과 비슷하다. 부작용이 있으면 매번 결과가 달라질 수 있다.
+
+**English definition:** A calling convention that passes an unevaluated argument expression into the body and reevaluates it each time the parameter is used.
+
+> [!example] Engineering view
+> It resembles passing a connection to an upstream combinational expression rather than sampling its value, so each use reads it again. With effects, repeated uses may differ.
+
+### 지연 평가 (lazy evaluation)
+
+인수 계산을 실제로 필요할 때까지 미루고, 한 번 계산한 결과를 공유해 같은 식을 반복 계산하지 않는 전략이다.
+
+> [!example] 엔지니어 관점
+> clock gating으로 consumer가 요청할 때만 블록을 켜고, 첫 결과를 register에 저장해 이후 요청에 재사용하는 구조와 닮았다.
+
+**English definition:** An evaluation strategy that delays a computation until its value is needed and shares the result after the first evaluation to avoid repeated work.
+
+> [!example] Engineering view
+> It resembles clock-gating a block until a consumer requests its output, then registering the first result and reusing it for later requests.
+
+### 썽크 (thunk)
+
+아직 실행하지 않은 식과 나중에 그 식을 계산하는 데 필요한 환경을 묶어 둔 지연 계산 객체다.
+
+> [!example] 엔지니어 관점
+> 보류된 micro-op와 operand source 정보를 queue entry에 넣어 두었다가 ready가 되면 issue하는 것과 비슷하다.
+
+**English definition:** A delayed-computation object pairing an unevaluated expression with the environment needed to evaluate it later.
+
+> [!example] Engineering view
+> It is like storing a pending micro-operation and its operand-source metadata in a queue entry until it becomes ready to issue.
+
+### 강제 (forcing)
+
+썽크가 나타내는 지연 계산의 실제 값을 요구해 평가를 시작하고 그 결과를 얻는 동작이다.
+
+> [!example] 엔지니어 관점
+> consumer가 valid data를 요구해 power-gated producer를 깨우고 결과가 준비될 때까지 handshake를 진행하는 순간에 해당한다.
+
+**English definition:** The operation of demanding the actual value represented by a thunk, triggering its evaluation and obtaining the result.
+
+> [!example] Engineering view
+> It corresponds to a consumer demanding valid data, waking a gated producer, and completing the handshake when the result becomes available.
+
+### 메모화 (memoization)
+
+계산 결과를 저장해 같은 계산이 다시 요구될 때 실행하지 않고 저장된 값을 돌려주는 기법이다.
+
+> [!example] 엔지니어 관점
+> 동일한 address나 key의 결과를 재사용하는 cache와 같다. lazy evaluation에서는 같은 썽크의 부작용까지 반복되지 않게 한다는 점도 중요하다.
+
+**English definition:** A technique that stores a computed result and returns the stored value rather than rerunning the same computation on later demand.
+
+> [!example] Engineering view
+> It is like a cache reusing the result for the same address or key. In lazy evaluation it also ensures effects inside one thunk are not repeated.
+
+### 무한 리스트 (infinite list)
+
+끝을 미리 모두 만들지 않고 현재 원소와 다음 원소를 계산할 지연 recipe로 표현한 끝없는 데이터 구조다.
+
+> [!example] 엔지니어 관점
+> 필요한 cycle의 sample만 계속 만들어 내는 stream generator와 같다. 소비한 prefix만 실제로 존재하므로 유한 메모리로 유한 부분을 다룰 수 있다.
+
+**English definition:** An unbounded data structure represented by a current element and a delayed recipe for computing the rest, rather than being fully constructed in advance.
+
+> [!example] Engineering view
+> It is like a stream generator that produces samples only for cycles requested by the consumer. Only the consumed prefix is materialized, so finite prefixes fit in finite memory.
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

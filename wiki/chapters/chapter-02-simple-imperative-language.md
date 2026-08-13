@@ -42,6 +42,79 @@ related:
 - **syntactic sugar (syntactic sugar)**
 - **완전 추상성 (full abstraction)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 도메인 (domain)
+
+계산 결과의 정보량을 순서로 나타내고, 점점 더 정확해지는 근사의 극한을 담을 수 있는 수학적 공간이다. 여기서 ⊥는 결과가 아직 없거나 계산이 끝나지 않음을 나타낸다.
+
+> [!example] 엔지니어 관점
+> 4상태 논리에서 X가 구체적인 0이나 1보다 정보가 적다고 보는 관점이 출발점에 가깝다. 단, 도메인은 단순 신호값을 넘어 프로그램 전체 결과의 근사도 다룬다.
+
+**English definition:** A mathematical space that orders computation results by information content and contains limits of increasingly precise approximations. Its bottom element ⊥ represents no result yet, including nontermination.
+
+> [!example] Engineering view
+> The starting intuition resembles treating X as less informative than a concrete 0 or 1 in four-state logic. Domains extend that idea to approximations of whole computations.
+
+```text
+⊥ ⊑ d
+```
+
+### 연속 함수 (continuous function)
+
+정보가 증가하는 근사 사슬의 최소 상한을 보존하는 함수다. 유한한 입력 정보에서 갑자기 무한히 새로운 정보를 요구하지 않는다는 뜻이다.
+
+> [!example] 엔지니어 관점
+> 반복 시뮬레이션에서 입력 근사를 조금씩 정교하게 할 때 출력 근사도 일관되게 정교해지고, 그 극한이 완전한 입력의 출력과 맞는 상황을 떠올리면 된다.
+
+**English definition:** A function that preserves least upper bounds of increasing chains of information. Intuitively, it cannot demand infinitely much new information all at once from finite input evidence.
+
+> [!example] Engineering view
+> Imagine iterative simulation where refining the input approximation consistently refines the output, and the limit agrees with the output for the fully known input.
+
+### 최소 고정점 (least fixed point)
+
+`F(x)=x`를 만족하는 해들 가운데 정보 순서로 가장 작은 해다. 재귀나 while을 유한 번 펼쳐서 정당화할 수 있는 동작만 포함한다.
+
+> [!example] 엔지니어 관점
+> 피드백 회로의 값을 미지 상태에서 시작해 전달 규칙을 반복 적용하여 안정점에 도달시키는 해석과 닮았다. ‘최소’는 근거 없는 추가 동작을 넣지 않는다.
+
+**English definition:** The least solution, in the information order, of `F(x)=x`. For recursion or while loops, it includes only behavior justified by some finite unfolding.
+
+> [!example] Engineering view
+> It resembles starting a feedback network from an unknown state and repeatedly applying propagation rules until a stable solution is reached. “Least” excludes unsupported extra behavior.
+
+```text
+fix(F) = ⨆ₙ Fⁿ(⊥)
+```
+
+### syntactic sugar
+
+핵심 언어의 기존 구성으로 의미 보존 번역할 수 있는 편의 표기다. 쓰기 편해지지만 원칙적으로 새로운 계산 능력을 추가하지 않는다.
+
+> [!example] 엔지니어 관점
+> HDL의 generate 문이나 반복 매크로가 elaboration 뒤 더 기본적인 인스턴스 집합으로 바뀌는 것과 같다. 번역 결과가 원래 의도를 보존해야 한다.
+
+**English definition:** Convenient notation that can be translated meaning-preservingly into existing core-language constructs. It improves usability without necessarily adding computational power.
+
+> [!example] Engineering view
+> It is like an HDL generate construct or repetition macro elaborating into a more basic set of instances. The elaborated form must preserve the intended behavior.
+
+### 완전 추상성 (full abstraction)
+
+semantics이 두 프로그램을 같다고 보는 경우와 어떤 프로그램 문맥도 둘을 구별하지 못하는 경우가 정확히 일치하는 성질이다.
+
+> [!example] 엔지니어 관점
+> 두 IP가 모든 허용 testbench에서 같은 핀 동작을 보일 때에만 모델도 둘을 같다고 보는 이상적인 대응이다. 모델이 testbench가 볼 수 없는 내부 차이를 구별하면 너무 세밀하다.
+
+**English definition:** The property that semantic equality coincides exactly with indistinguishability by every program context.
+
+> [!example] Engineering view
+> Ideally, a model equates two IP blocks exactly when every permitted testbench sees the same pin behavior. A model that distinguishes invisible internal details is too fine-grained.
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

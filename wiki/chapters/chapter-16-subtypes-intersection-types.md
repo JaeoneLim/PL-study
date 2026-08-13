@@ -43,6 +43,99 @@ related:
 - **교차 타입 (intersection type)**
 - **일관성 (coherence)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 서브타이핑 (subtyping)
+
+S 타입의 모든 값을 T가 필요한 곳에서 안전하게 사용할 수 있을 때 성립하는 `S <: T` 관계다. 단순히 두 타입의 표현이 비슷하다는 뜻은 아니다.
+
+> [!example] 엔지니어 관점
+> 더 강한 timing·protocol 보장을 제공하는 IP가 더 약한 요구만 하는 socket에 들어갈 수 있는 interface refinement와 비슷하다.
+
+**English definition:** A relation `S <: T` holding when every value of type S can be used safely wherever T is expected. It is not merely similarity of representations.
+
+> [!example] Engineering view
+> It resembles interface refinement: an IP block providing stronger timing or protocol guarantees can occupy a socket that requires only weaker ones.
+
+```text
+S <: T
+```
+
+### 대체 가능성 (substitutability)
+
+프로그램이 기대하는 관찰 가능한 동작을 깨뜨리지 않고 한 타입의 값을 다른 타입 자리에서 바꿔 쓸 수 있는 성질이다.
+
+> [!example] 엔지니어 관점
+> pinout과 protocol 계약을 지키는 새 IP revision을 기존 board나 SoC integration에 그대로 꽂을 수 있는 조건과 같다.
+
+**English definition:** The ability to replace a value with one of another type without violating the observable behavior expected by the surrounding program.
+
+> [!example] Engineering view
+> It is the condition under which a new IP revision can be dropped into an existing board or SoC integration because it preserves pinout and protocol contracts.
+
+### 공변성 (covariance)
+
+구성 타입 안쪽의 서브타입 방향과 바깥 구성 타입의 서브타입 방향이 같은 성질이다. 보통 읽기만 하는 결과 위치에서 안전하다.
+
+> [!example] 엔지니어 관점
+> 더 구체적인 packet을 출력하는 source는 일반 packet을 받는 sink에도 연결할 수 있다는 방향과 같다. producer 결과 타입은 대개 공변적이다.
+
+**English definition:** The property that a type constructor preserves the subtype direction of its component. It is typically safe in output-only or read-only positions.
+
+> [!example] Engineering view
+> It matches the fact that a source producing a more specific packet can feed a sink accepting general packets. Producer result types are commonly covariant.
+
+```text
+S <: T ⇒ F(S) <: F(T)
+```
+
+### 반공변성 (contravariance)
+
+구성 타입 안쪽의 서브타입 방향이 바깥에서는 반대로 뒤집히는 성질이다. 함수의 입력처럼 값을 받아들이는 위치에서 나타난다.
+
+> [!example] 엔지니어 관점
+> 더 넓은 범위의 packet을 받아들일 수 있는 sink라야 특정 packet 전용 sink를 기대한 자리를 안전하게 대신할 수 있다. consumer 요구 방향이 뒤집힌다.
+
+**English definition:** The property that a type constructor reverses the subtype direction of its component. It appears in consuming positions such as function inputs.
+
+> [!example] Engineering view
+> A sink accepting a wider class of packets can safely replace one expected to accept a specific packet. The direction reverses for consumers.
+
+```text
+S <: T ⇒ (T→R) <: (S→R)
+```
+
+### 교차 타입 (intersection type)
+
+같은 값이 타입 S와 타입 T의 요구를 모두 만족함을 나타내는 `S ∩ T` 타입이다.
+
+> [!example] 엔지니어 관점
+> 하나의 IP가 AXI target 계약과 debug interface 계약을 동시에 제공한다고 분류하는 것과 같다. 둘 중 하나를 고르는 union이 아니라 둘 다 갖춘 값이다.
+
+**English definition:** A type `S ∩ T` describing values that satisfy the requirements of both type S and type T.
+
+> [!example] Engineering view
+> It is like classifying one IP block as satisfying both an AXI-target contract and a debug-interface contract. Unlike a union, the value provides both.
+
+```text
+v : S ∩ T
+```
+
+### 일관성 (coherence)
+
+같은 typing judgment를 만드는 서로 다른 유도 경로가 있더라도 프로그램의 최종 의미가 경로에 따라 달라지지 않는 성질이다.
+
+> [!example] 엔지니어 관점
+> 여러 합법적인 adapter 삽입 경로가 모두 같은 pin-level behavior를 만들어야 하는 것과 같다. compiler의 선택이 사용자에게 관찰되면 일관성이 깨진다.
+
+**English definition:** The property that different derivation paths for the same typing judgment do not give the program different final meanings.
+
+> [!example] Engineering view
+> It is like requiring all legal adapter-insertion paths to produce the same pin-level behavior. Coherence fails if the compiler’s chosen path becomes observable.
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

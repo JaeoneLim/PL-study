@@ -42,6 +42,83 @@ related:
 - **개봉 (unpacking)**
 - **표현 독립성 (representation independence)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 추상 타입 (abstract type)
+
+모듈 밖에서는 내부 표현을 알 수 없고 공개된 연산을 통해서만 값을 만들고 관찰할 수 있는 타입이다.
+
+> [!example] 엔지니어 관점
+> 내부 register map을 숨기고 command/status interface만 공개한 IP와 같다. integration 코드는 구현 bit layout에 직접 의존할 수 없다.
+
+**English definition:** A type whose internal representation is hidden outside a module, so clients can create and observe values only through exported operations.
+
+> [!example] Engineering view
+> It is like an IP block that hides its internal register map and exposes only command/status operations. Integration code cannot depend on the implementation’s bit layout.
+
+### 실존 타입 (existential type)
+
+‘어떤 숨겨진 표현 타입 α가 존재하고, 그 α로 이 인터페이스 T를 구현한다’를 `∃α.T`로 나타내는 패키지 타입이다.
+
+> [!example] 엔지니어 관점
+> 내부 SRAM인지 register array인지 밝히지 않은 채 read/write 계약만 제공하는 sealed IP package와 같다.
+
+**English definition:** A package type `∃α.T` saying that some hidden representation type α exists together with an implementation of interface T at that α.
+
+> [!example] Engineering view
+> It is like a sealed IP package that exposes a read/write contract without revealing whether its storage is SRAM or a register array.
+
+```text
+∃α. T
+```
+
+### 패키징 (packing)
+
+구체 표현 타입과 그 구현 값을 실존 타입 뒤에 봉인하여 클라이언트가 표현을 직접 사용하지 못하게 하는 연산이다.
+
+> [!example] 엔지니어 관점
+> 검증된 RTL과 내부 parameter를 encrypted IP wrapper 안에 넣고 공개 port 계약만 남기는 과정과 비슷하다.
+
+**English definition:** The operation that seals a concrete representation type and implementation value behind an existential type so clients cannot use the representation directly.
+
+> [!example] Engineering view
+> It resembles placing verified RTL and internal parameters inside an encrypted IP wrapper while exposing only the public port contract.
+
+```text
+pack [R, m] as ∃α.T
+```
+
+### 개봉 (unpacking)
+
+실존 패키지를 열어 숨겨진 타입을 신선한 추상 이름으로, 구현을 인터페이스 값으로 잠시 사용하되 표현이 밖으로 새지 못하게 하는 연산이다.
+
+> [!example] 엔지니어 관점
+> IP wrapper 안쪽에서만 private bus type을 연결하고 외부에는 표준 interface만 계속 노출하는 integration scope와 비슷하다.
+
+**English definition:** The operation that opens an existential package, temporarily naming its hidden type abstractly and its implementation as an interface value, without allowing the representation to escape.
+
+> [!example] Engineering view
+> It resembles an integration scope where a private bus type is connected only inside an IP wrapper while the outside continues to see a standard interface.
+
+```text
+unpack [α, x] = p in e
+```
+
+### 표현 독립성 (representation independence)
+
+공개 연산의 관찰 결과를 보존하는 한 내부 표현을 다른 것으로 바꿔도 모든 올바른 클라이언트의 동작이 같다는 성질이다.
+
+> [!example] 엔지니어 관점
+> FIFO를 flip-flop array에서 SRAM macro로 바꿔도 latency·ordering·handshake 계약이 같으면 상위 RTL을 수정할 필요가 없는 것과 같다.
+
+**English definition:** The property that one internal representation can replace another without changing any well-behaved client, provided observations through exported operations are preserved.
+
+> [!example] Engineering view
+> It is like replacing a FIFO’s flip-flop array with an SRAM macro without changing surrounding RTL because latency, ordering, and handshake contracts remain identical.
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할

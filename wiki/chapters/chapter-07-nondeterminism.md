@@ -42,6 +42,79 @@ related:
 - **교착 (deadlock)**
 - **최약 전제조건 (weakest precondition)**
 
+## 장별 용어 해설
+
+> [!info] 비유 사용법
+> 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
+
+### 보호 명령 (guarded command)
+
+Boolean 조건인 guard와, 그 조건이 참일 때 실행할 명령을 한 쌍으로 묶은 구성이다. 여러 guard가 참이면 그중 하나를 선택할 수 있다.
+
+> [!example] 엔지니어 관점
+> 여러 request의 enable 조건과 처리 동작을 나열한 arbiter 규칙과 비슷하다. 둘 이상이 동시에 enable일 때 우선순위를 정하지 않으면 선택은 비결정적이다.
+
+**English definition:** A construct pairing a Boolean guard with a command enabled when that guard is true. If several guards are true, one of their commands may be selected.
+
+> [!example] Engineering view
+> It resembles listing enable conditions and actions for an arbiter. If multiple requests are enabled and no priority is specified, the choice is nondeterministic.
+
+```text
+g₁ → c₁ ▯ g₂ → c₂
+```
+
+### 비결정성 (nondeterminism)
+
+같은 시작 상태에서 언어 규칙이 둘 이상의 실행 결과나 다음 단계를 허용하지만 어느 것을 택할지 지정하지 않는 성질이다.
+
+> [!example] 엔지니어 관점
+> 동시에 들어온 request 중 어느 쪽을 먼저 서비스할지 명시하지 않은 arbiter 모델과 같다. 확률적 선택과 달리 각 경우의 확률을 말하지 않는다.
+
+**English definition:** The property that language rules permit more than one next step or result from the same starting state without specifying which one is chosen.
+
+> [!example] Engineering view
+> It is like an arbiter model that leaves unspecified which simultaneous request is served first. Unlike randomness, nondeterminism assigns no probability to the choices.
+
+### 파워도메인 (powerdomain)
+
+비결정적 계산이 만들 수 있는 결과 집합을 도메인 이론의 정보 순서와 함께 다루도록 만든 의미 공간이다.
+
+> [!example] 엔지니어 관점
+> 한 입력에 대해 허용되는 모든 output trace를 모은 verification envelope와 비슷하다. 단순 집합만으로는 비종료와 근사 정보를 충분히 구분하지 못해 별도 구조가 필요하다.
+
+**English definition:** A semantic domain designed to represent sets of possible outcomes of a nondeterministic computation while retaining an information ordering.
+
+> [!example] Engineering view
+> It resembles a verification envelope containing every permitted output trace for one input. Extra structure is needed because a plain set does not adequately represent divergence and approximation.
+
+### 교착 (deadlock)
+
+실행이 끝난 것은 아닌데 현재 참인 guard나 가능한 전이가 하나도 없어 더 진행할 수 없는 상태다.
+
+> [!example] 엔지니어 관점
+> FSM이 합법적인 done 상태가 아닌데 어떤 transition condition도 참이 아니어서 멈춘 경우와 같다. 무한히 움직이는 livelock과는 다르다.
+
+**English definition:** A non-final state in which no guard is enabled and no transition can proceed.
+
+> [!example] Engineering view
+> It is like an FSM stuck outside a legal done state because no transition condition is true. This differs from livelock, which keeps moving without useful progress.
+
+### 최약 전제조건 (weakest precondition)
+
+명령을 실행한 뒤 목표 사후조건이 반드시 성립하도록 보장하는 시작 조건 중 가장 약한, 즉 가장 많은 상태를 허용하는 조건이다.
+
+> [!example] 엔지니어 관점
+> 출력 timing·protocol 요구에서 출발해 입력과 초기 상태가 만족해야 할 최소 제약을 combinational cone을 거슬러 계산하는 것과 비슷하다.
+
+**English definition:** The least restrictive starting condition that guarantees a target postcondition after executing a command.
+
+> [!example] Engineering view
+> It resembles propagating an output timing or protocol requirement backward through a combinational cone to derive the minimum constraints on inputs and initial state.
+
+```text
+wp(c, q)
+```
+
 ## 장 전체 내용 지도
 
 > [!abstract] 이 장의 역할
