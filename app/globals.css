@@ -332,8 +332,14 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .learning-goals ol { display: grid; gap: 13px; margin: 0; padding: 0; counter-reset: goal; list-style: none; }
 .learning-goals li { position: relative; padding-left: 28px; color: var(--ink-soft); font-size: 12px; line-height: 1.55; counter-increment: goal; }
 .learning-goals li::before { content: counter(goal, decimal-leading-zero); position: absolute; left: 0; top: 2px; color: var(--blue); font: 700 9px/1 var(--mono); }
-.chapter-layout { display: grid; grid-template-columns: 270px minmax(0, 820px); gap: clamp(50px, 8vw, 130px); align-items: start; justify-content: center; padding: 68px clamp(24px, 6vw, 90px) 110px; }
-.chapter-toc { position: sticky; top: 88px; max-height: calc(100vh - 108px); overflow-y: auto; border-top: 2px solid var(--ink); padding: 16px 8px 18px 0; }
+.chapter-layout { display: grid; width: 100%; grid-template-columns: var(--chapter-sidebar-width, 270px) 16px minmax(0, 1fr); gap: clamp(18px, 2.2vw, 34px); align-items: start; padding: 68px clamp(24px, 4vw, 64px) 110px; }
+.chapter-toc { position: sticky; top: 88px; min-width: 0; max-height: calc(100vh - 108px); overflow-y: auto; border-top: 2px solid var(--ink); padding: 16px 8px 18px 0; }
+.chapter-sidebar-resizer { position: sticky; top: 88px; display: grid; width: 16px; height: calc(100vh - 108px); place-items: center; border-radius: 8px; color: var(--ink-soft); cursor: col-resize; touch-action: none; user-select: none; transition: color 140ms ease, background 140ms ease; }
+.chapter-sidebar-resizer::before { content: ""; position: absolute; inset-block: 0; left: 50%; width: 1px; background: var(--line); transform: translateX(-50%); }
+.chapter-sidebar-resizer span { position: relative; z-index: 1; display: grid; width: 14px; height: 42px; place-items: center; border: 1px solid var(--line); border-radius: 8px; background: var(--paper-bright); font: 800 15px/1 var(--mono); }
+.chapter-sidebar-resizer:hover, .chapter-sidebar-resizer:focus-visible, .chapter-layout.is-dragging .chapter-sidebar-resizer { color: var(--blue); background: rgba(37,79,232,.08); outline: 0; }
+.chapter-sidebar-resizer:focus-visible span { border-color: var(--blue); box-shadow: 0 0 0 3px var(--acid); }
+body.is-resizing-sidebar, body.is-resizing-sidebar * { cursor: col-resize !important; user-select: none !important; }
 .chapter-toc > p, .toc-terms > p { margin: 0 0 15px; font: 800 9px/1 var(--mono); letter-spacing: .12em; }
 .chapter-toc nav { display: grid; }
 .chapter-toc nav a { display: grid; grid-template-columns: 29px 1fr; gap: 6px; border-top: 1px solid var(--line); padding: 11px 0; color: var(--ink-soft); font-size: 10px; line-height: 1.4; }
@@ -342,7 +348,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .toc-terms { margin-top: 30px; border-top: 1px solid var(--ink); padding-top: 16px; }
 .toc-terms > span { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--line); padding: 8px 0; font-size: 10px; }
 .toc-terms small { color: var(--ink-soft); font-size: 8px; text-align: right; }
-.lesson-content { min-width: 0; }
+.lesson-content { width: 100%; min-width: 0; }
 .chapter-deep-guide { scroll-margin-top: 98px; border-top: 3px solid var(--blue); padding: 28px 0 82px; }
 .deep-guide-purpose { margin: 0 0 34px; color: var(--ink-soft); font-size: 15px; line-height: 1.85; }
 .section-brief-list { display: grid; border-top: 1px solid var(--ink); }
@@ -379,6 +385,11 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .longform-prose p, .longform-notation > p, .longform-callout > p, .worked-example p, .longform-list li, .section-checkpoints li { overflow-wrap: anywhere; }
 .longform-prose p { margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 2; }
 .longform-blocks code, .longform-introduction code, .section-checkpoints code { border-radius: 2px; padding: .1em .3em; background: rgba(37,79,232,.08); color: var(--blue-dark); font: 600 .88em/1.5 var(--mono); }
+.math-inline { display: inline-block; margin-inline: .08em; color: var(--ink); white-space: nowrap; vertical-align: -.08em; }
+.math-inline .katex { font-size: 1.04em; }
+.math-display { display: block; overflow-x: auto; padding: 27px 30px; color: var(--blue-dark); background: var(--paper-bright); text-align: center; }
+.math-display .katex-display { min-width: max-content; margin: 0; }
+.math-display .katex { font-size: 1.16em; }
 .longform-list { border-left: 3px solid var(--blue); padding: 4px 0 4px 25px; }
 .longform-list h3 { margin: 0 0 18px; font: 600 21px/1.4 var(--serif); }
 .longform-list ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
@@ -388,6 +399,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .longform-notation figcaption { border-bottom: 1px solid var(--ink); padding: 13px 17px; color: var(--acid); background: var(--ink); font: 800 9px/1.2 var(--mono); letter-spacing: .09em; text-transform: uppercase; }
 .longform-notation pre { overflow-x: auto; margin: 0; padding: 24px; color: var(--blue-dark); background: var(--paper-bright); font: 600 13px/1.85 var(--mono); }
 .longform-notation pre code { padding: 0; background: transparent; font: inherit; }
+.longform-notation > .math-display + p { border-top-color: var(--ink); }
 .longform-notation > p { margin: 0; border-top: 1px solid var(--line); padding: 17px 22px; color: var(--ink-soft); font-size: 12px; line-height: 1.8; }
 .worked-example { border: 1px solid var(--ink); padding: 28px; background: var(--paper-bright); box-shadow: 7px 7px 0 var(--sky); }
 .worked-example-label { margin: 0 0 12px !important; color: var(--blue) !important; font: 800 9px/1 var(--mono) !important; letter-spacing: .1em; }
@@ -514,7 +526,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 @media (max-width: 1050px) {
   .chapter-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .course-hero { grid-template-columns: 1fr minmax(270px,.55fr); gap: 45px; }
-  .chapter-layout { grid-template-columns: 220px minmax(0, 1fr); gap: 55px; }
+  .chapter-layout { gap: 22px; padding-inline: 30px; }
   .overview-invitation { grid-template-columns: 150px 1fr 1fr; }
   .overview-invitation > a { grid-column: 2 / -1; justify-self: start; }
 }
@@ -535,6 +547,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .learning-goals { max-width: 620px; }
   .chapter-layout { grid-template-columns: 1fr; }
   .chapter-toc { position: static; display: grid; max-height: none; grid-template-columns: 1fr 1fr; gap: 30px; overflow: visible; padding-right: 0; }
+  .chapter-sidebar-resizer { display: none; }
   .toc-terms { margin-top: 0; border-top: 0; padding-top: 0; }
   .glossary-hero-grid { grid-template-columns: 1fr; }
   .glossary-reading-rule { max-width: 620px; }

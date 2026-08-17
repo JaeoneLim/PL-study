@@ -22,9 +22,9 @@ units: Chapters 1–19 plus the mathematical appendix.
 The course is being expanded sequentially so displayed reading times reflect
 actual material rather than a nominal estimate.
 
-- Chapter 1: complete 60+ minute lesson, worked examples, proof sketches,
-  retrieval checks, and practice workshop
-- Chapters 2–19 and the appendix: concise guided briefs, labeled `Brief` until
+- Chapters 1–2: complete 60+ minute lessons, worked examples, proof sketches,
+  retrieval checks, and practice workshops
+- Chapters 3–19 and the appendix: concise guided briefs, labeled `Brief` until
   each receives the same 30+ minute treatment
 
 ## Korean terminology policy
@@ -33,6 +33,12 @@ The Korean edition preserves `syntax`, `semantics`, `statement`, `assertion`,
 and `constructor` in English so study-group discussion, note-taking, and search
 use the same vocabulary. Standard compounds such as `abstract syntax`,
 `denotational semantics`, and `syntax-directed` remain in English as well.
+
+Chapter 2 also keeps its title, section headings, and canonical semantic terms
+in English. Terms such as `state transformer`, `domain`, `predomain`, `bottom`,
+`continuous function`, `least fixed point`, `functional`, `semantic soundness`,
+and `full abstraction` remain visible and primary; Korean may follow as a short
+parenthetical gloss but never replaces the English term.
 
 ## Copyright boundary
 

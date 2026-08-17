@@ -36,7 +36,7 @@ related:
 
 ## 핵심 용어
 
-- **evaluation semantics (evaluation semantics)**
+- **evaluation semantics**
 - **클로저 (closure)**
 - **패턴 매칭 (pattern matching)**
 - **재귀 환경 (recursive environment)**

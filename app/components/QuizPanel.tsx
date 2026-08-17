@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { Locale, QuizQuestion } from "../../content/course";
 
-export function QuizPanel({ locale, questions, slug }: { locale: Locale; questions: QuizQuestion[]; slug: string }) {
+export function QuizPanel({ locale, headingLocale = locale, questions, slug }: { locale: Locale; headingLocale?: Locale; questions: QuizQuestion[]; slug: string }) {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [checked, setChecked] = useState(false);
   const score = questions.reduce((sum, question, index) => sum + (answers[index] === question.correct ? 1 : 0), 0);
@@ -30,7 +30,7 @@ export function QuizPanel({ locale, questions, slug }: { locale: Locale; questio
       <div className="quiz-heading">
         <div>
           <p className="kicker">{locale === "ko" ? "인출 연습" : "RETRIEVAL PRACTICE"}</p>
-          <h2 id="quiz-heading">{locale === "ko" ? "개념 확인 퀴즈" : "Concept check"}</h2>
+          <h2 id="quiz-heading">{headingLocale === "ko" ? "개념 확인 퀴즈" : "Concept check"}</h2>
         </div>
         <span>{questions.length} {locale === "ko" ? "문항" : "questions"}</span>
       </div>

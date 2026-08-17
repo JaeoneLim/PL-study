@@ -40,7 +40,7 @@ related:
 - **정의역 (domain)**
 - **범위 오류 (bounds error)**
 - **이진 탐색 (binary search)**
-- **higher-order assertion (higher-order assertion)**
+- **higher-order assertion**
 
 ## 장별 용어 해설
 

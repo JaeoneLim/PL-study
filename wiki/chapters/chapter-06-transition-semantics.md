@@ -37,7 +37,7 @@ related:
 ## 핵심 용어
 
 - **구성 (configuration)**
-- **small-step semantics (small-step semantics)**
+- **small-step semantics**
 - **전이 폐쇄 (transition closure)**
 - **결정성 (determinacy)**
 - **라벨 전이 (labeled transition)**
