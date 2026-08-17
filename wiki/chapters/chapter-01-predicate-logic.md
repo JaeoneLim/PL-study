@@ -36,7 +36,7 @@ related:
 
 ## 핵심 용어
 
-- **abstract syntax (abstract syntax)**
+- **abstract syntax**
 - **합성성 (compositionality)**
 - **타당성 (validity)**
 - **구조적 귀납법 (structural induction)**
@@ -241,7 +241,7 @@ assertion이 특정 상태 하나가 아니라 고려하는 모든 상태에서 
 > - 문자열 치환은 변수를 포획할 수 있으므로 바인더 이름 변경이 필요하다.
 >   - EN: Textual replacement can capture variables, so bound-variable renaming may be required.
 
-# 1장 완전 학습 본문 (60분 읽기)
+# 1장 완전 학습 본문 (60 분 읽기)
 
 이 본문은 교재 1장의 순서를 따라가되 문장을 옮겨 적는 번역본이 아니라, 정의가 왜 필요한지부터 계산과 증명에 어떻게 쓰이는지까지 독립적으로 풀어 쓴 학습 해설이다. 앞의 절을 이해해야 뒤의 절이 자연스럽게 이어지므로 처음 읽을 때는 순서대로 진행하는 편이 좋다.
 
@@ -256,7 +256,7 @@ assertion이 특정 상태 하나가 아니라 고려하는 모든 상태에서 
 >
 > To keep discussion and search vocabulary consistent across the study group, the Korean edition preserves syntax, semantics, statement, assertion, and constructor in English, including standard compounds such as abstract syntax, denotational semantics, and syntax-directed.
 
-## 01. 왜 프로그래밍 언어 책이 술어 논리로 시작하는가 — 도입 · pp. 1 · 4분
+## 01. 왜 프로그래밍 언어 책이 술어 논리로 시작하는가 — 도입 · pp. 1 · 4 분
 
 > [!abstract] 이 절의 중심
 > 낯선 방법을 익숙한 대상에 먼저 적용하면 방법 자체를 선명하게 볼 수 있다.
@@ -307,7 +307,7 @@ The terminology is chosen to align logic with later programming languages: terms
 
 ---
 
-## 02. 문자열과 syntax structure를 분리하기 — §1.1 · pp. 1–3 · 6분
+## 02. 문자열과 syntax structure를 분리하기 — §1.1 · pp. 1–3 · 6 분
 
 > [!abstract] 이 절의 중심
 > 프로그램은 문자로 입력되지만 의미가 붙는 대상은 문자 배열이 아니라 파싱된 syntax structure다.
@@ -396,7 +396,7 @@ Quantifier bodies extend to a stopping symbol or the end of the enclosing phrase
 
 ---
 
-## 03. 운반집합·constructor·초기 대수 — §1.1 · pp. 3–8 · 7분
+## 03. 운반집합·constructor·초기 대수 — §1.1 · pp. 3–8 · 7 분
 
 > [!abstract] 이 절의 중심
 > abstract syntax은 특정 트리 구현이 아니라, 어떤 올바른 구현도 만족해야 하는 구조적 계약이다.
@@ -503,7 +503,7 @@ Each stage permits one more constructor layer than the preceding stage. The unio
 
 ---
 
-## 04. 상태를 입력으로 받는 표시적 의미 — §1.2 · pp. 8–10 · 7분
+## 04. 상태를 입력으로 받는 표시적 의미 — §1.2 · pp. 8–10 · 7 분
 
 > [!abstract] 이 절의 중심
 > 자유 변수가 있는 식의 의미는 정수 하나가 아니라, 상태가 주어질 때 정수를 돌려주는 함수다.
@@ -620,7 +620,7 @@ Denotational semantics assigns mathematical objects to already parsed syntax. He
 
 ---
 
-## 05. syntax-directedness, 유일성, 합성성 — §1.2 · pp. 9–12 · 6분
+## 05. syntax-directedness, 유일성, 합성성 — §1.2 · pp. 9–12 · 6 분
 
 > [!abstract] 이 절의 중심
 > 의미 방정식은 예시 계산법의 모음이 아니라 모든 구절에 정확히 하나의 의미를 주는 재귀 정의다.
@@ -699,7 +699,7 @@ Explaining an object-language feature with an analogous metalanguage feature is 
 
 ---
 
-## 06. 상태에서의 참, 타당성, 형식 증명 — §1.3 · pp. 12–15 · 8분
+## 06. 상태에서의 참, 타당성, 형식 증명 — §1.3 · pp. 12–15 · 8 분
 
 > [!abstract] 이 절의 중심
 > semantics이 무엇이 참인지 정한다면, 추론 체계는 무엇을 규칙으로 증명할 수 있는지 정한다.
@@ -800,7 +800,7 @@ Completeness asks the converse: is every semantically valid assertion derivable?
 
 ---
 
-## 07. 바인딩, 자유 변수, 일치 정리 — §1.4 · pp. 15–18 · 8분
+## 07. 바인딩, 자유 변수, 일치 정리 — §1.4 · pp. 15–18 · 8 분
 
 > [!abstract] 이 절의 중심
 > 변수의 의미는 철자만으로 정해지지 않는다. 어느 바인더가 그 발생을 지배하는지가 syntax structure의 일부다.
@@ -911,7 +911,7 @@ Structural induction is justified by induction on phrase depth. In practice, cov
 
 ---
 
-## 08. 캡처 회피 치환과 치환 정리 — §1.4 · pp. 18–21 · 10분
+## 08. 캡처 회피 치환과 치환 정리 — §1.4 · pp. 18–21 · 10 분
 
 > [!abstract] 이 절의 중심
 > 치환은 글자를 바꾸는 작업이 아니라 자유 변수의 의미 관계를 보존하는 syntactic operation이다.
@@ -1042,7 +1042,7 @@ The Renaming Theorem says that changing a binder to a fresh name preserves meani
 
 ---
 
-## 09. 정의에서 손으로 계산하고 증명하기 — 연습 워크숍 · pp. 22–23의 주제 확장 · 10분
+## 09. 정의에서 손으로 계산하고 증명하기 — 연습 워크숍 · pp. 22–23의 주제 확장 · 10 분
 
 > [!abstract] 이 절의 중심
 > 답을 읽는 것보다 먼저 종이에 풀고, 아래 해설로 정의를 적용한 순서를 검산하자.
@@ -1193,7 +1193,7 @@ The Renaming Theorem says that changing a binder to a fresh name preserves meani
 
 ---
 
-## 10. 네 도구를 하나의 흐름으로 연결하기 — 1장 종합 · 4분
+## 10. 네 도구를 하나의 흐름으로 연결하기 — 1장 종합 · 4 분
 
 > [!abstract] 이 절의 중심
 > 1장의 개별 정의는 하나의 언어를 설계하고 검증하는 반복 가능한 절차를 이룬다.
@@ -1351,7 +1351,7 @@ Which correctly relates validity and derivability?
 
 ## 다음 개념으로
 
-이제 의미가 단순한 진릿값이 아니라, 종료하지 않을 수 있는 상태 변환이 되면서 도메인 이론이 필요해진다.
+이제 의미가 단순한 진릿값이 아니라 possibly nonterminating state transformer가 되면서 domain theory가 필요해진다.
 
 **English:** Next, meanings become possibly nonterminating state transformations, which forces us to introduce domain theory.
 

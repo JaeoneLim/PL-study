@@ -12,6 +12,7 @@ import type { Locale } from "../content/types";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const date = "2026-08-03";
 const sourcePath = ".raw/private/reynolds-theories-of-programming-languages-2009.pdf";
+const chapterTwoSlug = "simple-imperative-language";
 
 const filenames: Record<string, string> = {
   "predicate-logic": "chapter-01-predicate-logic",
@@ -46,47 +47,50 @@ function asCallout(type: string, title: string, body: string) {
   return `> [!${type}] ${title}\n${body.split("\n").map((line) => line ? `> ${line}` : ">").join("\n")}`;
 }
 
-function longformBlockMarkdown(block: LessonBlock, locale: Locale) {
+function longformBlockMarkdown(block: LessonBlock, locale: Locale, headingLocale: Locale = locale) {
   if (block.kind === "prose") {
     return block.paragraphs.map((paragraph) => paragraph[locale]).join("\n\n");
   }
 
   if (block.kind === "list") {
-    const heading = block.title ? `### ${block.title[locale]}\n\n` : "";
+    const heading = block.title ? `### ${block.title[headingLocale]}\n\n` : "";
     return `${heading}${block.items.map((item) => `- ${item[locale]}`).join("\n")}`;
   }
 
   if (block.kind === "notation") {
-    return `### ${block.title[locale]}\n\n\`\`\`text\n${block.notation}\n\`\`\`\n\n${block.explanation[locale]}`;
+    return `### ${block.title[headingLocale]}\n\n\`\`\`text\n${block.notation}\n\`\`\`\n\n${block.explanation[locale]}`;
   }
 
   if (block.kind === "example") {
     const body = `${block.setup[locale]}\n\n${block.steps.map((step, index) => `${index + 1}. ${step[locale]}`).join("\n")}\n\n**${locale === "ko" ? "결론" : "Conclusion"}:** ${block.conclusion[locale]}`;
-    return asCallout("example", block.title[locale], body);
+    return asCallout("example", block.title[headingLocale], body);
   }
 
   const type = block.tone === "warning" ? "warning" : block.tone === "proof" ? "abstract" : "tip";
-  return asCallout(type, block.title[locale], block.paragraphs.map((paragraph) => paragraph[locale]).join("\n\n"));
+  return asCallout(type, block.title[headingLocale], block.paragraphs.map((paragraph) => paragraph[locale]).join("\n\n"));
 }
 
 function longformMarkdown(slug: string) {
   const lesson = chapterLongforms[slug];
   if (!lesson) return "";
+  const headingsInEnglish = slug === chapterTwoSlug;
+  const headingLocale: Locale = headingsInEnglish ? "en" : "ko";
+  const heading = (ko: string, en: string) => headingsInEnglish ? en : ko;
 
   const sections = lesson.sections.map((lessonSection, index) => {
-    const koreanBlocks = lessonSection.blocks.map((block) => longformBlockMarkdown(block, "ko")).join("\n\n");
+    const koreanBlocks = lessonSection.blocks.map((block) => longformBlockMarkdown(block, "ko", headingLocale)).join("\n\n");
     const englishBlocks = lessonSection.blocks.map((block) => longformBlockMarkdown(block, "en")).join("\n\n");
     const koreanChecks = lessonSection.checkpoints.map((checkpoint, checkIndex) => `${checkIndex + 1}. ${checkpoint.ko}`).join("\n");
     const englishChecks = lessonSection.checkpoints.map((checkpoint, checkIndex) => `${checkIndex + 1}. ${checkpoint.en}`).join("\n");
 
-    return `## ${String(index + 1).padStart(2, "0")}. ${lessonSection.title.ko} — ${lessonSection.covers} · ${lessonSection.minutes}분
+    return `## ${String(index + 1).padStart(2, "0")}. ${lessonSection.title[headingLocale]} — ${lessonSection.covers} · ${lessonSection.minutes} ${heading("분", "min")}
 
-> [!abstract] 이 절의 중심
+> [!abstract] ${heading("이 절의 중심", "Section focus")}
 > ${lessonSection.lead.ko}
 
 ${koreanBlocks}
 
-${asCallout("question", "이 절을 덮고 확인하기", koreanChecks)}
+${asCallout("question", heading("이 절을 덮고 확인하기", "Retrieval check"), koreanChecks)}
 
 ### English companion — ${lessonSection.title.en}
 
@@ -97,7 +101,7 @@ ${englishBlocks}
 ${asCallout("question", "Retrieval check", englishChecks)}`;
   }).join("\n\n---\n\n");
 
-  return `# ${lesson.title.ko} (${lesson.readingMinutes}분 읽기)
+  return `# ${lesson.title[headingLocale]} (${lesson.readingMinutes} ${heading("분 읽기", "MIN READ")})
 
 ${lesson.introduction.map((paragraph) => paragraph.ko).join("\n\n")}
 
@@ -110,31 +114,40 @@ ${sections}`;
 function chapterNote(unit: (typeof units)[number]) {
   const guide = chapterGuides[unit.slug];
   const glossary = chapterGlossaries[unit.slug];
+  const headingsInEnglish = unit.slug === chapterTwoSlug;
+  const headingLocale: Locale = headingsInEnglish ? "en" : "ko";
+  const heading = (ko: string, en: string) => headingsInEnglish ? en : ko;
+  const chapterTitle = headingsInEnglish ? unit.title.en : `${unit.title.ko} (${unit.title.en})`;
   const related = units
     .filter((candidate) => candidate.part === unit.part && candidate.slug !== unit.slug)
     .slice(0, 3)
     .map((candidate) => `  - "[[${filenames[candidate.slug]}]]"`)
     .join("\n");
   const goals = unit.goals.map((goal) => `- ${goal.ko}\n  - EN: ${goal.en}`).join("\n");
-  const terms = unit.keyTerms.map((term) => `- **${term.ko} (${term.en})**`).join("\n");
+  const terms = unit.keyTerms.map((term) => headingsInEnglish || term.ko === term.en
+    ? `- **${term.en}**`
+    : `- **${term.ko} (${term.en})**`).join("\n");
   const glossaryEntries = glossary.map((entry) => {
-    const alternate = entry.term.ko === entry.term.en ? entry.term.ko : `${entry.term.ko} (${entry.term.en})`;
+    const alternate = headingsInEnglish
+      ? entry.term.en
+      : entry.term.ko === entry.term.en ? entry.term.ko : `${entry.term.ko} (${entry.term.en})`;
     const notation = entry.notation ? `\n\n\`\`\`text\n${entry.notation}\n\`\`\`` : "";
-    return `### ${alternate}\n\n${entry.definition.ko}\n\n> [!example] 엔지니어 관점\n> ${entry.engineerView.ko}\n\n**English definition:** ${entry.definition.en}\n\n> [!example] Engineering view\n> ${entry.engineerView.en}${notation}`;
+    return `### ${alternate}\n\n${entry.definition.ko}\n\n> [!example] ${heading("엔지니어 관점", "Engineering view")}\n> ${entry.engineerView.ko}\n\n**English definition:** ${entry.definition.en}\n\n> [!example] Engineering view\n> ${entry.engineerView.en}${notation}`;
   }).join("\n\n");
-  const detailedContents = guide.sections.map((item) => `### ${item.covers} · ${item.title.ko}\n\n${item.detail.ko}\n\n**English — ${item.title.en}:** ${item.detail.en}`).join("\n\n");
+  const detailedContents = guide.sections.map((item) => `### ${item.covers} · ${item.title[headingLocale]}\n\n${item.detail.ko}\n\n**English — ${item.title.en}:** ${item.detail.en}`).join("\n\n");
   const takeaways = guide.takeaways.map((item) => `- ${item.ko}\n  - EN: ${item.en}`).join("\n");
   const cautions = guide.cautions.map((item) => `- ${item.ko}\n  - EN: ${item.en}`).join("\n");
   const completeLesson = longformMarkdown(unit.slug);
-  const steps = unit.steps.map((step) => `## ${step.title.ko} — ${step.covers}\n\n${step.summary.ko}\n\n${step.detail.ko}\n\n> [!question] 책을 덮고 답해 보기\n> ${step.checkpoint.ko}\n\n### English companion\n\n${step.summary.en}\n\n${step.detail.en}`).join("\n\n---\n\n");
+  const steps = unit.steps.map((step) => `## ${step.title[headingLocale]} — ${step.covers}\n\n${step.summary.ko}\n\n${step.detail.ko}\n\n> [!question] ${heading("책을 덮고 답해 보기", "Close the book and answer")}\n> ${step.checkpoint.ko}\n\n### English companion\n\n${step.summary.en}\n\n${step.detail.en}`).join("\n\n---\n\n");
   const quiz = unit.quiz.map((question, index) => {
     const options = question.options.map((option, optionIndex) => `- ${String.fromCharCode(65 + optionIndex)}. ${option.ko} / ${option.en}`).join("\n");
-    return `### Q${index + 1}. ${question.question.ko}\n\n${question.question.en}\n\n${options}\n\n> [!success]- 정답과 해설\n> **${String.fromCharCode(65 + question.correct)}.** ${question.explanation.ko}\n>\n> EN: ${question.explanation.en}`;
+    const companionQuestion = headingsInEnglish ? question.question.ko : question.question.en;
+    return `### Q${index + 1}. ${question.question[headingLocale]}\n\n${companionQuestion}\n\n${options}\n\n> [!success]- ${heading("정답과 해설", "Answer and explanation")}\n> **${String.fromCharCode(65 + question.correct)}.** ${question.explanation.ko}\n>\n> EN: ${question.explanation.en}`;
   }).join("\n\n");
 
   return `---
 type: chapter
-title: "${unit.number}. ${unit.title.ko}"
+title: "${unit.number}. ${unit.title[headingLocale]}"
 title_en: "${unit.title.en}"
 created: ${date}
 updated: ${date}
@@ -150,57 +163,57 @@ related:
 ${related || "  - \"[[reynolds-theories-of-programming-languages]]\""}
 ---
 
-# ${unit.number}. ${unit.title.ko} (${unit.title.en})
+# ${unit.number}. ${chapterTitle}
 
-> [!abstract] 한눈에 보기
+> [!abstract] ${heading("한눈에 보기", "At a glance")}
 > ${unit.overview.ko}
 >
 > **English:** ${unit.overview.en}
 
-## 학습 목표
+## ${heading("학습 목표", "Learning objectives")}
 
 ${goals}
 
-## 핵심 용어
+## ${heading("핵심 용어", "Key terms")}
 
 ${terms}
 
-## 장별 용어 해설
+## ${heading("장별 용어 해설", "Chapter glossary")}
 
-> [!info] 비유 사용법
+> [!info] ${heading("비유 사용법", "How to use analogies")}
 > 하드웨어 예시는 첫 mental model을 만들기 위한 근사다. 비유와 정의가 어긋나면 각 항목의 정확한 정의를 기준으로 삼는다.
 
 ${glossaryEntries}
 
-## 장 전체 내용 지도
+## ${heading("장 전체 내용 지도", "Detailed chapter map")}
 
-> [!abstract] 이 장의 역할
+> [!abstract] ${heading("이 장의 역할", "This chapter's role")}
 > ${guide.purpose.ko}
 >
 > **English:** ${guide.purpose.en}
 
 ${detailedContents}
 
-## 반드시 남겨야 할 핵심
+## ${heading("반드시 남겨야 할 핵심", "What to retain")}
 
 ${takeaways}
 
-> [!warning] 자주 생기는 혼동
+> [!warning] ${heading("자주 생기는 혼동", "Common confusions")}
 ${cautions.split("\n").map((line) => `> ${line}`).join("\n")}
 
-${completeLesson ? `${completeLesson}\n\n# 압축 복습\n\n` : ""}${steps}
+${completeLesson ? `${completeLesson}\n\n# ${heading("압축 복습", "Condensed review")}\n\n` : ""}${steps}
 
-## 자체 점검 퀴즈
+## ${heading("자체 점검 퀴즈", "Self-check quiz")}
 
 ${quiz}
 
-## 다음 개념으로
+## ${heading("다음 개념으로", "Next concept")}
 
 ${unit.bridge.ko}
 
 **English:** ${unit.bridge.en}
 
-## 출처 경계
+## ${heading("출처 경계", "Source boundary")}
 
 - Source: \`${sourcePath}\`, pp. ${unit.pages}.
 - 이 노트의 설명과 문항은 독립적으로 작성된 학습 자료다.
@@ -366,11 +379,15 @@ await write("wiki/log.md", `# Wiki log
 `);
 
 const glossaryIndex = units.map((unit) => {
+  const headingsInEnglish = unit.slug === chapterTwoSlug;
   const entries = chapterGlossaries[unit.slug].map((entry) => {
-    const alternate = entry.term.ko === entry.term.en ? entry.term.ko : `${entry.term.ko} (${entry.term.en})`;
+    const alternate = headingsInEnglish
+      ? entry.term.en
+      : entry.term.ko === entry.term.en ? entry.term.ko : `${entry.term.ko} (${entry.term.en})`;
     return `### ${alternate}\n\n${entry.definition.ko}\n\n**English:** ${entry.definition.en}`;
   }).join("\n\n");
-  return `## [[${filenames[unit.slug]}#장별 용어 해설|${unit.number}. ${unit.title.ko}]]\n\n${entries}`;
+  const glossaryAnchor = headingsInEnglish ? "Chapter glossary" : "장별 용어 해설";
+  return `## [[${filenames[unit.slug]}#${glossaryAnchor}|${unit.number}. ${unit.title.ko}]]\n\n${entries}`;
 }).join("\n\n---\n\n");
 
 await write("wiki/glossary.md", `# Glossary

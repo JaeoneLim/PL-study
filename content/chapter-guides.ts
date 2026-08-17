@@ -39,22 +39,22 @@ export const chapterGuides: Record<string, ChapterGuide> = {
     ],
   },
   "simple-imperative-language": {
-    purpose: b("작은 명령형 언어를 완전한 수학적 대상으로 만들고, 반복과 재귀에 의미를 부여하는 도메인 이론의 최소 도구를 도입한다.", "Turns a small imperative language into a complete mathematical object and introduces the minimum domain theory needed to interpret iteration and recursion."),
+    purpose: b("The Simple Imperative Language를 완전한 수학적 대상으로 만들고, iteration과 recursion에 의미를 부여하는 domain theory (도메인 이론)의 최소 도구를 도입한다.", "Turns a small imperative language into a complete mathematical object and introduces the minimum domain theory needed to interpret iteration and recursion."),
     sections: [
-      section("§2.1–2.2", "syntax, 상태, 의미 함수", "Syntax, states, and semantic functions", "식은 상태에서 값으로, 명령은 상태에서 상태로 가는 부분 함수로 해석된다. 정의되지 않음은 산술 오류가 아니라 비종료를 먼저 나타낸다.", "Expressions map states to values, while commands are partial functions from states to states. Undefinedness initially represents nontermination rather than arithmetic failure."),
-      section("§2.3–2.4", "도메인, 연속성, 최소 고정점", "Domains, continuity, and least fixed points", "부분 정보를 순서화하고 증가 사슬의 최소 상계를 사용한다. 연속 함수의 최소 고정점은 while 의미를 유한한 반복 근사의 극한으로 구성한다.", "Partial information is ordered and increasing chains receive least upper bounds. A continuous function’s least fixed point constructs while-loop meaning as the limit of finite approximations."),
-      section("§2.5–2.6", "선언, 치환, 문법 설탕", "Declarations, substitution, and syntactic sugar", "지역 변수 선언의 의미를 환경 확장과 치환으로 비교한다. for 문은 핵심 언어로 번역되는 파생 형식이며 번역이 변수 포획과 평가 횟수를 보존해야 한다.", "Local declarations are compared through environment extension and substitution. A for-command is derived syntax whose translation must preserve binding and evaluation behavior."),
-      section("§2.7", "산술 오류의 명시화", "Making arithmetic errors explicit", "비종료와 오류를 같은 미정의 값으로 합치면 관찰을 잃는다. 결과 도메인에 오류를 별도 경우로 추가해 두 현상을 구분한다.", "Collapsing divergence and arithmetic error into one undefined result loses observations. Extending the result domain with an explicit error separates them."),
-      section("§2.8", "건전성과 완전 추상성", "Soundness and full abstraction", "의미가 실행 관찰을 보존하는지, 그리고 문맥이 구별할 수 없는 프로그램만 의미적으로 같게 두는지 검사한다. 완전 추상성은 의미 동치와 문맥 동치의 일치를 요구한다.", "Checks whether denotations preserve operational observations and identify only programs no context can distinguish. Full abstraction asks denotational and contextual equivalence to coincide."),
+      section("§2.1–2.2", "Syntax, states, and semantic functions", "Syntax, states, and semantic functions", "expression은 state에서 value로, command는 possibly nonterminating state transformer (비종료 가능 상태 변환 함수)로 해석된다. undefinedness는 arithmetic error가 아니라 nontermination을 먼저 나타낸다.", "Expressions map states to values, while commands are partial functions from states to states. Undefinedness initially represents nontermination rather than arithmetic failure."),
+      section("§2.3–2.4", "Domains, continuity, and least fixed points", "Domains, continuity, and least fixed points", "partial information을 information order로 정렬하고 chain의 least upper bound (lub)를 사용한다. continuous function의 least fixed point는 `while` denotation을 finite approximant의 limit로 구성한다.", "Partial information is ordered and increasing chains receive least upper bounds. A continuous function’s least fixed point constructs while-loop meaning as the limit of finite approximations."),
+      section("§2.5–2.6", "Declarations, substitution, and syntactic sugar", "Declarations, substitution, and syntactic sugar", "local variable declaration의 denotation을 state update와 restoration으로 설명한다. `for` command는 core language로 desugar되는 derived form이며 translation은 variable capture와 evaluation 횟수를 보존해야 한다.", "Local declarations are compared through environment extension and substitution. A for-command is derived syntax whose translation must preserve binding and evaluation behavior."),
+      section("§2.7", "Arithmetic-error policy", "Arithmetic-error policy", "unchecked arithmetic은 정확히 지정된 total hardware function을 사용할 수 있다. checked arithmetic은 별도 error result와 propagation rule이 필요하지만, 이 장은 Chapter 3의 predicate-logic assertion language와 연결하기 위해 그 확장을 보류한다.", "Unchecked arithmetic can use precisely specified total hardware functions. Checked arithmetic requires explicit error results and propagation rules, but this chapter defers that extension to preserve the connection with Chapter 3's assertion language."),
+      section("§2.8", "Soundness and full abstraction", "Soundness and full abstraction", "semantic soundness가 observation을 보존하는지 검사한다. full abstraction (완전 추상성)은 semantic equality와 contextual equivalence (문맥 동치)의 정확한 일치를 요구한다.", "Checks whether denotations preserve operational observations and identify only programs no context can distinguish. Full abstraction asks denotational and contextual equivalence to coincide."),
     ],
     takeaways: [
-      b("명령의 핵심 의미 객체는 상태 변환이며 비종료 때문에 보통 부분적이다.", "A command’s central semantic object is a state transformer, generally partial because of divergence."),
-      b("while은 방정식의 아무 해가 아니라 유한 실행에서 접근 가능한 최소 해를 취한다.", "A while-loop takes the least solution of its semantic equation—the one approximated by finite executions."),
-      b("언어 확장은 새 관찰을 의미 도메인에 추가하게 만든다.", "Language extensions force new observations into the semantic domain."),
+      b("command의 핵심 semantic object는 nontermination을 포함하는 state transformer다.", "A command’s central semantic object is a state transformer, generally partial because of divergence."),
+      b("`while`은 semantic equation의 임의의 solution이 아니라 finite execution으로 approximate되는 least fixed point를 취한다.", "A while-loop takes the least solution of its semantic equation—the one approximated by finite executions."),
+      b("language extension은 새 observation을 semantic domain에 추가하게 만든다.", "Language extensions force new observations into the semantic domain."),
     ],
     cautions: [
-      b("⊥를 자동으로 ‘오류’라 부르지 않는다. 이 장의 기본 모델에서는 비종료다.", "Do not automatically read bottom as ‘error’; in the basic model it denotes nontermination."),
-      b("고정점 방정식만 쓰는 것으로는 부족하다. 왜 최소 고정점인지 설명해야 한다.", "Writing a fixed-point equation is insufficient; explain why the least fixed point is selected."),
+      b("bottom element `⊥`를 자동으로 error라 부르지 않는다. 이 장의 기본 model에서는 nontermination이다.", "Do not automatically read bottom as ‘error’; in the basic model it denotes nontermination."),
+      b("fixed-point equation만 쓰는 것으로는 부족하다. 왜 least fixed point를 선택하는지 설명해야 한다.", "Writing a fixed-point equation is insufficient; explain why the least fixed point is selected."),
     ],
   },
   "program-specifications": {

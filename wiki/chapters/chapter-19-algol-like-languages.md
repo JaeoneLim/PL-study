@@ -37,11 +37,11 @@ related:
 ## 핵심 용어
 
 - **구절 타입 (phrase type)**
-- **acceptor (acceptor)**
-- **variable (variable)**
+- **acceptor**
+- **variable**
 - **선언자 (declarator)**
 - **스택 규율 (stack discipline)**
-- **Algol (Algol)**
+- **Algol**
 
 ## 장별 용어 해설
 

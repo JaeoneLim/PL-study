@@ -39,7 +39,7 @@ related:
 - **전칭 다형성 (universal polymorphism)**
 - **타입 추상화 (type abstraction)**
 - **타입 적용 (type application)**
-- **System F (System F)**
+- **System F**
 - **다형적 인코딩 (polymorphic encoding)**
 
 ## 장별 용어 해설

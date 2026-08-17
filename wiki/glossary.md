@@ -73,35 +73,35 @@ assertion이 특정 상태 하나가 아니라 고려하는 모든 상태에서 
 
 ---
 
-## [[chapter-02-simple-imperative-language#장별 용어 해설|02. 단순 명령형 언어]]
+## [[chapter-02-simple-imperative-language#Chapter glossary|02. The Simple Imperative Language]]
 
-### 도메인 (domain)
+### domain
 
-계산 결과의 정보량을 순서로 나타내고, 점점 더 정확해지는 근사의 극한을 담을 수 있는 수학적 공간이다. 여기서 ⊥는 결과가 아직 없거나 계산이 끝나지 않음을 나타낸다.
+domain (정보 순서 구조)은 계산 결과의 정보량을 순서로 나타내고 점점 더 정확해지는 approximation의 limit를 담는다. bottom element `⊥`는 아직 결과가 없거나 computation이 nonterminate함을 나타낸다.
 
 **English:** A mathematical space that orders computation results by information content and contains limits of increasingly precise approximations. Its bottom element ⊥ represents no result yet, including nontermination.
 
-### 연속 함수 (continuous function)
+### continuous function
 
-정보가 증가하는 근사 사슬의 최소 상한을 보존하는 함수다. 유한한 입력 정보에서 갑자기 무한히 새로운 정보를 요구하지 않는다는 뜻이다.
+continuous function (연속 함수)은 information이 증가하는 chain의 least upper bound (lub)를 보존한다. finite input information에서 갑자기 infinite evidence를 요구하지 않는다는 뜻이다.
 
 **English:** A function that preserves least upper bounds of increasing chains of information. Intuitively, it cannot demand infinitely much new information all at once from finite input evidence.
 
-### 최소 고정점 (least fixed point)
+### least fixed point
 
-`F(x)=x`를 만족하는 해들 가운데 정보 순서로 가장 작은 해다. 재귀나 while을 유한 번 펼쳐서 정당화할 수 있는 동작만 포함한다.
+least fixed point (최소 고정점)는 `F(x)=x`를 만족하는 solution 가운데 information order상 가장 작다. recursion이나 `while`의 finite unfolding이 정당화하는 behavior만 포함한다.
 
 **English:** The least solution, in the information order, of `F(x)=x`. For recursion or while loops, it includes only behavior justified by some finite unfolding.
 
 ### syntactic sugar
 
-핵심 언어의 기존 구성으로 의미 보존 번역할 수 있는 편의 표기다. 쓰기 편해지지만 원칙적으로 새로운 계산 능력을 추가하지 않는다.
+syntactic sugar는 core language의 기존 construct로 meaning-preserving translation할 수 있는 convenience notation이다. 쓰기 편해지지만 원칙적으로 새 computational power를 추가하지 않는다.
 
 **English:** Convenient notation that can be translated meaning-preservingly into existing core-language constructs. It improves usability without necessarily adding computational power.
 
-### 완전 추상성 (full abstraction)
+### full abstraction
 
-semantics이 두 프로그램을 같다고 보는 경우와 어떤 프로그램 문맥도 둘을 구별하지 못하는 경우가 정확히 일치하는 성질이다.
+full abstraction (완전 추상성)은 semantic equality와 어떤 program context도 둘을 구별하지 못하는 contextual equivalence가 정확히 일치하는 성질이다.
 
 **English:** The property that semantic equality coincides exactly with indistinguishability by every program context.
 

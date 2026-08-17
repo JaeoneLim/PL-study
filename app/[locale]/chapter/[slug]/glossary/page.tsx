@@ -17,9 +17,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const unit = getUnit(slug);
   const entries = getChapterGlossary(slug);
   if (!unit || !entries) return {};
+  const headingsInEnglish = slug === "simple-imperative-language";
 
   return {
-    title: locale === "ko" ? `${unit.number}장 용어집 · ${unit.title.ko}` : `Chapter ${unit.number} glossary · ${unit.title.en}`,
+    title: headingsInEnglish || locale === "en" ? `Chapter ${unit.number} glossary · ${unit.title.en}` : `${unit.number}장 용어집 · ${unit.title.ko}`,
     description: locale === "ko"
       ? `${unit.title.ko}의 핵심 용어 ${entries.length}개를 비SW 엔지니어도 이해할 수 있도록 설명합니다.`
       : `${entries.length} key terms from ${unit.title.en}, explained for engineers outside software.`,
@@ -42,6 +43,7 @@ export default async function ChapterGlossaryPage({ params }: Props) {
   const locale = localeParam;
   const { previous, next } = getUnitNeighbors(slug);
   const otherLocale = locale === "ko" ? "en" : "ko";
+  const headingsInEnglish = slug === "simple-imperative-language";
 
   return (
     <div className="site-shell glossary-shell" lang={locale}>
@@ -58,7 +60,7 @@ export default async function ChapterGlossaryPage({ params }: Props) {
           <div className="glossary-hero-grid">
             <div>
               <p className="kicker">CHAPTER {unit.number} · {locale === "ko" ? "ENGINEER-FRIENDLY GLOSSARY" : "ENGINEER-FRIENDLY GLOSSARY"}</p>
-              <h1>{locale === "ko" ? `${unit.title.ko} 용어집` : `${unit.title.en} glossary`}</h1>
+              <h1>{headingsInEnglish || locale === "en" ? `${unit.title.en} glossary` : `${unit.title.ko} 용어집`}</h1>
               <p className="glossary-lead">
                 {locale === "ko"
                   ? "프로그래밍 언어 이론을 처음 접하는 엔지니어를 위한 장별 참조 페이지입니다. 먼저 정확한 뜻을 읽고, 하드웨어 관점의 비유로 익숙한 모델에 연결하세요."

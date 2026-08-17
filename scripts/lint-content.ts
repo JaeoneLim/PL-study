@@ -50,6 +50,55 @@ assert(bookOverview.arcs.length === 4, `expected 4 whole-book arcs, found ${book
 assert(bookOverview.semanticSpine.length >= 5, "whole-book overview needs a complete semantic spine");
 assert(bookOverview.recurringLenses.length >= 6, "whole-book overview needs recurring conceptual lenses");
 assert(Boolean(chapterLongforms["predicate-logic"]), "Chapter 1 must have a complete longform lesson");
+assert(Boolean(chapterLongforms["simple-imperative-language"]), "Chapter 2 must have a complete longform lesson");
+
+const chapterTwoSlug = "simple-imperative-language";
+const chapterTwoUnit = units.find((unit) => unit.slug === chapterTwoSlug);
+const chapterTwoGuide = chapterGuides[chapterTwoSlug];
+const chapterTwoLongform = chapterLongforms[chapterTwoSlug];
+if (chapterTwoUnit && chapterTwoGuide && chapterTwoLongform) {
+  const headings = [
+    chapterTwoUnit.title,
+    chapterTwoUnit.eyebrow,
+    ...chapterTwoUnit.steps.map((step) => step.title),
+    ...chapterTwoGuide.sections.map((section) => section.title),
+    chapterTwoLongform.title,
+    ...chapterTwoLongform.sections.flatMap((section) => [
+      section.title,
+      ...section.blocks.flatMap((block) => "title" in block && block.title ? [block.title] : []),
+    ]),
+  ];
+  for (const [index, heading] of headings.entries()) {
+    assert(heading.ko === heading.en, `Chapter 2 heading ${index + 1} must use the canonical English text in both locales`);
+    assert(!/[가-힣]/.test(heading.ko), `Chapter 2 heading ${index + 1} must not replace the English title with Korean`);
+  }
+
+  const chapterTwoKoreanCopy: string[] = [];
+  collectKoreanCopy({
+    unit: chapterTwoUnit,
+    guide: chapterTwoGuide,
+    glossary: chapterGlossaries[chapterTwoSlug],
+    longform: chapterTwoLongform,
+  }, chapterTwoKoreanCopy);
+  const chapterTwoText = chapterTwoKoreanCopy.join("\n");
+  for (const term of [
+    "The Simple Imperative Language",
+    "state transformer",
+    "domain",
+    "predomain",
+    "bottom",
+    "continuous function",
+    "least fixed point",
+    "functional",
+    "predicate-logic",
+    "initial algebra",
+    "semantic soundness",
+    "full abstraction",
+  ]) {
+    assert(new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(chapterTwoText), `Chapter 2 Korean context must preserve the English term ${term}`);
+  }
+  assert(!chapterTwoText.includes("함수자"), "Chapter 2 must use functional, not the functor-like translation 함수자");
+}
 
 const koreanCopy: string[] = [];
 collectKoreanCopy({ bookOverview, chapterGlossaries, chapterGuides, chapterLongforms, units }, koreanCopy);

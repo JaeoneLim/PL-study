@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "katex/dist/katex.min.css";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL

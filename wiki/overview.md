@@ -127,7 +127,7 @@ Reynolds의 중심 생각은 하나의 언어를 이해하려면 syntax만 읽�
 ### 1부 · 기초 · 명령형 semantics (Foundations · Imperative Semantics)
 
 - [[chapter-01-predicate-logic|01. 술어 논리]] — 언어를 설명하는 네 가지 도구
-- [[chapter-02-simple-imperative-language|02. 단순 명령형 언어]] — 상태 변환과 최소 고정점
+- [[chapter-02-simple-imperative-language|02. The Simple Imperative Language]] — State transformers and least fixed points
 - [[chapter-03-program-specifications|03. 프로그램 명세와 증명]] — 부분 정확성, 전체 정확성, 불변식
 - [[chapter-04-arrays|04. 배열]] — 업데이트되는 함수와 higher-order assertion
 - [[chapter-05-failure-io-continuations|05. 실패, 입출력, 계속]] — 결과에서 상호작용 과정으로

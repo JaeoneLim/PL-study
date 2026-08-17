@@ -15,6 +15,7 @@ export type LessonNotationBlock = {
   kind: "notation";
   title: Bilingual;
   notation: string;
+  latex?: string;
   explanation: Bilingual;
 };
 

@@ -38,7 +38,7 @@ related:
 
 - **계속 전달 방식 (continuation-passing style)**
 - **일급 계속 (first-class continuation)**
-- **call/cc (call/cc)**
+- **call/cc**
 - **비지역 탈출 (nonlocal exit)**
 - **비함수화 (defunctionalization)**
 

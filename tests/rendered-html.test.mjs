@@ -52,6 +52,7 @@ test("renders the Korean course map with every unit", async () => {
   const html = await response.text();
   assert.match(html, /과정 지도/);
   assert.match(html, /술어 논리/);
+  assert.match(html, /The Simple Imperative Language/);
   assert.match(html, /Algol 계열 언어/);
   assert.match(html, /수학적 배경/);
   assert.match(html, /책 전체 개요부터/);
@@ -130,6 +131,46 @@ test("renders Chapter 1 as a complete longform lesson", async () => {
   assert.match(html, /치환 정리\(Substitution Theorem\)/);
   assert.match(html, /정의에서 손으로 계산하고 증명하기/);
   assert.match(html, /압축 복습/);
+  assert.ok((html.match(/class="math-display"/g) ?? []).length >= 6, "Chapter 1 notation boxes should use display math typesetting");
+  assert.match(html, /class="math-inline"/);
+  assert.match(html, /<math xmlns="http:\/\/www\.w3\.org\/1998\/Math\/MathML"/);
+  assert.doesNotMatch(html, /katex-error/);
+});
+
+test("renders Chapter 2 as a complete longform lesson", async () => {
+  const [koResponse, enResponse] = await Promise.all([
+    render("/ko/chapter/simple-imperative-language"),
+    render("/en/chapter/simple-imperative-language"),
+  ]);
+  assert.equal(koResponse.status, 200);
+  assert.equal(enResponse.status, 200);
+  const [ko, en] = await Promise.all([koResponse.text(), enResponse.text()]);
+  assert.match(ko, /The Simple Imperative Language/);
+  assert.match(ko, /Chapter 2 complete study text/);
+  assert.match(ko, /75.*분 읽기/s);
+  assert.match(ko, /The least fixed-point theorem and finite loop approximants/);
+  assert.match(ko, /Defining soundness and full abstraction through observations/);
+  assert.match(ko, /state transformer \(상태 변환 함수\)/);
+  assert.match(ko, /initial algebra \(초기 대수\)/);
+  assert.match(ko, /predicate-logic assertion language/);
+  assert.doesNotMatch(ko, /함수자/);
+  assert.ok((ko.match(/class="math-display"/g) ?? []).length >= 11, "Chapter 2 notation boxes should use display math typesetting");
+  assert.match(ko, /class="katex-display"/);
+  assert.match(ko, /class="math-inline"/);
+  assert.match(ko, /<math xmlns="http:\/\/www\.w3\.org\/1998\/Math\/MathML"/);
+  assert.doesNotMatch(ko, /katex-error/);
+  assert.match(ko, /class="chapter-sidebar-resizer"/);
+  assert.match(ko, /role="separator"/);
+  assert.match(ko, /aria-valuemin="210"/);
+  assert.match(ko, /aria-valuemax="420"/);
+  const headings = [...ko.matchAll(/<h[1-3]\b[^>]*>([\s\S]*?)<\/h[1-3]>/g)]
+    .map((match) => match[1].replace(/<[^>]+>/g, ""));
+  assert.ok(headings.length >= 20, "Chapter 2 should render its complete heading hierarchy");
+  assert.deepEqual(headings.filter((heading) => /[가-힣]/.test(heading)), [], "Chapter 2 headings should remain in English");
+  assert.match(en, /Chapter 2 complete study text/);
+  assert.match(en, /75.*MIN READ/s);
+  assert.match(en, /The least fixed-point theorem and finite loop approximants/);
+  assert.match(en, /Defining soundness and full abstraction through observations/);
 });
 
 test("keeps copyrighted source material out of the tracked surface", async () => {
