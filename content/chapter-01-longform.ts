@@ -33,19 +33,27 @@ export const predicateLogicLongform: ChapterLongform = {
   slug: "predicate-logic",
   readingMinutes: 60,
   minimumKoreanCharacters: 12000,
-  title: b("1장 완전 학습 본문", "Chapter 1 complete study text"),
+  title: b("Chapter 1 complete study text", "Chapter 1 complete study text"),
   introduction: [
     b(
-      "이 본문은 교재 1장의 순서를 따라가되 문장을 옮겨 적는 번역본이 아니라, 정의가 왜 필요한지부터 계산과 증명에 어떻게 쓰이는지까지 독립적으로 풀어 쓴 학습 해설이다. 앞의 절을 이해해야 뒤의 절이 자연스럽게 이어지므로 처음 읽을 때는 순서대로 진행하는 편이 좋다.",
-      "This is an independently written study explanation that follows the conceptual order of Chapter 1. Rather than reproducing the textbook, it develops why each definition is needed and how it is used in calculations and proofs. The sections are cumulative, so a first reading should proceed in order."
+      "이 본문은 PL 이론이나 수리논리학을 배운 적 없는 엔지니어를 기준 독자로 삼는다. AST, 함수, map, unit test처럼 익숙한 구현 개념에서 시작해 definition과 proof로 이동한다. 수학 notation이 먼저 나왔더라도 외우지 말고, 바로 뒤의 코드 관점 설명과 worked example에서 어떤 문제를 해결하는지 확인하자.",
+      "This lesson assumes an engineer who knows ordinary programming but has not studied PL theory or mathematical logic. It starts from familiar implementation ideas—ASTs, functions, maps, and tests—and then moves to definitions and proofs. When notation appears, use the explanation and worked example to identify the problem it solves before trying to memorize it."
     ),
     b(
-      "1장의 목적은 술어 논리 자체를 깊이 공부하는 데만 있지 않다. 익숙한 논리를 실험대로 삼아 언어 이론의 네 도구, 곧 abstract syntax·denotational semantics·추론 규칙·바인딩을 정확히 분리하는 것이 핵심이다. 2장 이후에는 대상 언어만 바뀌고 이 네 질문이 계속 돌아온다. 어떤 syntax을 허용하는가, 그 syntax은 무엇을 뜻하는가, 어떤 주장을 규칙으로 증명할 수 있는가, 이름의 범위와 치환은 의미를 어떻게 보존하는가를 묻는 습관이 이 장의 진짜 성과다.",
+      "1장의 목적은 Predicate Logic 자체를 깊이 공부하는 데만 있지 않다. 익숙한 정수식과 논리식을 작은 object language로 삼아 abstract syntax, denotational semantics, inference rule, binding을 서로 분리한다. 2장 이후에는 object language만 바뀌고 같은 질문이 반복된다. 어떤 syntax을 허용하는가? 그 syntax은 무엇을 뜻하는가? 어떤 statement를 rule로 증명할 수 있는가? scope와 substitution은 의미를 어떻게 보존하는가?",
       "The goal is not merely to review predicate logic. A familiar logic serves as a laboratory for four tools—abstract syntax, denotational semantics, inference rules, and binding. Later chapters change the object language but repeatedly ask the same questions: which phrases exist, what they mean, what can be proved by rules, and how scope and substitution preserve meaning."
     ),
     b(
-      "스터디에서 함께 말하고 검색할 때 표현이 어긋나지 않도록 syntax, semantics, statement, assertion, constructor는 한국어로 옮기지 않고 영문 표기를 유지한다. 파생 표현도 abstract syntax, denotational semantics, syntax-directed처럼 해당 분야에서 통용되는 영문 형태를 쓴다.",
-      "To keep discussion and search vocabulary consistent across the study group, the Korean edition preserves syntax, semantics, statement, assertion, and constructor in English, including standard compounds such as abstract syntax, denotational semantics, and syntax-directed."
+      "한국어 본문에서도 canonical technical term은 번역하지 않는다. syntax, semantics, statement, assertion, constructor뿐 아니라 Predicate Logic, carrier set, initial algebra, homomorphism도 영문 표기를 유지한다. 영문을 아는 것이 이해라고 가정하지는 않는다. term이 처음 등장할 때 한국어 문장으로 역할을 풀고, 구현 예와 수식에서 같은 개념을 다시 연결한다. 이 정책은 장과 절 제목에도 적용한다. 목차와 원문을 나란히 놓았을 때 같은 이름을 바로 찾을 수 있고, 번역어와 원어를 다시 대응시키는 비용을 크게 줄일 수 있다.",
+      "The Korean text preserves canonical technical terms rather than translating them: syntax, semantics, statement, assertion, constructor, Predicate Logic, carrier set, initial algebra, and homomorphism. The same policy applies to chapter and section headings so readers can align the study guide with the source table of contents. English labels are still explained in plain language and connected to implementation examples and notation."
+    ),
+    b(
+      "각 절은 ‘왜 필요한가 → 정확한 definition → 손으로 따라가는 example → retrieval check’ 순서로 읽는다. 처음 읽을 때 proof의 모든 세부를 재현하지 못해도 괜찮다. 입력이 무엇이고 출력이 무엇인지, 그리고 definition이 어떤 ambiguity나 bug를 막는지만 설명할 수 있으면 다음 절로 진행해도 된다. 막히면 가장 가까운 worked example로 돌아가 입력을 바꿔 다시 계산해 보자.",
+      "Read each section in the order: motivation → precise definition → worked example → retrieval check. On a first pass, reproducing every proof detail is unnecessary. Move on once you can name the inputs and outputs of a definition and explain which ambiguity or bug it prevents."
+    ),
+    b(
+      "읽는 흐름도 미리 잡아 두자. 먼저 문자열을 AST와 분리하고, AST를 특정 클래스 구현이 아닌 constructor의 계약으로 설명한다. 다음으로 AST를 state-dependent function에 연결해 meaning을 계산한다. 그 뒤 ‘모든 state에서 참’과 ‘rule로 증명 가능’을 분리하고, 마지막으로 binder 아래에서 이름을 안전하게 바꾸는 방법을 배운다. 앞부분은 compiler front end와 interpreter에, 뒷부분은 type checker, optimizer, verifier에 직접 이어진다. 한 절을 마칠 때마다 새 term의 사전식 번역을 암기하는 대신, 익숙한 도구의 어느 책임에 대응하는지 한 문장으로 말해 보자. 그 연결을 설명할 수 있으면 notation의 세부를 잠시 잊어도 다음 학습에서 다시 복구할 수 있다.",
+      "The reading path is: separate strings from ASTs; describe ASTs by constructor contracts rather than one class implementation; map ASTs to state-dependent meanings; distinguish truth in all states from provability by rules; and finally manipulate names safely under binders. The first half connects to compiler front ends and interpreters, the second to type checkers, optimizers, and verifiers."
     ),
   ],
   sections: [
@@ -53,7 +61,7 @@ export const predicateLogicLongform: ChapterLongform = {
       id: "why-logic",
       covers: "도입 · pp. 1",
       minutes: 4,
-      title: b("왜 프로그래밍 언어 책이 술어 논리로 시작하는가", "Why a programming-languages book begins with predicate logic"),
+      title: b("Why a programming-languages book begins with Predicate Logic", "Why a programming-languages book begins with Predicate Logic"),
       lead: b(
         "낯선 방법을 익숙한 대상에 먼저 적용하면 방법 자체를 선명하게 볼 수 있다.",
         "Applying unfamiliar methods to a familiar object makes the methods themselves easier to see."
@@ -61,11 +69,11 @@ export const predicateLogicLongform: ChapterLongform = {
       blocks: [
         prose(
           b(
-            "프로그래밍 언어를 엄밀하게 설명하려면 소스 코드를 읽는 직관만으로는 부족하다. 같은 프로그램도 표면 표기, 파싱된 구조, 수학적 의미, 실행 규칙, 증명 체계라는 여러 층에서 볼 수 있기 때문이다. 이 층들을 한꺼번에 다루면 괄호를 어디에 붙이는 문제와 프로그램이 무엇을 계산하는 문제, 계산이 옳다는 것을 어떻게 보이는 문제가 뒤섞인다. 1장은 이들을 의도적으로 분리한 다음 서로 연결한다.",
+            "컴파일러 pipeline을 떠올려 보자. source string은 parser를 지나 AST가 되고, evaluator나 code generator는 그 AST의 동작을 정하며, type checker나 verifier는 별도의 rule로 판단을 만든다. 이 층들을 한꺼번에 설명하면 괄호를 어디에 붙이는 문제, 무엇을 계산하는 문제, 계산이 옳다고 보이는 문제가 뒤섞인다. 1장은 작은 언어 하나를 사용해 이 층들을 의도적으로 분리한 뒤 다시 연결한다.",
             "A rigorous account of a programming language needs more than intuition about source code. The same program has surface notation, parsed structure, mathematical meaning, execution rules, and a proof system. Chapter 1 deliberately separates these layers and then reconnects them."
           ),
           b(
-            "술어 논리는 이 작업에 알맞은 첫 대상이다. 첫째, 정수식과 논리식은 이미 익숙하므로 새 표기보다 설명 방법에 집중할 수 있다. 둘째, 이 장의 논리식은 언제나 정수나 진릿값을 내므로 비종료와 부분 정보라는 어려움을 잠시 미룰 수 있다. 셋째, 3장에서 명령형 프로그램의 사전조건과 사후조건을 바로 이 assertion language로 적게 된다. 따라서 1장은 예비 지식이면서 동시에 이후 증명 체계의 실제 부품이다.",
+            "Predicate Logic은 이 연습에 알맞은 첫 object language다. 정수식과 Boolean condition은 엔지니어에게 이미 익숙하므로 새 언어 기능보다 설명 방법에 집중할 수 있다. 또한 이 장의 식은 항상 정수나 truth value를 내므로 nontermination과 partial information은 잠시 미룬다. 3장에서는 여기서 만든 assertion language를 명령형 프로그램의 precondition과 postcondition에 그대로 사용한다.",
             "Predicate logic is a good first object for three reasons. Its arithmetic and logical notation are familiar; every expression receives an ordinary value, postponing divergence and partial information; and the assertion language becomes the specification language for imperative programs in Chapter 3."
           ),
           b(
@@ -90,7 +98,7 @@ export const predicateLogicLongform: ChapterLongform = {
         )
       ],
       checkpoints: [
-        b("술어 논리에서는 당장 다루지 않아도 되지만 2장에서 반드시 추가해야 하는 계산 현상은 무엇인가?", "Which computational phenomenon can be postponed in predicate logic but must be added in Chapter 2?"),
+        b("Predicate Logic에서는 당장 다루지 않아도 되지만 2장에서 반드시 추가해야 하는 계산 현상은 무엇인가?", "Which computational phenomenon can be postponed in predicate logic but must be added in Chapter 2?"),
         b("전통 논리학의 term, formula, assignment를 이 책은 각각 무엇이라 부르는가?", "What names does this book use for term, formula, and assignment?")
       ],
     },
@@ -98,19 +106,19 @@ export const predicateLogicLongform: ChapterLongform = {
       id: "syntax-directed-semantics",
       covers: "§1.2 · pp. 9–12",
       minutes: 6,
-      title: b("syntax-directedness, 유일성, 합성성", "Syntax direction, uniqueness, and compositionality"),
+      title: b("Syntax direction, uniqueness, and compositionality", "Syntax direction, uniqueness, and compositionality"),
       lead: b(
-        "의미 방정식은 예시 계산법의 모음이 아니라 모든 구절에 정확히 하나의 의미를 주는 재귀 정의다.",
+        "semantic equation은 example별 처리 코드가 아니라 모든 AST node에 정확히 하나의 의미를 주는 recursive definition이다.",
         "Semantic equations are not a collection of examples; they recursively assign exactly one meaning to every phrase."
       ),
       blocks: [
         prose(
           b(
-            "아무 방정식이나 의미 정의가 되는 것은 아니다. 이 책에서 의미 방정식은 두 조건을 지킨다. 첫째, 추상 문법의 생산 규칙마다 대응하는 방정식이 하나씩 있어야 한다. 둘째, 구성된 구절의 의미는 직접 부분구절의 의미만으로 계산되어야 한다. 변수처럼 미리 주어진 종류는 부분구절 자체를 사용할 수 있다. 이 대응 때문에 어떤 구절을 만나도 최상위 constructor를 보고 적용할 방정식을 바로 고를 수 있다.",
+            "interpreter에서 AST variant 하나를 빼먹으면 runtime에서 처리하지 못하는 node가 생긴다. semantic definition도 같다. 첫째, abstract grammar의 production마다 equation이 하나 있어야 한다. 둘째, 한 node의 의미는 그 node의 constructor와 직접 child들의 의미만으로 계산해야 한다. 따라서 어떤 구절을 만나도 최상위 constructor를 pattern match해 적용할 equation을 고를 수 있다.",
             "Not every collection of equations defines semantics. There must be one equation per syntactic production, and the meaning of a constructed phrase must be computed only from the meanings of its immediate subphrases, except for predefined items such as variable names."
           ),
           b(
-            "이런 정의를 syntax-directed 또는 준동형적(homomorphic)이라고 한다. 이름은 의미 계산의 재귀 모양이 syntax tree의 모양을 그대로 따른다는 뜻이다. 덧셈 노드에서는 두 자식의 정수 의미를 더하고, 논리곱 노드에서는 두 자식의 진릿값을 논리곱하며, 수량자 노드에서는 본문의 의미를 갱신된 상태들에 적용한다. syntax structure와 의미 계산 구조가 평행하다.",
+            "이런 definition을 syntax-directed 또는 homomorphic이라고 한다. evaluator의 recursion이 syntax tree의 모양을 그대로 따른다는 뜻이다. addition node에서는 두 child의 integer meaning을 더하고, conjunction node에서는 두 Boolean meaning을 결합하며, quantifier node에서는 갱신된 state마다 body meaning을 적용한다. compiler에서 exhaustive pattern match로 AST visitor를 작성하는 구조와 같다.",
             "Such a definition is syntax-directed, or homomorphic: recursion in the semantic function follows the syntax tree. Addition combines integer meanings; conjunction combines Boolean meanings; a quantifier applies its body meaning to updated states."
           )
         ),
@@ -122,13 +130,13 @@ export const predicateLogicLongform: ChapterLongform = {
             "Induct on phrase depth. A phrase at depth `j+1` has one outer constructor by disjoint ranges and one tuple of children by injectivity. The children have unique meanings by induction, and the one semantic equation for that constructor uniquely combines them."
           ),
           b(
-            "존재성도 같은 논증에서 얻는다. constructor와 부분구절을 분해할 수 있고, 부분구절 의미가 이미 존재하며, 오른쪽의 메타언어 연산이 값을 돌려주므로 새 의미가 존재한다. 따라서 syntax 집합이 초기 대수이고 의미 함수가 목표 대수로 가는 유일한 준동형이라는 대수적 statement와 깊이 귀납 설명은 같은 사실의 두 얼굴이다.",
+            "existence도 같은 argument에서 얻는다. constructor와 child를 분해할 수 있고 child meaning이 이미 존재하며 오른쪽의 metalanguage operation이 값을 돌려주므로, 현재 node의 meaning도 존재한다. 이를 algebra의 언어로 압축하면 ‘syntax는 initial algebra이고 semantics는 target algebra로 가는 unique homomorphism이다’가 된다. 앞 절의 AST-fold 설명과 여기의 depth induction은 같은 사실을 구현 관점과 proof 관점에서 본 것이다.",
             "The same argument gives existence. This depth-induction account is the concrete face of the algebraic statement that syntax is initial and semantics is its unique homomorphism into the chosen target algebra."
           )
         ),
         prose(
           b(
-            "syntax-directedness은 합성성(compositionality)을 낳는다. 합성적 semantics에서는 전체 의미가 직접 부분구절의 의미만으로 정해진다. 부분구절이 얼마나 길었는지, 어떤 변수 이름을 썼는지, 어떤 과정을 거쳐 만들어졌는지처럼 의미 이외의 속성을 엿보지 않는다. 그 결과 어떤 문맥 안의 부분구절을 의미가 같은 다른 구절로 바꾸어도 전체 의미가 변하지 않는다.",
+            "syntax-directedness는 compositionality를 준다. compositional semantics에서 전체 meaning은 직접 child의 meaning만으로 정해진다. child source가 얼마나 길었는지, 어떤 최적화 과정을 거쳤는지처럼 meaning 밖의 정보를 엿보지 않는다. 그래서 context 안의 한 subphrase를 같은 denotation을 가진 다른 subphrase로 바꾸어도 전체 meaning이 유지된다.",
             "Syntax direction yields compositionality: a whole phrase depends only on the denotations of its immediate children. Consequently, replacing a subphrase by another with the same denotation preserves the meaning of every enclosing context."
           ),
           b(
@@ -144,7 +152,7 @@ export const predicateLogicLongform: ChapterLongform = {
             b("따라서 문맥 `[-]×y<z`에 넣은 `(x+0)×y<z`와 `x×y<z`도 같은 assertion 의미를 갖는다.", "Putting either expression in the context `[-]×y<z` produces equivalent assertions."),
             b("문맥이 여러 층이어도 각 층의 의미 방정식이 부분 의미만 사용하므로 동치가 바깥까지 전달된다.", "The equivalence propagates through arbitrarily many context layers because each equation uses only child meanings.")
           ],
-          b("합성성은 ‘동일 의미를 동일하게 취급한다’는 교체 가능성을 수학적으로 보장한다.", "Compositionality mathematically guarantees substitutability of equal meanings.")
+          b("compositionality는 ‘같은 meaning을 가진 부품은 교체할 수 있다’는 원리를 수학적으로 보장한다.", "Compositionality mathematically guarantees substitutability of equal meanings.")
         ),
         prose(
           b(
@@ -175,20 +183,24 @@ export const predicateLogicLongform: ChapterLongform = {
       id: "validity-inference",
       covers: "§1.3 · pp. 12–15",
       minutes: 8,
-      title: b("상태에서의 참, 타당성, 형식 증명", "Truth in a state, validity, and formal proof"),
+      title: b("Truth in a state, validity, and formal proof", "Truth in a state, validity, and formal proof"),
       lead: b(
-        "semantics이 무엇이 참인지 정한다면, 추론 체계는 무엇을 규칙으로 증명할 수 있는지 정한다.",
+        "semantics가 truth를 정하고 proof system이 derivability를 정한다. test result와 verifier의 proof obligation을 구분하는 것과 비슷하다.",
         "Semantics determines what is true; an inference system determines what can be proved by rules."
       ),
       blocks: [
         prose(
           b(
-            "assertion `p`가 한 상태 `σ`에서 참이라는 것은 `⟦p⟧σ=true`라는 뜻이다. ‘`p`가 `σ`를 기술한다’, ‘`σ`가 `p`를 만족한다’도 같은 말이다. 반면 `p`가 타당(valid)하다는 것은 모든 상태에서 참이라는 뜻이다. `x>0`은 어떤 상태에서는 참이지만 타당하지 않다. `x=x`와 `x+0=x`는 모든 상태에서 참이므로 타당하다. 모든 상태에서 거짓인 assertion은 만족 불가능(unsatisfiable)하다고 한다.",
+            "assertion `p`가 한 state `σ`에서 true라는 것은 `⟦p⟧σ=true`라는 뜻이다. 이는 특정 test fixture에서 assertion이 통과한 것과 같다. 반면 `p`의 validity는 모든 state에서 true라는 property다. `x>0`은 어떤 state에서는 true지만 valid하지 않다. `x=x`와 `x+0=x`는 모든 state에서 true이므로 valid하다. 모든 state에서 false인 assertion은 unsatisfiable하다.",
             "An assertion is true in a state `σ` when its denotation there is true. It is valid when true in every state. Thus `x>0` may be true but is not valid; `x=x` is valid. An assertion false in every state is unsatisfiable."
           ),
           b(
             "`p₀ ⇒ p₁`이 타당하면 `p₀`를 만족하는 모든 상태가 `p₁`도 만족한다. 이때 `p₀`가 `p₁`보다 강하고, `p₁`이 `p₀`보다 약하다고 한다. 강한 조건일수록 허용하는 상태 집합이 작다. `false`는 아무 상태도 허용하지 않으므로 모든 assertion보다 강하고, `true`는 모든 상태를 허용하므로 모든 assertion보다 약하다. 두 assertion이 서로보다 강하면 같은 상태 집합을 기술하므로 의미적으로 동치다.",
             "If `p₀ ⇒ p₁` is valid, every state satisfying `p₀` also satisfies `p₁`; `p₀` is stronger and `p₁` weaker. Stronger assertions admit fewer states. `false` is strongest, `true` weakest. Mutual strength is semantic equivalence."
+          ),
+          b(
+            "이제 질문 축이 둘이라는 점을 분명히 하자. `⊨p`는 semantic model을 기준으로 모든 state를 양화한 statement이고, `⊢p`는 주어진 proof rule로 끝나는 finite proof tree가 존재한다는 statement다. model checker가 property를 확인하는 일과 proof checker가 certificate를 검증하는 일이 관련은 있지만 같은 definition은 아닌 것과 같다. soundness와 completeness는 이 두 축 사이에 어느 방향의 보증이 있는지 나타내는 별도 theorem이다.",
+            "There are two axes. `⊨p` quantifies over all states in the semantic model; `⊢p` says that a finite proof tree ending in `p` exists under the proof rules. Soundness and completeness are separate theorems relating these two definitions."
           )
         ),
         notation(
@@ -211,7 +223,7 @@ p_0\equiv p_1
         ),
         prose(
           b(
-            "추론 규칙은 0개 이상의 전제와 하나의 결론으로 이루어진 틀이다. 전제와 결론에는 구체 assertion 대신 적절한 구절을 받을 메타변수가 들어갈 수 있다. 메타변수에 실제 대상 언어 구절을 넣으면 규칙의 인스턴스가 된다. 전제가 하나도 없는 규칙은 공리 스키마이고, 메타변수마저 없어 가능한 인스턴스가 하나뿐이면 단순히 공리라고 한다. 부가 조건이 붙은 규칙은 그 조건을 만족하는 교체만 인스턴스로 인정한다.",
+            "inference rule은 0개 이상의 premise와 하나의 conclusion으로 이루어진 schema다. type checker rule에서 child expression의 typing judgment가 premise이고 parent expression의 judgment가 conclusion인 모습을 떠올리면 된다. metavariable에 실제 object-language phrase를 넣으면 rule instance가 된다. premise가 없는 rule은 axiom schema이고, metavariable도 없어 instance가 하나뿐이면 axiom이다. side condition이 있으면 그 조건을 만족하는 replacement만 허용한다.",
             "An inference rule is a schema with zero or more premises and one conclusion. Replacing metavariables by suitable object-language phrases gives an instance. A zero-premise rule is an axiom schema; without metavariables it is simply an axiom."
           ),
           b(
@@ -235,9 +247,9 @@ p_0\equiv p_1
         ),
         callout(
           "key",
-          b("건전성은 syntax과 의미 사이의 다리", "Soundness bridges syntax and semantics"),
+          b("soundness는 syntax와 semantics 사이의 다리", "Soundness bridges syntax and semantics"),
           b(
-            "규칙이 건전하다는 것은 모든 인스턴스에서 전제들이 모두 타당하면 결론도 타당하다는 뜻이다. 모든 규칙이 건전하면 공리에서 시작해 규칙을 유한 번 적용한 모든 증명 줄이 타당하다. 즉 `⊢p`이면 `⊨p`다. 건전성은 증명기가 거짓을 증명하지 않는다는 보증이지, 모든 참을 반드시 증명한다는 보증은 아니다.",
+            "rule의 soundness는 모든 instance에서 premise가 모두 valid하면 conclusion도 valid하다는 뜻이다. 모든 rule이 sound하면 axiom에서 시작해 rule을 유한 번 적용한 모든 proof line이 valid하다. 즉 `⊢p`이면 `⊨p`다. soundness는 verifier가 증명한 statement를 semantic model이 반박하지 않는다는 보증이다. 모든 true statement를 verifier가 반드시 찾는다는 보증은 아니다.",
             "A rule is sound when every instance preserves validity from all premises to its conclusion. If every rule is sound, derivability implies validity: `⊢p` entails `⊨p`. Soundness prevents false theorems; it does not guarantee that every truth is derivable."
           ),
           b(
@@ -255,14 +267,14 @@ p_0\equiv p_1
         ),
         prose(
           b(
-            "완전성은 건전성의 반대 방향이다. 의미적으로 타당한 모든 assertion이 규칙으로 증명 가능하면 추론 체계가 완전하다. 여기서는 정수 산술 연산의 의미를 고정했기 때문에 산술적 타당성 전체를 유한 규칙으로 포착할 수 없다는 불완전성 문제가 생긴다. 반면 연산 해석까지 임의로 바꾸어도 참인 논리적 타당성에는 완전한 일차 논리 계산이 존재한다. 프로그램 검증에서는 보통 실제 정수 연산을 고정해야 하므로, 논리 규칙만으로 모든 산술 사실을 해결하겠다는 기대를 버리고 필요한 산술 추론을 별도 이론이나 자동화에 맡긴다.",
+            "completeness는 반대 방향을 묻는다. semantically valid한 모든 assertion을 rule로 derive할 수 있으면 proof system이 complete하다. 여기서는 integer arithmetic의 interpretation을 고정했기 때문에 모든 arithmetic truth를 finite rule set으로 포착할 수 없다는 incompleteness 문제가 생긴다. program verification은 보통 실제 integer operation을 고정하므로, logic rule만으로 모든 arithmetic fact를 해결하려 하지 않고 SMT solver의 arithmetic theory나 별도 lemma에 맡긴다.",
             "Completeness asks the converse: is every semantically valid assertion derivable? With fixed integer arithmetic, no finite rule set captures every arithmetical truth. First-order logical validity under arbitrary interpretations has complete calculi, but program verification normally fixes the intended arithmetic and uses additional mathematical reasoning or automation."
           )
         )
       ],
       checkpoints: [
         b("`x=3`, `x>0`, `true`를 강한 순서부터 나열하고 상태 집합 포함 관계로 정당화하라.", "Order `x=3`, `x>0`, and `true` from strongest to weakest and justify the order by state-set inclusion."),
-        b("건전성과 완전성을 각각 `⊢`와 `⊨`를 사용해 한 줄로 써 보라.", "Write soundness and completeness as implications using `⊢` and `⊨`."),
+        b("soundness와 completeness를 각각 `⊢`와 `⊨`를 사용해 한 줄로 써 보라.", "Write soundness and completeness as implications using `⊢` and `⊨`."),
         b("왜 `x>0`은 형식 증명의 독립된 한 줄로 올 수 없지만 `(x>0)⇒(x≥0)`은 올 수 있는가?", "Why cannot `x>0` appear as a standalone proof line while `(x>0)⇒(x≥0)` can?")
       ],
     },
@@ -270,7 +282,7 @@ p_0\equiv p_1
       id: "abstract-grammar",
       covers: "§1.1 · pp. 1–3",
       minutes: 6,
-      title: b("문자열과 syntax structure를 분리하기", "Separating strings from syntactic structure"),
+      title: b("Separating strings from syntactic structure", "Separating strings from syntactic structure"),
       lead: b(
         "프로그램은 문자로 입력되지만 의미가 붙는 대상은 문자 배열이 아니라 파싱된 syntax structure다.",
         "Programs arrive as characters, but semantics is assigned to parsed syntactic structure rather than raw strings."
@@ -284,6 +296,10 @@ p_0\equiv p_1
           b(
             "보통의 문맥 자유 문법은 어떤 문자열이 허용되는지 말하는 데 훌륭하지만, syntax structure와 표기상의 선택을 함께 적는다. 변수의 철자, 연산자가 앞에 오는지 가운데 오는지, 우선순위와 결합 방향은 파서에는 중요해도 덧셈이라는 구성의 본질은 아니다. 추상 문법은 비단말 기호와 부분구절의 배열로 구조를 드러내면서도, 사람이 읽을 최소한의 표기를 곁들인 절충 형식이다.",
             "A context-free grammar is excellent for recognizing strings but mixes structural information with representational choices: spelling, prefix versus infix notation, precedence, and associativity. An abstract grammar keeps the sorts and subphrase pattern while retaining only enough notation to remain readable."
+          ),
+          b(
+            "실무에서는 이 경계를 parser API에서 확인할 수 있다. parser test는 공백이나 괄호가 다른 두 source가 같은 AST를 만드는지 검사할 수 있고, optimizer test는 AST 이후 단계만 다룬다. pretty-printer가 다시 문자열을 만들더라도 원래 공백과 괄호를 그대로 복원할 필요는 없다. source의 표기 정보와 이후 단계에 필요한 구조 정보가 서로 다른 책임이라는 뜻이다. 이 구분을 해 두면 grammar를 바꿔도 evaluator와 proof를 다시 설계할 필요가 줄어든다.",
+            "This boundary appears in a parser API. Parser tests may check that differently spaced or parenthesized sources produce the same AST, while optimizer tests start from the AST. A pretty-printer need not recover the original whitespace. Separating notation from structure lets grammar changes leave evaluators and proofs intact."
           )
         ),
         notation(
@@ -347,35 +363,39 @@ p_0\equiv p_1
       id: "carriers-constructors",
       covers: "§1.1 · pp. 3–8",
       minutes: 7,
-      title: b("운반집합·constructor·초기 대수", "Carriers, constructors, and the initial-algebra view"),
+      title: b("Carriers, constructors, and the initial-algebra view", "Carriers, constructors, and the initial-algebra view"),
       lead: b(
-        "abstract syntax은 특정 트리 구현이 아니라, 어떤 올바른 구현도 만족해야 하는 구조적 계약이다.",
+        "이 절의 algebra 용어는 AST 구현을 더 추상적으로 설명하는 interface라고 읽으면 된다.",
         "Abstract syntax is a structural contract satisfied by any correct representation, not one privileged tree implementation."
       ),
       blocks: [
         prose(
           b(
-            "syntax을 진짜로 추상화하려면 ‘구절은 트리다’라고 특정 자료구조까지 고정해서는 안 된다. 대신 각 구절 종류에 운반집합(carrier)을 두고, 생산 규칙마다 운반집합 사이의 constructor 함수를 둔다. 이 장에는 변수 집합 `Var`, 정수식 집합 `IntExp`, assertion 집합 `Assert`가 있다. 예를 들어 변수 constructor는 `Cvar : Var → IntExp`, 덧셈 constructor는 `C+ : IntExp × IntExp → IntExp`, 전칭 수량자 constructor는 `C∀ : Var × Assert → Assert`의 형식을 가진다.",
+            "Rust enum이나 TypeScript discriminated union으로 AST를 정의한다고 생각하자. `IntExp`와 `Assert`는 각 node 종류의 모든 가능한 값을 모은 type에 가깝다. algebra에서는 이런 집합을 carrier set이라고 한다. grammar production은 carrier set 사이의 constructor function이 된다. 예를 들어 `Cvar : Var → IntExp`, `C+ : IntExp × IntExp → IntExp`, `C∀ : Var × Assert → Assert`다. 이 표기는 각 constructor가 무엇을 입력받고 어떤 phrase kind를 만드는지 적은 API signature다.",
             "A genuinely abstract syntax does not commit to one tree data structure. It specifies a carrier for each phrase sort and a constructor function for each production. Here we have `Var`, `IntExp`, and `Assert`, with constructors such as `Cvar : Var → IntExp`, `C+ : IntExp × IntExp → IntExp`, and `C∀ : Var × Assert → Assert`."
           ),
           b(
-            "상수처럼 자식이 없는 constructor는 빈 곱, 즉 원소가 하나뿐인 집합에서 운반집합으로 가는 함수로 볼 수 있다. `C0 : 1 → IntExp`라고 쓰면 `C0()`이 상수 0 구절이다. 구현 언어에서는 보통 `Const(0)`처럼 정수 하나를 받는 constructor로 모든 상수를 합치지만, 수학적 구조는 동일하다. constructor의 인자 수와 인자 종류가 구절의 직접 부분구절을 정확히 정한다.",
+            "상수처럼 child가 없는 constructor도 0-argument factory로 보면 어렵지 않다. 수학에서는 원소가 하나인 집합 `1`에서 carrier set으로 가는 함수 `C0 : 1 → IntExp`로 쓴다. 구현에서는 보통 모든 정수 상수를 `Const(n)` 하나로 합친다. 표기가 달라도 constructor의 arity와 argument type이 직접 child를 정한다는 점은 같다.",
             "A nullary constructor can be viewed as a function from the one-element set into a carrier. Implementations often combine all numeric constants into `Const(n)`, but the structural role is the same: constructor arity and argument sorts determine the immediate subphrases."
+          ),
+          b(
+            "여기서 세 층을 섞지 않는 것이 중요하다. carrier set은 만들 수 있는 값들의 전체 범위이고, constructor는 그 값 하나를 만드는 조립 방법이며, concrete tree나 object는 그 조립 방법을 실제로 적용한 결과다. 예를 들어 `IntExp`는 가능한 모든 정수식의 범위이고, `C+`는 두 정수식으로 새 정수식을 만드는 방법이며, `C+(Cvar(x), C0())`는 그 방법으로 만든 한 값이다. class, pointer, tag를 어떻게 배치할지는 이 계약의 바깥에 있으므로 여러 구현이 같은 abstract syntax을 실현할 수 있다.",
+            "Keep three levels separate: a carrier set is the full range of possible values, a constructor is a way to assemble one value, and a concrete tree or object is the result of applying constructors. Memory layout, pointers, and runtime tags remain implementation choices outside this contract."
           )
         ),
         list(
           b("올바른 abstract syntax 구현이 만족해야 할 세 조건", "Three conditions for a realization of abstract syntax"),
-          b("단사성: 같은 constructor의 결과가 같으면 각 인자도 같아야 한다. `C+(e₀,e₁)=C+(e₂,e₃)`이면 `e₀=e₂`, `e₁=e₃`이다.", "Injectivity: equal results of one constructor imply equal corresponding arguments."),
-          b("서로소 치역: 같은 운반집합으로 들어가는 서로 다른 constructor의 결과는 겹치지 않는다. 덧셈 구절이 동시에 곱셈 구절일 수 없다.", "Disjoint ranges: distinct constructors into one carrier never produce the same phrase."),
-          b("유한 생성: 미리 주어진 집합의 원소를 제외한 모든 구절은 constructor를 유한 번 적용해 만들어져야 한다. 무한 깊이의 유령 구절은 허용하지 않는다.", "Finite generation: every non-predefined phrase is built by finitely many constructor applications; no infinitely deep phantom phrases are included.")
+          b("injectivity: 같은 constructor result라면 argument도 같아야 한다. `C+(e₀,e₁)=C+(e₂,e₃)`이면 `e₀=e₂`, `e₁=e₃`이다. 즉 node에서 child를 유일하게 복원할 수 있다.", "Injectivity: equal results of one constructor imply equal corresponding arguments."),
+          b("disjoint ranges: 서로 다른 constructor의 result가 겹치지 않는다. 한 node가 동시에 `Add`와 `Multiply` variant일 수 없다.", "Disjoint ranges: distinct constructors into one carrier never produce the same phrase."),
+          b("finite generation: 모든 phrase는 constructor를 유한 번 적용해 만들어진다. 메모리에 만들 수도, source로 쓸 수도 없는 무한 깊이의 phantom phrase는 포함하지 않는다.", "Finite generation: every non-predefined phrase is built by finitely many constructor applications; no infinitely deep phantom phrases are included.")
         ),
         prose(
           b(
-            "첫 두 조건은 구절을 분해할 수 있게 한다. 어떤 assertion이 `p₀ ∧ p₁` 꼴이라면 최상위 constructor가 논리곱이라는 사실과 두 직접 sub-assertion `p₀`, `p₁`이 유일하다. 따라서 ‘구절의 모양에 따른 경우 분석’이 가능하다. 세 번째 조건은 이 분해를 반복하면 반드시 바닥의 상수나 변수에 도착함을 보장한다. 재귀 함수 정의와 구조적 귀납 증명이 바로 이 성질에 기대고 있다.",
+            "앞의 두 조건은 안전한 pattern matching을 보장한다. assertion이 `p₀ ∧ p₁` 꼴이면 최상위 variant와 두 child가 유일하다. finite generation은 child를 따라 내려가면 결국 constant나 variable에 도착한다고 보장한다. 그래서 recursive evaluator가 모든 node를 처리하고 종료하며, structural induction이 모든 finite AST를 덮을 수 있다.",
             "The first two conditions make decomposition unique: if an assertion has the form `p₀ ∧ p₁`, its outer constructor and two children are uniquely determined. Finite generation guarantees that repeated decomposition reaches constants or variables. Recursive definitions and structural induction rely on exactly these facts."
           ),
           b(
-            "유한 생성을 더 엄밀히 말하려면 깊이별 근사를 만든다. 깊이 0에는 아무 구절도 두지 않고, 깊이 `j+1`에는 깊이 `j` 이하의 구절들을 인자로 constructor를 한 번 적용해 얻는 구절을 넣는다. 모든 유한 깊이 집합의 합집합이 전체 운반집합이다. 이 정의는 2장에서 반복문의 의미를 근사하고 최소 고정점을 취하는 방식과 같은 모양을 갖는다. syntax 자체도 ‘생성 방정식의 최소 해’로 이해할 수 있다.",
+            "finite generation을 수식으로 쓰려면 depth별 approximation을 만든다. depth 0에서 시작해, stage `j+1`에는 stage `j`까지 만든 phrase에 constructor를 한 번 더 적용한 결과를 넣는다. 모든 finite stage의 union이 전체 carrier set이다. 여기서 핵심은 ‘constructor로 정당화되는 값만 넣는 smallest solution’이라는 점이다. 2장의 least fixed point도 같은 construction pattern을 사용한다.",
             "Finite generation can be formalized by depth approximants. Start with no phrases at depth zero; at stage `j+1`, apply constructors to phrases available by stage `j`; take the union of all finite stages. This mirrors the least-fixed-point construction used for loops in Chapter 2."
           )
         ),
@@ -412,10 +432,18 @@ p_0\equiv p_1
         ),
         callout(
           "proof",
-          b("초기 대수라는 말의 직관", "Intuition for ‘initial algebra’"),
+          b("initial algebra를 AST fold로 읽기", "Intuition for ‘initial algebra’"),
           b(
-            "abstract syntax은 constructor가 요구하는 것 외에는 아무것도 추가하지 않은 가장 자유로운 대수다. constructor 방정식을 만족하는 어떤 목표 대수를 주어도, 각 syntax을 그 대수의 값으로 보내는 구조 보존 함수가 정확히 하나 존재한다. 다음 절의 의미 함수가 유일하게 정해지는 이유를 이 한 문장이 압축한다.",
+            "initial algebra는 constructor로 만들 수 있는 finite syntax만 담고, 별도의 equation으로 서로 다른 tree를 억지로 같게 만들지 않은 구조다. 엔지니어 관점에서는 AST type과 그 exhaustive `fold` interface를 떠올리면 된다. 각 constructor case를 target value로 바꾸는 handler를 모두 주면, 모든 AST를 target으로 보내는 recursive function이 정확히 하나 정해진다.",
             "Abstract syntax is the freely generated algebra containing nothing beyond what constructors require. For any target algebra interpreting those constructors, there is exactly one structure-preserving map from syntax to that target. This is the algebraic reason the next section's semantic function is unique."
+          ),
+          b(
+            "예를 들어 `Const` handler는 정수를, `Add` handler는 두 child result의 합을 돌려주게 하면 그 fold가 evaluator다. handler를 pretty-printing용 문자열 조합으로 바꾸면 같은 AST에서 printer를 얻는다. constructor structure를 보존하는 이 fold를 homomorphism이라고 하며, ‘handler를 정하면 fold가 하나뿐’이라는 성질이 initial algebra의 실용적인 핵심이다.",
+            "If the `Const` handler returns an integer and the `Add` handler sums child results, the fold is an evaluator. Replacing those handlers with string-building operations gives a pretty-printer. This constructor-preserving fold is a homomorphism; the practical content of initiality is that the handlers determine exactly one such fold."
+          ),
+          b(
+            "왜 굳이 이 성질을 이름 붙이는가? 새 constructor를 추가했을 때 evaluator, printer, free-variable collector처럼 AST 전체를 소비하는 함수가 새 case를 요구한다는 사실을 한 번에 말할 수 있기 때문이다. 반대로 AST에 constructor로 만들 수 없는 특별한 값을 몰래 넣거나, 서로 다른 두 tree를 이유 없이 같은 값으로 취급하면 exhaustive fold의 보장이 깨진다. initial algebra는 구현 기법 하나가 아니라 이런 소비 함수들이 의존하는 공통 계약이다.",
+            "Naming this property exposes a shared contract: adding a constructor requires a new case in every total consumer, such as an evaluator, printer, or free-variable collector. Smuggling in values not generated by constructors, or identifying unrelated trees, breaks that contract."
           )
         ),
         callout(
@@ -428,18 +456,18 @@ p_0\equiv p_1
         )
       ],
       checkpoints: [
-        b("constructor의 단사성과 서로소 치역이 각각 어떤 종류의 모호성을 막는지 구분해서 설명하라.", "Explain which ambiguity is prevented by constructor injectivity and which by disjoint ranges."),
-        b("유한 생성 조건이 없으면 구조적 귀납법이 왜 정당화되지 않는가?", "Why would structural induction fail without finite generation?"),
-        b("대수적 자료형의 각 variant가 추상 문법의 무엇에 대응하는가?", "What does each variant of an algebraic datatype correspond to in an abstract grammar?")
+        b("constructor의 injectivity와 disjoint ranges가 각각 어떤 pattern-match ambiguity를 막는지 설명하라.", "Explain which ambiguity is prevented by constructor injectivity and which by disjoint ranges."),
+        b("finite generation이 없으면 recursive evaluator와 structural induction에 각각 어떤 문제가 생기는가?", "Why would structural induction fail without finite generation?"),
+        b("initial algebra의 unique homomorphism을 AST의 exhaustive fold로 설명해 보라.", "Explain the unique homomorphism from an initial algebra as an exhaustive fold over an AST.")
       ],
     },
     {
       id: "denotations",
       covers: "§1.2 · pp. 8–10",
       minutes: 7,
-      title: b("상태를 입력으로 받는 표시적 의미", "Denotational meaning as a function of state"),
+      title: b("Denotational meaning as a function of state", "Denotational meaning as a function of state"),
       lead: b(
-        "자유 변수가 있는 식의 의미는 정수 하나가 아니라, 상태가 주어질 때 정수를 돌려주는 함수다.",
+        "free variable이 있는 expression의 denotation은 정수 하나가 아니라 state가 주어질 때 정수를 돌려주는 function이다.",
         "An open expression denotes not one integer but a function that returns an integer when supplied a state."
       ),
       blocks: [
@@ -451,6 +479,10 @@ p_0\equiv p_1
           b(
             "denotational semantics은 syntax을 이미 이해한다고 가정하고 그 syntax이 나타내는 수학적 대상을 지정한다. 이 장에서 정수식의 의미 대상은 `Σ → ℤ`, assertion의 의미 대상은 `Σ → 𝔹`이다. 의미 괄호 `⟦e⟧exp σ`는 상태 `σ`에서 식 `e`의 값을, `⟦p⟧assert σ`는 같은 상태에서 assertion `p`의 진릿값을 뜻한다. 괄호 안은 대상 언어, 괄호 밖 계산은 메타언어에 속한다.",
             "Denotational semantics assigns mathematical objects to already parsed syntax. Here integer expressions denote elements of `Σ → ℤ`, assertions elements of `Σ → 𝔹`. Inside the semantic brackets is object-language syntax; outside is metalanguage mathematics."
+          ),
+          b(
+            "여기서 function은 실제 evaluator 구현과 같아도 되지만 같아야 하는 것은 아니다. 구현은 cache, machine integer, exception을 사용할 수 있고 evaluation order도 정해야 한다. denotation은 그런 구현 detail을 지운 specification이다. 두 evaluator가 같은 denotation을 구현한다면 내부 algorithm이 달라도 이 장에서 관찰하는 meaning은 같다. 따라서 semantic equation은 코드를 그대로 옮긴 pseudocode가 아니라 구현이 만족해야 할 수학적 contract로 읽어야 한다.",
+            "The function need not be the evaluator implementation itself. An implementation may use caches, machine integers, exceptions, and a chosen evaluation order. A denotation erases those details and acts as a mathematical specification that multiple evaluators may implement."
           )
         ),
         notation(
@@ -526,7 +558,7 @@ p_0\equiv p_1
       id: "binding-free-variables",
       covers: "§1.4 · pp. 15–18",
       minutes: 8,
-      title: b("바인딩, 자유 변수, 일치 정리", "Binding, free variables, and the Coincidence Theorem"),
+      title: b("Binding, free variables, and the Coincidence Theorem", "Binding, free variables, and the Coincidence Theorem"),
       lead: b(
         "변수의 의미는 철자만으로 정해지지 않는다. 어느 바인더가 그 발생을 지배하는지가 syntax structure의 일부다.",
         "The meaning of a variable occurrence is not determined by spelling alone; its governing binder is part of the syntax."
@@ -620,9 +652,9 @@ p_0\equiv p_1
       id: "capture-avoiding-substitution",
       covers: "§1.4 · pp. 18–21",
       minutes: 10,
-      title: b("캡처 회피 치환과 치환 정리", "Capture-avoiding substitution and the Substitution Theorem"),
+      title: b("Capture-avoiding substitution and the Substitution Theorem", "Capture-avoiding substitution and the Substitution Theorem"),
       lead: b(
-        "치환은 글자를 바꾸는 작업이 아니라 자유 변수의 의미 관계를 보존하는 syntactic operation이다.",
+        "substitution은 글자를 바꾸는 작업이 아니라 free variable의 semantic relationship을 보존하는 syntactic operation이다.",
         "Substitution is not character replacement; it is a syntactic operation designed to preserve semantic relationships among free variables."
       ),
       blocks: [
@@ -630,6 +662,10 @@ p_0\equiv p_1
           b(
             "`p`의 자유 변수 `v`에 식 `e`를 넣는다는 직관은 간단해 보인다. 하지만 `e`에 자유롭게 등장하는 이름이 `p` 안의 바인더와 같으면 단순 텍스트 교체가 그 이름을 새로 묶어 버린다. 이를 변수 포획(capture)이라 한다. 포획은 단지 이름이 보기 싫게 겹치는 문제가 아니라 결과 assertion의 의미를 바꾼다.",
             "Replacing free occurrences of `v` in `p` by an expression `e` seems simple until a binder inside `p` uses a name occurring freely in `e`. Naive textual replacement then captures that occurrence and changes meaning."
+          ),
+          b(
+            "이 문제는 논리식에만 머물지 않는다. macro expansion, inlining, lambda calculus의 beta-reduction, compiler IR의 variable rename도 모두 binder 아래에 code를 옮긴다. 문자열 검색과 교체로 구현하면 우연히 주변 scope의 이름을 가리키는 hygiene bug가 생긴다. capture-avoiding substitution은 그런 transformation이 어느 declaration을 참조하는지 보존하기 위한 최소 조건이며, 뒤의 theorem은 이 조건이 실제 meaning 보존으로 이어짐을 확인한다.",
+            "The same issue appears in macro expansion, inlining, beta-reduction, and compiler-IR renaming. Blind text replacement creates hygiene bugs by changing which declaration a name refers to. Capture avoidance is the minimum discipline needed to preserve those references."
           )
         ),
         example(
@@ -730,7 +766,7 @@ p/(v\mapsto e)
       id: "practice-workshop",
       covers: "연습 워크숍 · pp. 22–23의 주제 확장",
       minutes: 10,
-      title: b("정의에서 손으로 계산하고 증명하기", "Practice workshop: calculate and prove from the definitions"),
+      title: b("Practice workshop: calculate and prove from the definitions", "Practice workshop: calculate and prove from the definitions"),
       lead: b(
         "답을 읽는 것보다 먼저 종이에 풀고, 아래 해설로 정의를 적용한 순서를 검산하자.",
         "Work each problem on paper before reading the solution, then verify the order in which definitions were applied."
@@ -822,7 +858,7 @@ p/(v\mapsto e)
       id: "chapter-synthesis",
       covers: "1장 종합",
       minutes: 4,
-      title: b("네 도구를 하나의 흐름으로 연결하기", "Connecting the four tools into one workflow"),
+      title: b("Connecting the four tools into one workflow", "Connecting the four tools into one workflow"),
       lead: b(
         "1장의 개별 정의는 하나의 언어를 설계하고 검증하는 반복 가능한 절차를 이룬다.",
         "The chapter's definitions form a repeatable workflow for designing and validating a language."
@@ -830,15 +866,15 @@ p/(v\mapsto e)
       blocks: [
         list(
           b("1장의 전체 논증", "The complete argument of Chapter 1"),
-          b("먼저 표면 문자열에서 독립된 구절 종류와 constructor를 정한다. 단사성·서로소 치역·유한 생성이 재귀와 귀납의 토대를 만든다.", "Define phrase sorts and constructors independently of surface strings; injectivity, disjointness, and finite generation support recursion and induction."),
+          b("먼저 source string과 독립된 phrase kind와 constructor를 정한다. injectivity, disjoint ranges, finite generation이 recursion과 induction의 토대를 만든다.", "Define phrase sorts and constructors independently of surface strings; injectivity, disjointness, and finite generation support recursion and induction."),
           b("각 구절 종류에 알맞은 의미 영역을 고르고, 모든 constructor에 syntax-directed 의미 방정식을 하나씩 준다.", "Choose semantic domains and give one syntax-directed equation per constructor."),
-          b("syntax-directedness과 초기성으로 의미 함수의 존재·유일성과 합성성을 얻는다.", "Syntax direction and initiality give existence, uniqueness, and compositionality."),
-          b("semantics으로 상태에서의 참과 타당성을 정의하고, 추론 규칙의 건전성으로 증명 가능성을 의미적 참에 연결한다.", "Use semantics to define truth and validity, then soundness to connect derivability with semantic truth."),
-          b("바인더가 있으면 자유 변수와 캡처 회피 치환을 구조적으로 정의하고, 일치·치환·이름변경 정리로 이름 조작이 의미를 보존함을 증명한다.", "For binders, define free variables and capture-avoiding substitution, then prove coincidence, substitution, and renaming results.")
+          b("syntax-directedness와 initial algebra property로 semantic function의 existence, uniqueness, compositionality를 얻는다.", "Syntax direction and initiality give existence, uniqueness, and compositionality."),
+          b("semantics로 truth와 validity를 정의하고, inference rule의 soundness로 derivability를 semantic truth에 연결한다.", "Use semantics to define truth and validity, then soundness to connect derivability with semantic truth."),
+          b("binder가 있으면 free variable과 capture-avoiding substitution을 구조적으로 정의하고, Coincidence·Substitution·Renaming Theorem으로 name manipulation이 meaning을 보존함을 증명한다.", "For binders, define free variables and capture-avoiding substitution, then prove coincidence, substitution, and renaming results.")
         ),
         prose(
           b(
-            "이 흐름은 뒤에서 그대로 확대된다. 2장은 assertion 대신 명령을 추가하고 의미 영역을 부분 상태 변환으로 바꾼다. 3장은 타당한 산술 assertion을 이용해 프로그램 명세의 추론 규칙을 만든다. 10장에서는 수량자 대신 람다가 이름을 묶고 베타 축약이 치환을 요구한다. 11장에서는 syntactic substitution 대신 환경과 클로저가 같은 의미 효과를 구현한다. 타입 장에서는 ‘의미 값’ 대신 타입 판단을 constructor에 맞춘 규칙으로 유도한다.",
+            "이 workflow는 뒤에서 그대로 확대된다. 2장은 assertion 대신 command를 추가하고 semantic domain을 partial state transformer로 바꾼다. 3장은 valid arithmetic assertion을 이용해 program specification의 inference rule을 만든다. 10장에서는 quantifier 대신 lambda가 name을 bind하고 beta-reduction이 substitution을 요구한다. 11장에서는 syntactic substitution 대신 environment와 closure가 같은 semantic effect를 구현한다. type chapter에서는 value meaning 대신 typing judgment를 constructor에 맞춘 rule로 derive한다.",
             "The same workflow scales. Chapter 2 adds commands and partial state transformers; Chapter 3 builds program-proof rules; lambda abstraction introduces another binder and beta-reduction uses substitution; closures implement equivalent environment behavior; type systems derive judgments by syntax-directed rules."
           ),
           b(
@@ -850,7 +886,7 @@ p/(v\mapsto e)
           "key",
           b("2장으로 가져갈 질문", "Question to carry into Chapter 2"),
           b(
-            "논리식은 모든 상태에서 즉시 진릿값을 내는 전체 함수로 해석할 수 있었다. 하지만 `while true do skip` 같은 명령은 최종 상태를 내지 않는다. syntax-directedness과 합성성을 유지하면서 ‘결과가 없음’을 수학적 의미에 넣으려면 어떤 값과 어떤 순서 구조가 필요한가? 이 질문이 도메인과 최소 고정점으로 이어진다.",
+            "assertion은 모든 state에서 즉시 truth value를 내는 total function으로 해석할 수 있었다. 하지만 `while true do skip` 같은 command는 final state를 내지 않는다. syntax-directedness와 compositionality를 유지하면서 ‘result가 없음’을 semantics에 넣으려면 어떤 value와 order structure가 필요한가? 이 질문이 domain과 least fixed point로 이어진다.",
             "Assertions could be interpreted as total functions, but a command such as `while true do skip` produces no final state. How can absence of a result be represented while preserving syntax direction and compositionality? This leads to domains and least fixed points."
           )
         )

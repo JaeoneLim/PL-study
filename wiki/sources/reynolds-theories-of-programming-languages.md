@@ -26,7 +26,7 @@ tags:
 
 ## 논지의 흐름
 
-1. 술어 논리에서 abstract syntax, 의미 함수, 추론 규칙, 바인딩을 분리한다.
+1. Predicate Logic에서 abstract syntax, semantic function, inference rule, binding을 분리한다.
 2. 작은 명령형 언어를 상태 변환, 도메인, 고정점, 프로그램 논리로 확장한다.
 3. 실패·입출력·비결정성·동시성을 계속, 재개, 전이, 흔적으로 설명한다.
 4. 람다 계산에서 적극/정상 순서 함수형 언어와 평가 기계를 유도한다.
@@ -41,7 +41,7 @@ tags:
 
 ## 파트 지도
 
-- [[chapter-01-predicate-logic|01 술어 논리]] → [[chapter-05-failure-io-continuations|05 계속과 I/O]]
+- [[chapter-01-predicate-logic|01 Predicate Logic]] → [[chapter-05-failure-io-continuations|05 계속과 I/O]]
 - [[chapter-06-transition-semantics|06 transition semantics]] → [[chapter-09-csp|09 CSP]]
 - [[chapter-10-lambda-calculus|10 람다 계산]] → [[chapter-14-normal-order-language|14 정상 순서]]
 - [[chapter-15-simple-type-system|15 단순 타입]] → [[chapter-19-algol-like-languages|19 Algol]]

@@ -100,10 +100,24 @@ if (chapterTwoUnit && chapterTwoGuide && chapterTwoLongform) {
   assert(!chapterTwoText.includes("함수자"), "Chapter 2 must use functional, not the functor-like translation 함수자");
 }
 
+const chapterOne = chapterLongforms["predicate-logic"];
+const chapterOneUnit = units.find((unit) => unit.slug === "predicate-logic");
+if (chapterOne && chapterOneUnit) {
+  assert(chapterOneUnit.title.ko === chapterOneUnit.title.en, "Chapter 1 title must preserve the original English name");
+  assert(chapterOneUnit.eyebrow.ko === chapterOneUnit.eyebrow.en, "Chapter 1 subtitle must preserve the original English name");
+  assert(chapterOne.title.ko === chapterOne.title.en, "Chapter 1 longform title must be identical in both locales");
+  for (const section of chapterOne.sections) {
+    assert(section.title.ko === section.title.en, `predicate-logic/${section.id}: section title must preserve the original English name`);
+  }
+  for (const step of chapterOneUnit.steps) {
+    assert(step.title.ko === step.title.en, `predicate-logic/${step.id}: study-step title must preserve the original English name`);
+  }
+}
+
 const koreanCopy: string[] = [];
 collectKoreanCopy({ bookOverview, chapterGlossaries, chapterGuides, chapterLongforms, units }, koreanCopy);
 const koreanCopyText = koreanCopy.join("\n");
-for (const term of ["syntax", "semantics", "statement", "assertion", "constructor"]) {
+for (const term of ["syntax", "semantics", "statement", "assertion", "constructor", "Predicate Logic", "initial algebra"]) {
   assert(new RegExp(`\\b${term}\\b`, "i").test(koreanCopyText), `Korean edition must preserve the English term ${term}`);
 }
 
@@ -203,6 +217,8 @@ const forbiddenTranslations = [
   { translated: "의미론", preferred: "semantics" },
   { translated: "단언", preferred: "assertion" },
   { translated: "생성자", preferred: "constructor" },
+  { translated: "술어 논리", preferred: "Predicate Logic" },
+  { translated: "초기 대수", preferred: "initial algebra" },
 ];
 for (const file of terminologyFiles) {
   const body = await readFile(file, "utf8");

@@ -213,7 +213,7 @@ semantic soundness가 observation을 보존하는지 검사한다. full abstract
 >
 > chapter title과 section heading도 English canonical form을 사용한다. heading은 원문에서 어떤 object와 theorem을 다루는지 찾는 navigation key이므로 한국어 번역으로 바꾸지 않는다. 한국어 본문은 정의의 동기, equation의 읽는 순서, counterexample의 의미를 충분히 설명하되, heading과 technical term을 그대로 검색해 교재·강의 노트·추가 문헌의 같은 개념으로 이동할 수 있게 한다.
 >
-> Chapter 1의 initial algebra와 predicate logic도 연결 문맥에서 English를 먼저 둔다. initial algebra (초기 대수)는 finite constructor로 생성되는 syntax의 least-solution 관점을, predicate logic (술어 논리)은 Chapter 3 specification에 쓰일 assertion language를 가리킨다. 두 term을 한국어만으로 적으면 Chapter 2의 least fixed point와 executable Boolean expression 사이의 cross-chapter connection을 원문 terminology로 추적하기 어렵다.
+> Chapter 1의 initial algebra와 Predicate Logic도 연결 문맥에서 English를 그대로 둔다. initial algebra는 finite constructor로 생성되는 syntax의 least-solution 관점을, Predicate Logic은 Chapter 3 specification에 쓰일 assertion language를 가리킨다. 두 term을 번역하면 Chapter 2의 least fixed point와 executable Boolean expression 사이의 cross-chapter connection을 원문 terminology로 추적하기 어렵다.
 >
 > theorem name은 특히 축약하지 않는다. Coincidence Theorem for Commands는 initial state가 relevant free variable에서 agree할 때 termination과 relevant result가 함께 agree한다는 clause와 freely unassigned variable을 보존하는 frame clause를 가진다. Substitution Theorem for Commands는 relevant name에 대한 injectivity를 요구하고, Renaming Theorem for Commands는 fresh local binder의 α-renaming을 다룬다. 모두 한국어로 ‘일치 정리·치환 정리·이름변경 정리’라고만 쓰면 Chapter 1 theorem과 command theorem의 서로 다른 hypothesis를 구별하기 어렵다.
 
@@ -1499,7 +1499,7 @@ For binding exercises, compute `FV` and `FA` separately and first check that a s
 > [!abstract] Section focus
 > Chapter 2는 small command language를 통해 partial computation (부분 계산), recursion (재귀), binding, language extension, observational equivalence (관찰 동치)를 한 이론으로 묶는다.
 
-첫 연결은 syntax에서 domain으로 간다. finite constructor로 생성된 command에 syntax-directed semantics을 주되 `while` recursion은 command-denotation function space의 continuous functional로 옮긴다. bottom에서 시작한 chain의 limit가 finite execution으로 정당화되는 least denotation을 만든다. Chapter 1의 initial algebra (초기 대수)와 Chapter 2의 least fixed point는 둘 다 finite stage에서 생성된 것만 넣는 least solution (최소 해) 원리를 공유한다.
+첫 연결은 syntax에서 domain으로 간다. finite constructor로 생성된 command에 syntax-directed semantics을 주되 `while` recursion은 command-denotation function space의 continuous functional로 옮긴다. bottom에서 시작한 chain의 limit가 finite execution으로 정당화되는 least denotation을 만든다. Chapter 1의 initial algebra와 Chapter 2의 least fixed point는 둘 다 finite stage에서 생성된 것만 넣는 least solution 원리를 공유한다. 이 공통점을 이해하면 두 장을 하나의 설계 원리로 연결할 수 있다.
 
 둘째 연결은 binding에서 program structure로 간다. `newvar`는 name scope뿐 아니라 initialization과 normal termination 뒤 restoration을 semantic equation에 넣는다. command substitution은 writable location 때문에 variable renaming으로 제한되고 alias-free condition에서만 general semantic-preservation theorem을 얻는다. pure expression에서 안전해 보이던 substitution이 effectful language에서는 추가 side condition을 요구한다는 첫 사례다.
 

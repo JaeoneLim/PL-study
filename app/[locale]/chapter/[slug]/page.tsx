@@ -38,7 +38,7 @@ export default async function ChapterPage({ params }: Props) {
   if (!guide) notFound();
   const longform = chapterLongforms[slug];
   const { previous, next } = getUnitNeighbors(slug);
-  const headingsInEnglish = slug === "simple-imperative-language";
+  const headingsInEnglish = slug === "predicate-logic" || slug === "simple-imperative-language";
   const headingLocale = headingsInEnglish ? "en" : locale;
 
   return (

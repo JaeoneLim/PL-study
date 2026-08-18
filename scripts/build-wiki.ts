@@ -13,6 +13,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const date = "2026-08-03";
 const sourcePath = ".raw/private/reynolds-theories-of-programming-languages-2009.pdf";
 const chapterTwoSlug = "simple-imperative-language";
+const englishHeadingSlugs = new Set(["predicate-logic", chapterTwoSlug]);
 
 const filenames: Record<string, string> = {
   "predicate-logic": "chapter-01-predicate-logic",
@@ -73,7 +74,7 @@ function longformBlockMarkdown(block: LessonBlock, locale: Locale, headingLocale
 function longformMarkdown(slug: string) {
   const lesson = chapterLongforms[slug];
   if (!lesson) return "";
-  const headingsInEnglish = slug === chapterTwoSlug;
+  const headingsInEnglish = englishHeadingSlugs.has(slug);
   const headingLocale: Locale = headingsInEnglish ? "en" : "ko";
   const heading = (ko: string, en: string) => headingsInEnglish ? en : ko;
 
@@ -114,10 +115,12 @@ ${sections}`;
 function chapterNote(unit: (typeof units)[number]) {
   const guide = chapterGuides[unit.slug];
   const glossary = chapterGlossaries[unit.slug];
-  const headingsInEnglish = unit.slug === chapterTwoSlug;
+  const headingsInEnglish = englishHeadingSlugs.has(unit.slug);
   const headingLocale: Locale = headingsInEnglish ? "en" : "ko";
   const heading = (ko: string, en: string) => headingsInEnglish ? en : ko;
-  const chapterTitle = headingsInEnglish ? unit.title.en : `${unit.title.ko} (${unit.title.en})`;
+  const chapterTitle = headingsInEnglish || unit.title.ko === unit.title.en
+    ? unit.title.en
+    : `${unit.title.ko} (${unit.title.en})`;
   const related = units
     .filter((candidate) => candidate.part === unit.part && candidate.slug !== unit.slug)
     .slice(0, 3)
@@ -249,7 +252,7 @@ tags:
 
 ## 논지의 흐름
 
-1. 술어 논리에서 abstract syntax, 의미 함수, 추론 규칙, 바인딩을 분리한다.
+1. Predicate Logic에서 abstract syntax, semantic function, inference rule, binding을 분리한다.
 2. 작은 명령형 언어를 상태 변환, 도메인, 고정점, 프로그램 논리로 확장한다.
 3. 실패·입출력·비결정성·동시성을 계속, 재개, 전이, 흔적으로 설명한다.
 4. 람다 계산에서 적극/정상 순서 함수형 언어와 평가 기계를 유도한다.
@@ -264,7 +267,7 @@ tags:
 
 ## 파트 지도
 
-- [[chapter-01-predicate-logic|01 술어 논리]] → [[chapter-05-failure-io-continuations|05 계속과 I/O]]
+- [[chapter-01-predicate-logic|01 Predicate Logic]] → [[chapter-05-failure-io-continuations|05 계속과 I/O]]
 - [[chapter-06-transition-semantics|06 transition semantics]] → [[chapter-09-csp|09 CSP]]
 - [[chapter-10-lambda-calculus|10 람다 계산]] → [[chapter-14-normal-order-language|14 정상 순서]]
 - [[chapter-15-simple-type-system|15 단순 타입]] → [[chapter-19-algol-like-languages|19 Algol]]
@@ -393,7 +396,7 @@ const glossaryIndex = units.map((unit) => {
 await write("wiki/glossary.md", `# Glossary
 
 > [!info] 용어 정책과 읽는 법
-> 한국어 학습 노트에서도 syntax, semantics, statement, assertion, constructor와 그 표준 파생 표현은 영문으로 쓴다. 각 장의 링크를 열면 정확한 뜻, English companion, 하드웨어 중심의 엔지니어 관점을 함께 볼 수 있다.
+> 한국어 학습 노트에서도 syntax, semantics, statement, assertion, constructor, Predicate Logic, initial algebra와 그 표준 파생 표현은 영문으로 쓴다. 영문 term은 바로 이어지는 한국어 설명과 구현 예제로 뜻을 익힌다. 각 장의 링크를 열면 정확한 definition, English companion, 하드웨어 중심의 엔지니어 관점을 함께 볼 수 있다.
 
 ${glossaryIndex}
 `);

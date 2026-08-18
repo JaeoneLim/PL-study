@@ -29,10 +29,16 @@ actual material rather than a nominal estimate.
 
 ## Korean terminology policy
 
-The Korean edition preserves `syntax`, `semantics`, `statement`, `assertion`,
-and `constructor` in English so study-group discussion, note-taking, and search
-use the same vocabulary. Standard compounds such as `abstract syntax`,
-`denotational semantics`, and `syntax-directed` remain in English as well.
+The Korean edition keeps canonical technical terms in English so discussion,
+notes, documentation searches, and source reading use one stable vocabulary.
+This includes `syntax`, `semantics`, `statement`, `assertion`, `constructor`,
+`Predicate Logic`, and `initial algebra`, plus standard compounds such as
+`abstract syntax`, `denotational semantics`, and `syntax-directed`.
+
+English labels are not left unexplained. On first use, the Korean prose states
+the role of the concept in plain language and connects it to an implementation
+example. The goal is conceptual continuity, not a word-for-word translation or
+an English-word quota.
 
 Chapter 2 also keeps its title, section headings, and canonical semantic terms
 in English. Terms such as `state transformer`, `domain`, `predomain`, `bottom`,

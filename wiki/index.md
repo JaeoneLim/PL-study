@@ -6,7 +6,7 @@
 
 ## Chapter notes
 
-- [[chapter-01-predicate-logic|01. 술어 논리]] — 언어를 설명하는 네 가지 도구
+- [[chapter-01-predicate-logic|01. Predicate Logic]] — Four tools for describing languages
 - [[chapter-02-simple-imperative-language|02. The Simple Imperative Language]] — State transformers and least fixed points
 - [[chapter-03-program-specifications|03. 프로그램 명세와 증명]] — 부분 정확성, 전체 정확성, 불변식
 - [[chapter-04-arrays|04. 배열]] — 업데이트되는 함수와 higher-order assertion

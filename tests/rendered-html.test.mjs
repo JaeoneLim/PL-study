@@ -51,7 +51,7 @@ test("renders the Korean course map with every unit", async () => {
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /과정 지도/);
-  assert.match(html, /술어 논리/);
+  assert.match(html, /Predicate Logic/);
   assert.match(html, /The Simple Imperative Language/);
   assert.match(html, /Algol 계열 언어/);
   assert.match(html, /수학적 배경/);
@@ -94,7 +94,7 @@ test("renders engineer-friendly chapter glossaries in both languages", async () 
   assert.equal(koResponse.status, 200);
   assert.equal(enResponse.status, 200);
   const [ko, en] = await Promise.all([koResponse.text(), enResponse.text()]);
-  assert.match(ko, /술어 논리 용어집/);
+  assert.match(ko, /Predicate Logic glossary/);
   assert.match(ko, /엔지니어 관점/);
   assert.match(ko, /하드웨어 예시는 첫 mental model/);
   assert.match(ko, /semantics/);
@@ -123,18 +123,25 @@ test("renders Chapter 1 as a complete longform lesson", async () => {
   const response = await render("/ko/chapter/predicate-logic");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /1장 완전 학습 본문/);
+  assert.match(html, /Chapter 1 complete study text/);
   assert.match(html, /60.*분 읽기/s);
-  assert.match(html, /운반집합·constructor·초기 대수/);
+  assert.match(html, /Carriers, constructors, and the initial-algebra view/);
+  assert.match(html, /Denotational meaning as a function of state/);
+  assert.match(html, /Capture-avoiding substitution and the Substitution Theorem/);
   assert.match(html, /syntax, semantics, statement, assertion, constructor/);
-  assert.match(html, /일치 정리\(Coincidence Theorem\)/);
-  assert.match(html, /치환 정리\(Substitution Theorem\)/);
-  assert.match(html, /정의에서 손으로 계산하고 증명하기/);
-  assert.match(html, /압축 복습/);
+  assert.match(html, /exhaustive.*fold/s);
+  assert.match(html, /Coincidence Theorem/);
+  assert.match(html, /Substitution Theorem/);
+  assert.match(html, /Practice workshop: calculate and prove from the definitions/);
+  assert.match(html, /Chapter 1 again in four steps/);
   assert.ok((html.match(/class="math-display"/g) ?? []).length >= 6, "Chapter 1 notation boxes should use display math typesetting");
   assert.match(html, /class="math-inline"/);
   assert.match(html, /<math xmlns="http:\/\/www\.w3\.org\/1998\/Math\/MathML"/);
   assert.doesNotMatch(html, /katex-error/);
+  const headings = [...html.matchAll(/<h[1-3]\b[^>]*>([\s\S]*?)<\/h[1-3]>/g)]
+    .map((match) => match[1].replace(/<[^>]+>/g, ""));
+  assert.ok(headings.length >= 20, "Chapter 1 should render its complete heading hierarchy");
+  assert.deepEqual(headings.filter((heading) => /[가-힣]/.test(heading)), [], "Chapter 1 headings should remain in English");
 });
 
 test("renders Chapter 2 as a complete longform lesson", async () => {
@@ -151,7 +158,7 @@ test("renders Chapter 2 as a complete longform lesson", async () => {
   assert.match(ko, /The least fixed-point theorem and finite loop approximants/);
   assert.match(ko, /Defining soundness and full abstraction through observations/);
   assert.match(ko, /state transformer \(상태 변환 함수\)/);
-  assert.match(ko, /initial algebra \(초기 대수\)/);
+  assert.match(ko, /Chapter 1의 initial algebra와 Chapter 2/);
   assert.match(ko, /predicate-logic assertion language/);
   assert.doesNotMatch(ko, /함수자/);
   assert.ok((ko.match(/class="math-display"/g) ?? []).length >= 11, "Chapter 2 notation boxes should use display math typesetting");

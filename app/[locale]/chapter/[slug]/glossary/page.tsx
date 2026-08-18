@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const unit = getUnit(slug);
   const entries = getChapterGlossary(slug);
   if (!unit || !entries) return {};
-  const headingsInEnglish = slug === "simple-imperative-language";
+  const headingsInEnglish = slug === "predicate-logic" || slug === "simple-imperative-language";
 
   return {
     title: headingsInEnglish || locale === "en" ? `Chapter ${unit.number} glossary · ${unit.title.en}` : `${unit.number}장 용어집 · ${unit.title.ko}`,
@@ -43,7 +43,7 @@ export default async function ChapterGlossaryPage({ params }: Props) {
   const locale = localeParam;
   const { previous, next } = getUnitNeighbors(slug);
   const otherLocale = locale === "ko" ? "en" : "ko";
-  const headingsInEnglish = slug === "simple-imperative-language";
+  const headingsInEnglish = slug === "predicate-logic" || slug === "simple-imperative-language";
 
   return (
     <div className="site-shell glossary-shell" lang={locale}>

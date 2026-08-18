@@ -161,7 +161,7 @@ export default async function BookOverviewPage({ params }: Props) {
                 ))}
               </ol>
               <div className="overview-cta">
-                <div><p className="kicker">{locale === "ko" ? "이제 첫 번째 도구를 준비할 차례" : "NOW PREPARE THE FIRST TOOL"}</p><h2>{locale === "ko" ? "1장 · 술어 논리" : "Chapter 1 · Predicate Logic"}</h2></div>
+                <div><p className="kicker">{locale === "ko" ? "이제 첫 번째 도구를 준비할 차례" : "NOW PREPARE THE FIRST TOOL"}</p><h2>{locale === "ko" ? "1장 · Predicate Logic" : "Chapter 1 · Predicate Logic"}</h2></div>
                 <Link className="button primary" href={`/${locale}/chapter/${firstUnit.slug}`}>{locale === "ko" ? "학습 시작" : "Begin studying"}<span aria-hidden="true">→</span></Link>
               </div>
             </section>
