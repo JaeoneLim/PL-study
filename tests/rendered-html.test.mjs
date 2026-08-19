@@ -56,7 +56,8 @@ test("renders the Korean course map with every unit", async () => {
   assert.match(html, /Algol 계열 언어/);
   assert.match(html, /수학적 배경/);
   assert.match(html, /책 전체 개요부터/);
-  assert.match(html, /60 min\+/);
+  assert.match(html, /65 min\+/);
+  assert.match(html, /81 min\+/);
   assert.match(html, /요약본/);
 });
 
@@ -124,7 +125,11 @@ test("renders Chapter 1 as a complete longform lesson", async () => {
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /Chapter 1 complete study text/);
-  assert.match(html, /60.*분 읽기/s);
+  assert.match(html, /65.*분 읽기/s);
+  assert.match(html, /class="term-primer"/);
+  assert.match(html, /The Chapter 1 vocabulary pipeline/);
+  assert.match(html, /concrete syntax → parser → abstract syntax/);
+  assert.match(html, /One assertion traced through the vocabulary/);
   assert.match(html, /Carriers, constructors, and the initial-algebra view/);
   assert.match(html, /Denotational meaning as a function of state/);
   assert.match(html, /Capture-avoiding substitution and the Substitution Theorem/);
@@ -154,7 +159,27 @@ test("renders Chapter 2 as a complete longform lesson", async () => {
   const [ko, en] = await Promise.all([koResponse.text(), enResponse.text()]);
   assert.match(ko, /The Simple Imperative Language/);
   assert.match(ko, /Chapter 2 complete study text/);
-  assert.match(ko, /75.*분 읽기/s);
+  assert.match(ko, /81.*분 읽기/s);
+  assert.match(ko, /class="term-primer"/);
+  assert.match(ko, /The Chapter 2 vocabulary pipeline/);
+  assert.match(ko, /state set Σ → lifting → result domain Σ⊥/);
+  assert.match(ko, /One while command traced through the domain terms/);
+  const textbookSectionTitles = [
+    "2.1 Syntax",
+    "2.2 Denotational Semantics",
+    "2.3 Domains and Continuous Functions",
+    "2.4 The Least Fixed-Point Theorem",
+    "2.5 Variable Declarations and Substitution",
+    "2.6 Syntactic Sugar: The for Command",
+    "2.7 Arithmetic Errors",
+    "2.8 Soundness and Full Abstraction",
+  ];
+  let previousTextbookSection = -1;
+  for (const title of textbookSectionTitles) {
+    const position = ko.indexOf(title);
+    assert.ok(position > previousTextbookSection, `${title} should follow the textbook section order`);
+    previousTextbookSection = position;
+  }
   assert.match(ko, /The least fixed-point theorem and finite loop approximants/);
   assert.match(ko, /Defining soundness and full abstraction through observations/);
   assert.match(ko, /state transformer \(상태 변환 함수\)/);
@@ -167,6 +192,10 @@ test("renders Chapter 2 as a complete longform lesson", async () => {
   assert.match(ko, /<math xmlns="http:\/\/www\.w3\.org\/1998\/Math\/MathML"/);
   assert.doesNotMatch(ko, /katex-error/);
   assert.match(ko, /class="chapter-sidebar-resizer"/);
+  assert.match(ko, /class="chapter-sidebar-toggle"/);
+  assert.match(ko, /aria-controls="chapter-sidebar-content"/);
+  assert.match(ko, /aria-expanded="true"/);
+  assert.match(ko, /목차 닫기/);
   assert.match(ko, /role="separator"/);
   assert.match(ko, /aria-valuemin="210"/);
   assert.match(ko, /aria-valuemax="420"/);
@@ -175,7 +204,7 @@ test("renders Chapter 2 as a complete longform lesson", async () => {
   assert.ok(headings.length >= 20, "Chapter 2 should render its complete heading hierarchy");
   assert.deepEqual(headings.filter((heading) => /[가-힣]/.test(heading)), [], "Chapter 2 headings should remain in English");
   assert.match(en, /Chapter 2 complete study text/);
-  assert.match(en, /75.*MIN READ/s);
+  assert.match(en, /81.*MIN READ/s);
   assert.match(en, /The least fixed-point theorem and finite loop approximants/);
   assert.match(en, /Defining soundness and full abstraction through observations/);
 });

@@ -4,7 +4,8 @@ import type { CSSProperties, KeyboardEvent, PointerEvent, ReactNode } from "reac
 import { useEffect, useRef, useState } from "react";
 import type { Locale } from "../../content/types";
 
-const STORAGE_KEY = "semantic-atlas-sidebar-width-v1";
+const WIDTH_STORAGE_KEY = "semantic-atlas-sidebar-width-v1";
+const COLLAPSED_STORAGE_KEY = "semantic-atlas-sidebar-collapsed-v1";
 const DEFAULT_WIDTH = 270;
 const MIN_WIDTH = 210;
 const MAX_WIDTH = 420;
@@ -20,10 +21,18 @@ function clampWidth(width: number, viewportWidth = typeof window === "undefined"
 
 function readStoredWidth(): number {
   try {
-    const value = Number(window.localStorage.getItem(STORAGE_KEY));
+    const value = Number(window.localStorage.getItem(WIDTH_STORAGE_KEY));
     return Number.isFinite(value) && value > 0 ? clampWidth(value) : DEFAULT_WIDTH;
   } catch {
     return DEFAULT_WIDTH;
+  }
+}
+
+function readStoredCollapsed(): boolean {
+  try {
+    return window.localStorage.getItem(COLLAPSED_STORAGE_KEY) === "true";
+  } catch {
+    return false;
   }
 }
 
@@ -37,6 +46,7 @@ export function ResizableChapterLayout({
   locale: Locale;
 }) {
   const [sidebarWidth, setSidebarWidth] = useState(DEFAULT_WIDTH);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [dragging, setDragging] = useState(false);
   const dragStart = useRef({ pointerX: 0, width: DEFAULT_WIDTH });
   const currentWidth = useRef(DEFAULT_WIDTH);
@@ -46,6 +56,7 @@ export function ResizableChapterLayout({
       const storedWidth = readStoredWidth();
       currentWidth.current = storedWidth;
       setSidebarWidth(storedWidth);
+      setSidebarCollapsed(readStoredCollapsed());
     });
 
     const keepWidthInViewport = () => {
@@ -71,11 +82,23 @@ export function ResizableChapterLayout({
     setSidebarWidth(next);
     if (persist) {
       try {
-        window.localStorage.setItem(STORAGE_KEY, String(next));
+        window.localStorage.setItem(WIDTH_STORAGE_KEY, String(next));
       } catch {
         // The layout remains usable when storage is unavailable.
       }
     }
+  };
+
+  const toggleSidebar = () => {
+    setSidebarCollapsed((collapsed) => {
+      const next = !collapsed;
+      try {
+        window.localStorage.setItem(COLLAPSED_STORAGE_KEY, String(next));
+      } catch {
+        // The toggle remains usable when storage is unavailable.
+      }
+      return next;
+    });
   };
 
   const startDragging = (event: PointerEvent<HTMLDivElement>) => {
@@ -116,26 +139,41 @@ export function ResizableChapterLayout({
   } as CSSProperties;
 
   return (
-    <div className={`chapter-layout${dragging ? " is-dragging" : ""}`} style={style}>
-      {sidebar}
-      <div
-        aria-label={locale === "ko" ? "목차 너비 조절" : "Resize contents sidebar"}
-        aria-orientation="vertical"
-        aria-valuemax={MAX_WIDTH}
-        aria-valuemin={MIN_WIDTH}
-        aria-valuenow={sidebarWidth}
-        className="chapter-sidebar-resizer"
-        onDoubleClick={() => updateWidth(DEFAULT_WIDTH, true)}
-        onKeyDown={resizeWithKeyboard}
-        onPointerCancel={stopDragging}
-        onPointerDown={startDragging}
-        onPointerMove={drag}
-        onPointerUp={stopDragging}
-        role="separator"
-        tabIndex={0}
-        title={locale === "ko" ? "드래그하거나 화살표 키로 목차 너비를 조절합니다" : "Drag or use arrow keys to resize the contents sidebar"}
-      >
-        <span aria-hidden="true">⋮</span>
+    <div className={`chapter-layout${dragging ? " is-dragging" : ""}${sidebarCollapsed ? " is-sidebar-collapsed" : ""}`} style={style}>
+      <div className="chapter-sidebar-panel" id="chapter-sidebar-content">
+        {sidebar}
+      </div>
+      <div className="chapter-sidebar-controls">
+        <button
+          aria-controls="chapter-sidebar-content"
+          aria-expanded={!sidebarCollapsed}
+          aria-label={locale === "ko" ? (sidebarCollapsed ? "목차 열기" : "목차 닫기") : (sidebarCollapsed ? "Open contents sidebar" : "Close contents sidebar")}
+          className="chapter-sidebar-toggle"
+          onClick={toggleSidebar}
+          title={locale === "ko" ? (sidebarCollapsed ? "목차 열기" : "목차 닫기") : (sidebarCollapsed ? "Open contents sidebar" : "Close contents sidebar")}
+          type="button"
+        >
+          <span aria-hidden="true">{sidebarCollapsed ? "›" : "‹"}</span>
+        </button>
+        {!sidebarCollapsed && <div
+          aria-label={locale === "ko" ? "목차 너비 조절" : "Resize contents sidebar"}
+          aria-orientation="vertical"
+          aria-valuemax={MAX_WIDTH}
+          aria-valuemin={MIN_WIDTH}
+          aria-valuenow={sidebarWidth}
+          className="chapter-sidebar-resizer"
+          onDoubleClick={() => updateWidth(DEFAULT_WIDTH, true)}
+          onKeyDown={resizeWithKeyboard}
+          onPointerCancel={stopDragging}
+          onPointerDown={startDragging}
+          onPointerMove={drag}
+          onPointerUp={stopDragging}
+          role="separator"
+          tabIndex={0}
+          title={locale === "ko" ? "드래그하거나 화살표 키로 목차 너비를 조절합니다" : "Drag or use arrow keys to resize the contents sidebar"}
+        >
+          <span aria-hidden="true">⋮</span>
+        </div>}
       </div>
       {children}
     </div>

@@ -332,9 +332,17 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .learning-goals ol { display: grid; gap: 13px; margin: 0; padding: 0; counter-reset: goal; list-style: none; }
 .learning-goals li { position: relative; padding-left: 28px; color: var(--ink-soft); font-size: 12px; line-height: 1.55; counter-increment: goal; }
 .learning-goals li::before { content: counter(goal, decimal-leading-zero); position: absolute; left: 0; top: 2px; color: var(--blue); font: 700 9px/1 var(--mono); }
-.chapter-layout { display: grid; width: 100%; grid-template-columns: var(--chapter-sidebar-width, 270px) 16px minmax(0, 1fr); gap: clamp(18px, 2.2vw, 34px); align-items: start; padding: 68px clamp(24px, 4vw, 64px) 110px; }
-.chapter-toc { position: sticky; top: 88px; min-width: 0; max-height: calc(100vh - 108px); overflow-y: auto; border-top: 2px solid var(--ink); padding: 16px 8px 18px 0; }
-.chapter-sidebar-resizer { position: sticky; top: 88px; display: grid; width: 16px; height: calc(100vh - 108px); place-items: center; border-radius: 8px; color: var(--ink-soft); cursor: col-resize; touch-action: none; user-select: none; transition: color 140ms ease, background 140ms ease; }
+.chapter-layout { display: grid; width: 100%; grid-template-areas: "sidebar controls content"; grid-template-columns: var(--chapter-sidebar-width, 270px) 28px minmax(0, 1fr); gap: clamp(18px, 2.2vw, 34px); align-items: start; padding: 68px clamp(24px, 4vw, 64px) 110px; }
+.chapter-layout.is-sidebar-collapsed { grid-template-areas: "controls content"; grid-template-columns: 28px minmax(0, 1fr); }
+.chapter-sidebar-panel { position: sticky; top: 88px; grid-area: sidebar; min-width: 0; align-self: start; }
+.chapter-layout.is-sidebar-collapsed .chapter-sidebar-panel { display: none; }
+.chapter-toc { min-width: 0; max-height: calc(100vh - 108px); overflow-y: auto; border-top: 2px solid var(--ink); padding: 16px 8px 18px 0; }
+.chapter-sidebar-controls { position: sticky; top: 88px; grid-area: controls; display: flex; width: 28px; height: calc(100vh - 108px); align-items: center; flex-direction: column; gap: 8px; }
+.chapter-sidebar-toggle { position: relative; z-index: 2; display: grid; width: 28px; height: 28px; flex: 0 0 auto; place-items: center; border: 1px solid var(--ink); border-radius: 50%; background: var(--paper-bright); color: var(--ink); cursor: pointer; transition: border-color 140ms ease, background 140ms ease, color 140ms ease, transform 140ms ease; }
+.chapter-sidebar-toggle span { font: 800 20px/1 var(--serif); transform: translateY(-1px); }
+.chapter-sidebar-toggle:hover, .chapter-sidebar-toggle:focus-visible { border-color: var(--blue); background: var(--blue); color: white; outline: 0; }
+.chapter-sidebar-toggle:focus-visible { box-shadow: 0 0 0 3px var(--acid); }
+.chapter-sidebar-resizer { position: relative; display: grid; width: 16px; min-height: 0; flex: 1 1 auto; place-items: center; border-radius: 8px; color: var(--ink-soft); cursor: col-resize; touch-action: none; user-select: none; transition: color 140ms ease, background 140ms ease; }
 .chapter-sidebar-resizer::before { content: ""; position: absolute; inset-block: 0; left: 50%; width: 1px; background: var(--line); transform: translateX(-50%); }
 .chapter-sidebar-resizer span { position: relative; z-index: 1; display: grid; width: 14px; height: 42px; place-items: center; border: 1px solid var(--line); border-radius: 8px; background: var(--paper-bright); font: 800 15px/1 var(--mono); }
 .chapter-sidebar-resizer:hover, .chapter-sidebar-resizer:focus-visible, .chapter-layout.is-dragging .chapter-sidebar-resizer { color: var(--blue); background: rgba(37,79,232,.08); outline: 0; }
@@ -348,9 +356,19 @@ body.is-resizing-sidebar, body.is-resizing-sidebar * { cursor: col-resize !impor
 .toc-terms { margin-top: 30px; border-top: 1px solid var(--ink); padding-top: 16px; }
 .toc-terms > span { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--line); padding: 8px 0; font-size: 10px; }
 .toc-terms small { color: var(--ink-soft); font-size: 8px; text-align: right; }
-.lesson-content { width: 100%; min-width: 0; }
+.lesson-content { grid-area: content; width: 100%; min-width: 0; }
 .chapter-deep-guide { scroll-margin-top: 98px; border-top: 3px solid var(--blue); padding: 28px 0 82px; }
 .deep-guide-purpose { margin: 0 0 34px; color: var(--ink-soft); font-size: 15px; line-height: 1.85; }
+.term-primer { margin: 0 0 38px; border: 1px solid var(--ink); background: var(--paper-bright); }
+.term-primer > header { padding: 25px 27px 23px; border-bottom: 1px solid var(--ink); }
+.term-primer > header > p { margin: 0 0 10px; color: var(--blue); font: 800 9px/1 var(--mono); letter-spacing: .11em; }
+.term-primer h3 { margin: 0 0 10px; font: 600 clamp(23px,3vw,32px)/1.2 var(--serif); letter-spacing: -.02em; }
+.term-primer > header > div { max-width: 780px; color: var(--ink-soft); font-size: 13px; line-height: 1.8; }
+.term-primer ol { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1px; margin: 0; padding: 1px; background: var(--line); list-style: none; counter-reset: terminology-path; }
+.term-primer li { position: relative; min-width: 0; padding: 23px 24px 23px 56px; background: var(--paper-bright); counter-increment: terminology-path; }
+.term-primer li::before { content: counter(terminology-path, decimal-leading-zero); position: absolute; top: 25px; left: 22px; color: var(--blue); font: 700 9px/1 var(--mono); }
+.term-primer code { display: block; overflow-wrap: anywhere; color: var(--blue-dark); font: 700 11px/1.55 var(--mono); white-space: normal; }
+.term-primer li p { margin: 10px 0 0; color: var(--ink-soft); font-size: 12px; line-height: 1.75; }
 .section-brief-list { display: grid; border-top: 1px solid var(--ink); }
 .section-brief-list article { display: grid; grid-template-columns: 92px 1fr; gap: 24px; border-bottom: 1px solid var(--line); padding: 23px 0; }
 .section-brief-list article > span { padding-top: 3px; color: var(--blue); font: 700 9px/1.4 var(--mono); }
@@ -381,6 +399,11 @@ body.is-resizing-sidebar, body.is-resizing-sidebar * { cursor: col-resize !impor
 .longform-section-header h2 { max-width: 680px; margin: 0 0 17px; font: 600 clamp(30px, 4vw, 46px)/1.15 var(--serif); letter-spacing: -.03em; }
 .longform-lead { max-width: 690px; color: var(--ink-soft); font: 500 18px/1.7 var(--serif); }
 .longform-blocks { display: grid; gap: 30px; padding-left: 95px; }
+.longform-subsection { scroll-margin-top: 98px; border-top: 1px solid var(--ink); padding: 28px 0 4px; }
+.longform-subsection:first-child { border-top: 0; padding-top: 0; }
+.longform-subsection > p { margin: 0 0 9px; color: var(--blue); font: 750 9px/1.4 var(--mono); letter-spacing: .06em; }
+.longform-subsection h3 { margin: 0 0 10px; font: 600 clamp(22px, 3vw, 31px)/1.25 var(--serif); letter-spacing: -.015em; }
+.longform-subsection > div { max-width: 760px; color: var(--ink-soft); font-size: 13px; line-height: 1.8; }
 .longform-prose { display: grid; gap: 19px; }
 .longform-prose p, .longform-notation > p, .longform-callout > p, .worked-example p, .longform-list li, .section-checkpoints li { overflow-wrap: anywhere; }
 .longform-prose p { margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 2; }
@@ -545,9 +568,11 @@ body.is-resizing-sidebar, body.is-resizing-sidebar * { cursor: col-resize !impor
   .source-note { grid-template-columns: 1fr; gap: 30px; }
   .chapter-hero-grid { grid-template-columns: 1fr; }
   .learning-goals { max-width: 620px; }
-  .chapter-layout { grid-template-columns: 1fr; }
-  .chapter-toc { position: static; display: grid; max-height: none; grid-template-columns: 1fr 1fr; gap: 30px; overflow: visible; padding-right: 0; }
-  .chapter-sidebar-resizer { display: none; }
+  .chapter-layout, .chapter-layout.is-sidebar-collapsed { grid-template-areas: "sidebar" "content"; grid-template-columns: 1fr; }
+  .chapter-layout.is-sidebar-collapsed .chapter-sidebar-panel { display: block; }
+  .chapter-sidebar-panel { position: static; }
+  .chapter-toc { display: grid; max-height: none; grid-template-columns: 1fr 1fr; gap: 30px; overflow: visible; padding-right: 0; }
+  .chapter-sidebar-controls { display: none; }
   .toc-terms { margin-top: 0; border-top: 0; padding-top: 0; }
   .glossary-hero-grid { grid-template-columns: 1fr; }
   .glossary-reading-rule { max-width: 620px; }
@@ -560,6 +585,7 @@ body.is-resizing-sidebar, body.is-resizing-sidebar * { cursor: col-resize !impor
   .overview-stats { width: min(540px,100%); }
   .overview-layout { grid-template-columns: 1fr; }
   .overview-toc { position: static; }
+  .term-primer ol { grid-template-columns: 1fr; }
   .longform-blocks { padding-left: 0; }
   .section-checkpoints { margin-left: 0; }
 }

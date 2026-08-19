@@ -122,35 +122,90 @@ full abstraction (완전 추상성)은 semantic equality와 어떤 program conte
 >
 > **English:** Turns a small imperative language into a complete mathematical object and introduces the minimum domain theory needed to interpret iteration and recursion.
 
-### §2.1–2.2 · Syntax, states, and semantic functions
+## The Chapter 2 vocabulary pipeline
 
-expression은 state에서 value로, command는 possibly nonterminating state transformer (비종료 가능 상태 변환 함수)로 해석된다. undefinedness는 arithmetic error가 아니라 nontermination을 먼저 나타낸다.
+> [!tip] First-pass terminology map
+> 2장의 domain-theory term은 while에 meaning을 주기 위해 순서대로 필요한 부품이다. 아래 경로에서 앞 term 없이 뒤 term을 정의할 수 없다는 점을 먼저 확인하고, longform의 while x>0 do x:=x-1 계산으로 내려간다.
+>
+> **English:** Chapter 2's domain-theory terms are ordered dependencies needed to give while a meaning. Read the path as a construction in which each later term depends on the earlier ones, then follow the concrete loop calculation in the longform lesson.
 
-**English — Syntax, states, and semantic functions:** Expressions map states to values, while commands are partial functions from states to states. Undefinedness initially represents nontermination rather than arithmetic failure.
+### `state + command → state transformer`
 
-### §2.3–2.4 · Domains, continuity, and least fixed points
+state는 한 순간의 variable-value assignment이고 command denotation은 initial state에서 final state로 가는 whole function이다. 한 번의 state update와 whole state transformer를 구분한다.
 
-partial information을 information order로 정렬하고 chain의 least upper bound (lub)를 사용한다. continuous function의 least fixed point는 `while` denotation을 finite approximant의 limit로 구성한다.
+**English:** A state is one variable assignment; a command denotation is the whole function from initial to final states. Distinguish one state update from the entire state transformer.
 
-**English — Domains, continuity, and least fixed points:** Partial information is ordered and increasing chains receive least upper bounds. A continuous function’s least fixed point constructs while-loop meaning as the limit of finite approximations.
+### `state set Σ → lifting → result domain Σ⊥`
 
-### §2.5–2.6 · Declarations, substitution, and syntactic sugar
+lifting은 ordinary state set에 fresh bottom을 추가한다. normal state는 termination result이고 ⊥는 error나 빈 state가 아니라 final state가 생산되지 않은 nontermination이다.
 
-local variable declaration의 denotation을 state update와 restoration으로 설명한다. `for` command는 core language로 desugar되는 derived form이며 translation은 variable capture와 evaluation 횟수를 보존해야 한다.
+**English:** Lifting adds a fresh bottom to the ordinary state set. A normal state is a termination result; ⊥ denotes nontermination with no final state, not an error or empty state.
 
-**English — Declarations, substitution, and syntactic sugar:** Local declarations are compared through environment extension and substitution. A for-command is derived syntax whose translation must preserve binding and evaluation behavior.
+### `information order → chain → least upper bound`
 
-### §2.7 · Arithmetic-error policy
+information order는 result의 수치가 아니라 알려진 정도를 비교한다. finite approximant가 증가하면 chain이 되고 lub는 모든 finite stage가 정당화한 정보를 모은 limit다.
 
-unchecked arithmetic은 정확히 지정된 total hardware function을 사용할 수 있다. checked arithmetic은 별도 error result와 propagation rule이 필요하지만, 이 장은 Chapter 3의 predicate-logic assertion language와 연결하기 위해 그 확장을 보류한다.
+**English:** Information order compares how much of a result is known, not numeric magnitude. Increasing finite approximants form a chain whose least upper bound collects all finitely justified information.
 
-**English — Arithmetic-error policy:** Unchecked arithmetic can use precisely specified total hardware functions. Checked arithmetic requires explicit error results and propagation rules, but this chapter defers that extension to preserve the connection with Chapter 3's assertion language.
+### `candidate transformer → functional F → finite approximants`
 
-### §2.8 · Soundness and full abstraction
+functional은 state가 아니라 candidate state transformer를 받아 loop를 한 번 더 unfold한 transformer를 만든다. ⊥, F⊥, F²⊥, …가 허용된 finite unfolding 횟수별 loop meaning이다.
 
-semantic soundness가 observation을 보존하는지 검사한다. full abstraction (완전 추상성)은 semantic equality와 contextual equivalence (문맥 동치)의 정확한 일치를 요구한다.
+**English:** A functional consumes a candidate state transformer, not a state, and adds one loop unfolding. ⊥, F⊥, F²⊥, … are loop meanings with increasing finite unfolding budgets.
 
-**English — Soundness and full abstraction:** Checks whether denotations preserve operational observations and identify only programs no context can distinguish. Full abstraction asks denotational and contextual equivalence to coincide.
+### `continuity + approximant chain → least fixed point μF`
+
+continuity가 functional의 limit 보존을 보장하므로 approximant chain의 lub가 fixed point가 된다. bottom에서 시작했기 때문에 arbitrary solution이 아니라 finite execution으로 정당화된 least fixed point다.
+
+**English:** Continuity makes the functional preserve the chain limit, turning the approximants' lub into a fixed point. Starting from bottom selects the least fixed point justified by finite execution rather than an arbitrary solution.
+
+### §2.1 · Syntax
+
+integer expression, Boolean expression, command의 세 phrase class와 constructor를 먼저 정한다. 다음 장의 Predicate Logic과 맞추기 위해 expression syntax을 의도적으로 가깝게 선택한 이유도 이 절에서 설명한다.
+
+**English — Syntax:** Defines the three phrase classes—integer expressions, Boolean expressions, and commands—and explains why expression syntax is deliberately aligned with the Predicate Logic used in the next chapter.
+
+### §2.2 · Denotational Semantics
+
+expression semantic function을 확인한 뒤 state set과 possibly nonterminating state transformer를 정의한다. assignment, skip, sequencing, conditional의 equation을 계산하고 마지막에 `while`의 recursive equation이 해를 아직 선택하지 못한다는 문제를 남긴다.
+
+**English — Denotational Semantics:** Introduces states and possibly nonterminating state transformers after reusing expression semantics, calculates assignment, skip, sequencing, and conditionals, and ends with the unresolved recursive equation for `while`.
+
+### §2.3 · Domains and Continuous Functions
+
+information order, chain, least upper bound, predomain, domain, lifting을 정의한 뒤 monotone function과 continuous function으로 이동한다. pointwise function domain이 command denotation을 ordered object로 만드는 과정까지 따른다.
+
+**English — Domains and Continuous Functions:** Defines information orders, chains, least upper bounds, predomains, domains, and lifting before introducing monotone and continuous functions and pointwise function domains.
+
+### §2.4 · The Least Fixed-Point Theorem
+
+continuous functional의 least fixed point를 bottom에서 시작한 finite approximant chain의 lub로 구성한다. 이 theorem을 `while` functional에 적용해 loop denotation을 얻는다.
+
+**English — The Least Fixed-Point Theorem:** Constructs the least fixed point of a continuous functional as the least upper bound of finite approximants from bottom, then applies the theorem to the `while` functional.
+
+### §2.5 · Variable Declarations and Substitution
+
+local declaration의 initialization, scope, restoration을 정의한 뒤 free variable과 assigned variable의 coincidence 성질을 세운다. 그 결과를 command substitution, fresh renaming, aliasing side condition에 적용한다.
+
+**English — Variable Declarations and Substitution:** Defines initialization, scope, and restoration for local declarations, establishes coincidence properties for free and assigned variables, and applies them to command substitution, fresh renaming, and aliasing conditions.
+
+### §2.6 · Syntactic Sugar: The for Command
+
+`for` command를 core language로 translate하며 bound의 평가 횟수, empty interval, control variable의 scope와 fresh-name condition을 보존하는지 순서대로 검사한다.
+
+**English — Syntactic Sugar: The for Command:** Translates the `for` command into the core language while checking bound evaluation, empty intervals, control-variable scope, and fresh-name conditions.
+
+### §2.7 · Arithmetic Errors
+
+arithmetic error를 explicit result로 만들 때 expression type과 propagation equation이 어떻게 달라지는지 검토한다. 이어 Chapter 3의 predicate-logic assertion language와 연결하기 위해 이 확장을 보류하는 이유를 설명한다.
+
+**English — Arithmetic Errors:** Examines how explicit arithmetic errors would change expression types and propagation equations, then explains why the extension is deferred to preserve the connection with Chapter 3 assertions.
+
+### §2.8 · Soundness and Full Abstraction
+
+program context와 observation을 먼저 정한 뒤 semantic soundness와 full abstraction을 구분한다. denotational equality와 contextual equivalence가 선택한 관찰 기준에서 정확히 맞는지 검사한다.
+
+**English — Soundness and Full Abstraction:** Fixes program contexts and observations before distinguishing semantic soundness from full abstraction and testing whether denotational and contextual equivalence coincide.
 
 ## What to retain
 
@@ -167,7 +222,7 @@ semantic soundness가 observation을 보존하는지 검사한다. full abstract
 > - fixed-point equation만 쓰는 것으로는 부족하다. 왜 least fixed point를 선택하는지 설명해야 한다.
 >   - EN: Writing a fixed-point equation is insufficient; explain why the least fixed point is selected.
 
-# Chapter 2 complete study text (75 MIN READ)
+# Chapter 2 complete study text (81 MIN READ)
 
 이 본문은 교재 2장의 논증 순서를 따라가면서 각 정의가 해결하는 문제를 독립적으로 다시 구성한 학습 해설이다. The Simple Imperative Language (단순 명령형 언어)가 익숙해 보여도 핵심은 실행법을 아는 데 있지 않다. possibly nonterminating command (종료하지 않을 수 있는 명령)에 수학적 의미를 주고, iteration (반복)을 finite approximant (유한 근사)의 limit (극한)로 정당화하며, local variable (지역 변수)와 aliasing (별칭)이 substitution law (치환 법칙)를 어떻게 바꾸는지 정확히 설명하는 것이 목표다.
 
@@ -186,87 +241,14 @@ semantic soundness가 observation을 보존하는지 검사한다. full abstract
 >
 > Korean prose explains motivation, calculation order, and likely misconceptions, while canonical English terms keep each explanation attached to the exact textbook concept. Read the English term together with its type so that state transformer, domain, functional, and bottom are not mistaken for nearby but different notions.
 
-## 01. Isolating imperative computation as state change — Introduction · p. 24 · 4 min
+## 2.1 Syntax — §2.1 · pp. 24–26 · 5 min
 
 > [!abstract] Section focus
-> 익숙한 language를 좁게 만들면 nontermination (비종료)·iteration (반복)·locality (지역성)라는 새 이론만 선명하게 볼 수 있다.
+> 교재의 첫 단계 그대로 integer expression, Boolean expression, command라는 세 phrase class와 constructor를 정하고, 이 syntax 선택이 다음 장의 Predicate Logic과 어떻게 맞물리는지 설명한다.
 
-실제 language는 imperative state change (명령형 상태 변화)와 functional computation (함수형 계산)을 섞는다. 2장은 그 상호작용을 잠시 미루고 assignment (대입), sequencing (순차 실행), conditional (조건문), `while`, local variable declaration (지역 변수 선언)만 남긴다. 이 language는 작지만 임의로 오래 실행할 수 있고 integer variable을 갱신할 수 있으므로 imperative computation의 핵심 문제를 이미 품고 있다. 뒤의 array, failure, I/O, nondeterminism, concurrency는 이 core language에 observation (관찰)과 effect (효과)를 하나씩 보태는 extension이다.
+### Three phrase classes and command constructors — §2.1 · pp. 24–26
 
-1장의 assertion은 모든 state (상태)에서 반드시 truth value (진릿값)를 냈다. 반면 command는 initial state (초기 상태)에서 출발해 final state (최종 상태)를 주지 않을 수 있다. `while true do skip`은 well-formed command지만 어떤 initial state에서도 terminate하지 않는다. 따라서 semantic codomain (의미 공역)을 먼저 바꾸지 않으면 모든 command에 denotation (의미)을 주겠다는 약속부터 실패한다. bottom element `⊥`는 이런 final result의 부재를 semantic domain 안에 드러낸다.
-
-이 장의 두 번째 변화는 name이 읽기 전용이 아니라 writable location (쓰기 가능한 저장 위치)이 된다는 점이다. assertion에서 variable을 다른 expression으로 substitute하는 일은 값을 다시 표현하는 문제였다. command에서 variable은 assignment target (대입 대상)에도 나타나므로 substitution은 storage location 자체를 합치거나 나눌 수 있다. 서로 다른 name을 하나로 보내는 순간 aliasing이 생기고, 원래 독립이던 assignment의 순서가 observable해진다.
-
-### Four problems solved in Chapter 2
-
-- command denotation: initial state (초기 상태)에서 normal final state (정상 최종 상태) 또는 nontermination으로 가는 state transformer (상태 변환 함수)를 정의한다.
-- iteration: recursive equation (재귀 방정식)의 여러 solution 중 finite execution (유한 실행)이 정당화하는 least solution을 고른다.
-- binding과 substitution: local variable의 scope (범위), restoration (복원), free variable (자유 변수), assignment target, aliasing condition을 분리한다.
-- 추상화의 적절성: 선택한 관찰과 context에 비해 semantics이 너무 거칠거나 세밀하지 않은지 검사한다.
-
-> [!tip] How to read the canonical terminology
-> 이 장에서는 English canonical term을 먼저 읽고 괄호 안의 한국어를 이해를 돕는 gloss로 읽는다. 예를 들어 state transformer (상태 변환 함수)는 단순히 state의 일부를 바꾼다는 말이 아니라 command의 denotation 전체, 즉 initial state를 받아 final state 또는 nontermination을 돌려주는 function을 가리킨다. 한국어 설명이 자연스럽더라도 이 technical identity를 state transformer라는 이름으로 계속 추적해야 정의와 theorem을 같은 대상으로 연결할 수 있다.
->
-> domain, predomain, bottom, lifting, chain, least upper bound (lub), continuous function은 서로 독립된 번역어 목록이 아니라 하나의 수학적 construction을 이루는 용어다. domain은 일반적인 입력 범위가 아니라 information order와 chain limit를 갖는 구조이고, bottom은 빈 state가 아니라 이 장의 lifted result space에서 final result가 없음을 나타내는 least element다. 따라서 각 term을 한국어만으로 바꾸면 function domain이나 arithmetic order 같은 다른 개념과 경계가 흐려질 수 있다.
->
-> least fixed point와 functional도 원문 term을 유지한다. `F`는 category theory의 functor가 아니라 command denotation을 입력받아 더 정교한 command denotation을 만드는 higher-order function, 즉 functional이다. semantic soundness와 full abstraction 역시 proof-rule soundness나 일반적인 완전성과 다른 정확한 logical direction을 가지므로 English term을 기준으로 식과 설명을 함께 읽는다.
->
-> chapter title과 section heading도 English canonical form을 사용한다. heading은 원문에서 어떤 object와 theorem을 다루는지 찾는 navigation key이므로 한국어 번역으로 바꾸지 않는다. 한국어 본문은 정의의 동기, equation의 읽는 순서, counterexample의 의미를 충분히 설명하되, heading과 technical term을 그대로 검색해 교재·강의 노트·추가 문헌의 같은 개념으로 이동할 수 있게 한다.
->
-> Chapter 1의 initial algebra와 Predicate Logic도 연결 문맥에서 English를 그대로 둔다. initial algebra는 finite constructor로 생성되는 syntax의 least-solution 관점을, Predicate Logic은 Chapter 3 specification에 쓰일 assertion language를 가리킨다. 두 term을 번역하면 Chapter 2의 least fixed point와 executable Boolean expression 사이의 cross-chapter connection을 원문 terminology로 추적하기 어렵다.
->
-> theorem name은 특히 축약하지 않는다. Coincidence Theorem for Commands는 initial state가 relevant free variable에서 agree할 때 termination과 relevant result가 함께 agree한다는 clause와 freely unassigned variable을 보존하는 frame clause를 가진다. Substitution Theorem for Commands는 relevant name에 대한 injectivity를 요구하고, Renaming Theorem for Commands는 fresh local binder의 α-renaming을 다룬다. 모두 한국어로 ‘일치 정리·치환 정리·이름변경 정리’라고만 쓰면 Chapter 1 theorem과 command theorem의 서로 다른 hypothesis를 구별하기 어렵다.
-
-> [!tip] Bottom is not an empty state
-> state `σ`는 모든 variable에 integer를 배정한다. bottom `⊥`는 그런 배정 중 하나가 아니라 final state가 전혀 생산되지 않았음을 나타내는 별도 result다. 따라서 `σ ⊑ τ`를 variable value의 수치 비교로 읽지 말고 computation result에 관한 정보 비교로 읽어야 한다.
-
-> [!question] Retrieval check
-> 1. Chapter 1의 semantic codomain (의미 공역)만으로 `while true do skip`을 해석할 수 없는 이유를 말하라.
-> 2. command의 name substitution (이름 치환)이 expression에서보다 위험한 이유를 assignment target (대입 대상)과 연결해 설명하라.
-
-### English companion — Isolating imperative computation as state change
-
-*Restricting a familiar language makes the new theory of divergence, iteration, and locality visible.*
-
-Real languages mix imperative state change with functional computation. Chapter 2 postpones their interaction and retains assignment, sequencing, conditionals, `while`, and local declarations. This language is small but can run arbitrarily long and update integer variables, so it already contains the central semantic problems of imperative computation. Later chapters add arrays, failure, I/O, nondeterminism, and concurrency to this core.
-
-Chapter 1 assertions always produced a truth value. A command may start in a state and never produce a final state: `while true do skip` is perfectly valid syntax but terminates from no initial state. The semantic codomain must therefore change before every command can receive a denotation. Bottom `⊥` makes this absence of a result explicit inside the model.
-
-The second change is that names become writable locations rather than merely readable inputs. In assertions, substitution re-expressed values. In commands, variables also occur on assignment's left side, so substitution may merge or separate storage locations. Mapping distinct names to one name creates aliasing and can make the order of previously independent assignments observable.
-
-### Four problems solved in Chapter 2
-
-- Command meaning: define a function from an initial state to either a normal final state or divergence.
-- Iteration: select, among many solutions to a recursive equation, the least one justified by finite execution.
-- Binding and substitution: separate scope, restoration, free variables, assigned variables, and aliasing conditions.
-- Adequacy of abstraction: check whether semantics is too coarse or too fine for the chosen observations and contexts.
-
-> [!tip] How to read the canonical terminology
-> Read the English canonical term first and treat the Korean parenthetical as a gloss. A state transformer is the complete command denotation from an initial state to a final state or nontermination, not merely an update to part of a state. Keeping the English identity visible connects definitions and theorems to the same object.
->
-> Domain, predomain, bottom, lifting, chain, least upper bound, and continuous function form one mathematical construction. Here domain is not merely an input range, and bottom is not an empty state. Replacing these terms with Korean-only labels can blur their boundaries with other concepts.
->
-> Least fixed point and functional likewise remain canonical. Here `F` is a higher-order function on command denotations, not a category-theoretic functor. Semantic soundness and full abstraction also have exact logical directions distinct from proof-rule soundness and ordinary completeness.
->
-> Chapter and section headings remain in their canonical English forms because they are navigation keys into the textbook and related literature. Korean prose supplies motivation and explanation without replacing those searchable terms.
->
-> Cross-chapter references likewise retain initial algebra and predicate logic in English. They connect finite syntax generation to least fixed points and executable Boolean expressions to the assertion language used for specifications.
->
-> Keep theorem names exact as well. The command Coincidence, Substitution, and Renaming theorems have hypotheses different from their Chapter 1 counterparts, so shortened translated labels obscure which result is being used.
-
-> [!tip] Bottom is not an empty state
-> A state `σ` assigns an integer to every variable. Bottom is not one such assignment; it is the separate outcome indicating that no final state is produced. Thus `σ ⊑ τ` is not a numeric comparison of variable values but an information comparison between computation results.
-
-> [!question] Retrieval check
-> 1. Why can Chapter 1's semantic codomain not interpret `while true do skip`?
-> 2. Why is name substitution more dangerous for commands than expressions? Relate the answer to assignment's left side.
-
----
-
-## 02. Three phrase classes and command constructors — §2.1 · pp. 24–26 · 5 min
-
-> [!abstract] Section focus
-> expression은 상태를 관찰하고 command는 상태를 바꾼다는 형식 구분이 의미 오류를 미리 차단한다.
+*expression은 상태를 관찰하고 command는 상태를 바꾼다는 형식 구분이 의미 오류를 미리 차단한다.*
 
 language에는 integer expression, Boolean expression, command라는 세 carrier set (운반집합)이 있다. integer expression은 Chapter 1의 integer expression과 같고 Boolean expression은 quantifier-free assertion (수량자 없는 assertion)이다. unbounded integer quantification은 일반적으로 runtime guard로 decidable하거나 effectively evaluable하지 않으므로 executable guard에서 제외한다. Chapter 3의 specification에는 더 강한 predicate-logic assertion language를 사용하지만 실행 중 guard는 computable Boolean expression으로 제한한다.
 
@@ -297,11 +279,28 @@ comm c ::= v:=e | skip | c;c
 >
 > **결론:** 파싱이 확정한 constructor 구조가 이후 의미 계산과 구조적 귀납의 기준이다.
 
+> [!tip] How to read the canonical terminology
+> 이 장에서는 English canonical term을 먼저 읽고 괄호 안의 한국어를 이해를 돕는 gloss로 읽는다. 예를 들어 state transformer (상태 변환 함수)는 단순히 state의 일부를 바꾼다는 말이 아니라 command의 denotation 전체, 즉 initial state를 받아 final state 또는 nontermination을 돌려주는 function을 가리킨다. 한국어 설명이 자연스럽더라도 이 technical identity를 state transformer라는 이름으로 계속 추적해야 정의와 theorem을 같은 대상으로 연결할 수 있다.
+>
+> domain, predomain, bottom, lifting, chain, least upper bound (lub), continuous function은 서로 독립된 번역어 목록이 아니라 하나의 수학적 construction을 이루는 용어다. domain은 일반적인 입력 범위가 아니라 information order와 chain limit를 갖는 구조이고, bottom은 빈 state가 아니라 이 장의 lifted result space에서 final result가 없음을 나타내는 least element다. 따라서 각 term을 한국어만으로 바꾸면 function domain이나 arithmetic order 같은 다른 개념과 경계가 흐려질 수 있다.
+>
+> least fixed point와 functional도 원문 term을 유지한다. `F`는 category theory의 functor가 아니라 command denotation을 입력받아 더 정교한 command denotation을 만드는 higher-order function, 즉 functional이다. semantic soundness와 full abstraction 역시 proof-rule soundness나 일반적인 완전성과 다른 정확한 logical direction을 가지므로 English term을 기준으로 식과 설명을 함께 읽는다.
+>
+> chapter title과 section heading도 English canonical form을 사용한다. heading은 원문에서 어떤 object와 theorem을 다루는지 찾는 navigation key이므로 한국어 번역으로 바꾸지 않는다. 한국어 본문은 정의의 동기, equation의 읽는 순서, counterexample의 의미를 충분히 설명하되, heading과 technical term을 그대로 검색해 교재·강의 노트·추가 문헌의 같은 개념으로 이동할 수 있게 한다.
+>
+> Chapter 1의 initial algebra와 Predicate Logic도 연결 문맥에서 English를 그대로 둔다. initial algebra는 finite constructor로 생성되는 syntax의 least-solution 관점을, Predicate Logic은 Chapter 3 specification에 쓰일 assertion language를 가리킨다. 두 term을 번역하면 Chapter 2의 least fixed point와 executable Boolean expression 사이의 cross-chapter connection을 원문 terminology로 추적하기 어렵다.
+>
+> theorem name은 특히 축약하지 않는다. Coincidence Theorem for Commands는 initial state가 relevant free variable에서 agree할 때 termination과 relevant result가 함께 agree한다는 clause와 freely unassigned variable을 보존하는 frame clause를 가진다. Substitution Theorem for Commands는 relevant name에 대한 injectivity를 요구하고, Renaming Theorem for Commands는 fresh local binder의 α-renaming을 다룬다. 모두 한국어로 ‘일치 정리·치환 정리·이름변경 정리’라고만 쓰면 Chapter 1 theorem과 command theorem의 서로 다른 hypothesis를 구별하기 어렵다.
+
 > [!question] Retrieval check
 > 1. boolean expression에서 수량자를 제외하면서도 명세용 assertion에는 남겨 둘 수 있는 이유는 무엇인가?
 > 2. `c₀;c₁;c₂`의 결합 방향이 denotation을 바꾸지 않으려면 순차 의미가 어떤 법칙을 만족해야 하는가?
 
-### English companion — Three phrase classes and command constructors
+### English companion — 2.1 Syntax
+
+*Following the textbook's first step, define the three phrase classes—integer expressions, Boolean expressions, and commands—and explain how this syntax anticipates the connection to Predicate Logic in the next chapter.*
+
+### Three phrase classes and command constructors — §2.1 · pp. 24–26
 
 *The phrase distinction—expressions observe states, commands change them—rules out many semantic mistakes syntactically.*
 
@@ -334,16 +333,33 @@ Each production requires one constructor and one semantic clause. Syntactically,
 >
 > **Conclusion:** The constructor structure fixed by parsing drives all later semantic calculations and structural inductions.
 
+> [!tip] How to read the canonical terminology
+> Read the English canonical term first and treat the Korean parenthetical as a gloss. A state transformer is the complete command denotation from an initial state to a final state or nontermination, not merely an update to part of a state. Keeping the English identity visible connects definitions and theorems to the same object.
+>
+> Domain, predomain, bottom, lifting, chain, least upper bound, and continuous function form one mathematical construction. Here domain is not merely an input range, and bottom is not an empty state. Replacing these terms with Korean-only labels can blur their boundaries with other concepts.
+>
+> Least fixed point and functional likewise remain canonical. Here `F` is a higher-order function on command denotations, not a category-theoretic functor. Semantic soundness and full abstraction also have exact logical directions distinct from proof-rule soundness and ordinary completeness.
+>
+> Chapter and section headings remain in their canonical English forms because they are navigation keys into the textbook and related literature. Korean prose supplies motivation and explanation without replacing those searchable terms.
+>
+> Cross-chapter references likewise retain initial algebra and predicate logic in English. They connect finite syntax generation to least fixed points and executable Boolean expressions to the assertion language used for specifications.
+>
+> Keep theorem names exact as well. The command Coincidence, Substitution, and Renaming theorems have hypotheses different from their Chapter 1 counterparts, so shortened translated labels obscure which result is being used.
+
 > [!question] Retrieval check
 > 1. Why can quantifiers be absent from Boolean expressions yet remain available in specification assertions?
 > 2. Which law must sequential semantics satisfy for the grouping of `c₀;c₁;c₂` not to change its denotation?
 
 ---
 
-## 03. Calculating assignment, sequence, and conditionals as strict state transformers — §2.2 · pp. 26–28 · 8 min
+## 2.2 Denotational Semantics — §2.2 · pp. 26–29 · 14 min
 
 > [!abstract] Section focus
-> command는 초기 상태를 받아 정상 최종 상태나 `⊥`를 돌려주는 함수다.
+> expression semantics을 Chapter 1에서 가져온 뒤 state와 command semantic function을 정의하고, assignment·skip·sequencing·conditional을 계산한 다음 마지막에 `while`의 recursive equation이 남기는 문제에 도달한다.
+
+### Calculating assignment, sequence, and conditionals as strict state transformers — §2.2 · pp. 26–28
+
+*command는 초기 상태를 받아 정상 최종 상태나 `⊥`를 돌려주는 함수다.*
 
 state set을 `Σ = Var → ℤ`라 두면 integer expression은 `Σ → ℤ`, Boolean expression은 `Σ → 𝔹`를 denote한다. 이 둘은 아직 always terminating, error-free total function (항상 종료하고 오류가 없는 전체 함수)으로 가정한다. command만 `Comm → Σ → Σ⊥`로 해석한다. partial function (부분 함수)으로 써도 같은 정보를 표현할 수 있지만 bottom을 명시하면 뒤에서 lifting과 domain constructor로 확장하기 쉽다.
 
@@ -387,12 +403,55 @@ f†(r) = if r=⊥ then ⊥ else f(r)
 > [!warning] Do not conflate propagation of bottom with propagation of errors
 > 현재 model에서 bottom은 command nontermination만 뜻한다. division by zero나 overflow가 detect되어 abort하는 상황은 아직 semantic domain에 없다. `c₀;c₁`의 strictness를 ‘앞에서 error가 나면 뒤를 건너뛴다’고 설명하면 이 장이 의도적으로 보류한 policy를 몰래 추가하게 된다.
 
+### Why the while-unwinding equation is not yet a definition — §2.2 · pp. 28–29
+
+*자기 참조 방정식은 필요한 성질을 말하지만 의미를 유일하게 정하지 못할 수 있다.*
+
+직관적으로 `while b do c`는 guard가 true이면 `c`를 실행하고 다시 같은 loop를 실행하며 false이면 current state로 terminate한다. 이 직관을 쓰면 `Wσ = if ⟦b⟧σ then W†(⟦c⟧σ) else σ`라는 unwinding equation (펼침 방정식)을 얻는다. 여기서 `W`는 whole-loop denotation을 나타내는 unknown semantic function이다. equation 오른쪽에 `W`가 다시 나오므로 immediate subphrase `b`, `c`의 denotation만으로 전체 denotation을 계산하는 syntax-directed clause가 아니다.
+
+방정식을 만족한다는 사실과 방정식이 해를 하나만 갖는다는 사실은 다르다. `while true do skip`에서는 오른쪽이 그냥 `Wσ`가 되어 `W=W`만 남는다. `Σ→Σ⊥`의 모든 함수가 이 식을 만족하지만, 실행 직관이 원하는 것은 모든 상태를 `⊥`로 보내는 함수 하나다. 자기 동일식은 그 함수를 골라내지 못한다.
+
+조금 덜 극단적인 `while x≠0 do x:=x-2`도 같은 문제를 보인다. 양의 짝수에서는 0에 도달하지만 양의 홀수와 음수에서는 종료하지 않는다. 펼침 방정식은 종료하는 입력의 결과를 강제해도 실제로 loop가 끝나지 않는 입력에 임의의 상태를 배정한 가짜 해까지 허용할 수 있다. 우리는 ‘유한 횟수의 실행으로 확인되는 결과만 인정한다’는 추가 기준이 필요하다.
+
+### Factoring unwinding into a functional equation
+
+```text
+F : (Σ → Σ⊥) → (Σ → Σ⊥)
+F(f)(σ) = if ⟦b⟧σ
+          then f†(⟦c⟧σ)
+          else σ
+
+while의 후보 의미 W는 F(W)=W를 만족해야 한다.
+```
+
+문제는 fixed point의 existence만이 아니라 여러 fixed point 중 execution을 가장 적게 가정하는 solution을 선택하는 것이다.
+
+> [!example] Too many solutions for an infinite loop
+> `b=true`, `c=skip`일 때 functional `F`를 simplify한다.
+>
+> 1. 가드는 모든 `σ`에서 참이고 `⟦skip⟧σ=σ`다.
+> 2. 따라서 `F(f)(σ)=f†(σ)=f(σ)`이며 `F`는 함수 공간의 항등 함수다.
+> 3. 모든 `f`가 `F(f)=f`를 만족하므로 펼침 방정식만으로는 의미가 정해지지 않는다.
+> 4. 정보가 가장 적은 함수 `λσ.⊥`를 고르면 유한 실행으로 얻지 못한 최종 상태를 만들어 내지 않는다.
+>
+> **결론:** ‘최소’는 구현 속도가 아니라 정당화된 정보량의 최소성을 뜻한다.
+
+> [!tip] Bottom is not an empty state
+> state `σ`는 모든 variable에 integer를 배정한다. bottom `⊥`는 그런 배정 중 하나가 아니라 final state가 전혀 생산되지 않았음을 나타내는 별도 result다. 따라서 `σ ⊑ τ`를 variable value의 수치 비교로 읽지 말고 computation result에 관한 정보 비교로 읽어야 한다.
+
 > [!question] Retrieval check
 > 1. `⟦c₁⟧(⟦c₀⟧σ)`가 형식상 잘못될 수 있는 경우와 `†`가 고치는 부분을 설명하라.
 > 2. unselected conditional branch의 nontermination이 whole result에 영향을 주지 않는 이유를 semantic equation으로 설명하라.
 > 3. `x:=y; y:=x`가 일반적으로 swap이 아닌 이유를 상태 계산으로 보여라.
+> 4. 펼침 방정식이 올바른 필요조건이면서도 충분한 정의가 아닌 이유를 구분해 말하라.
+> 5. `while true do skip`의 방정식이 허용하는 가짜 해 하나를 만들고 왜 실행 직관과 어긋나는지 설명하라.
+> 6. loop 의미를 직접 구조 재귀로 정의하려 할 때 어느 부분에서 더 작은 syntax으로 내려가지 못하는가?
 
-### English companion — Calculating assignment, sequence, and conditionals as strict state transformers
+### English companion — 2.2 Denotational Semantics
+
+*Carry expression semantics forward from Chapter 1, define states and the command semantic function, calculate assignment, skip, sequencing, and conditionals, and only then reach the unresolved recursive equation for `while`.*
+
+### Calculating assignment, sequence, and conditionals as strict state transformers — §2.2 · pp. 26–28
 
 *A command is a function from an initial state to either a normal final state or `⊥`.*
 
@@ -438,53 +497,7 @@ The dagger is not a new runtime effect; it is a metalanguage operation extending
 > [!warning] Do not conflate propagation of bottom with propagation of errors
 > In the current model, bottom means command divergence only. Detected division by zero or overflow is not yet represented. Explaining strict sequencing merely as 'skip the second command after an error' silently adds an error policy that this chapter intentionally postpones.
 
-> [!question] Retrieval check
-> 1. When can `⟦c₁⟧(⟦c₀⟧σ)` be ill-typed, and how does `†` repair it?
-> 2. Use the semantic equation to explain why divergence in an unselected conditional branch does not affect the result.
-> 3. Show by a state calculation why `x:=y; y:=x` is not generally a swap.
-
----
-
-## 04. Why the while-unwinding equation is not yet a definition — §2.2 · pp. 28–29 · 6 min
-
-> [!abstract] Section focus
-> 자기 참조 방정식은 필요한 성질을 말하지만 의미를 유일하게 정하지 못할 수 있다.
-
-직관적으로 `while b do c`는 guard가 true이면 `c`를 실행하고 다시 같은 loop를 실행하며 false이면 current state로 terminate한다. 이 직관을 쓰면 `Wσ = if ⟦b⟧σ then W†(⟦c⟧σ) else σ`라는 unwinding equation (펼침 방정식)을 얻는다. 여기서 `W`는 whole-loop denotation을 나타내는 unknown semantic function이다. equation 오른쪽에 `W`가 다시 나오므로 immediate subphrase `b`, `c`의 denotation만으로 전체 denotation을 계산하는 syntax-directed clause가 아니다.
-
-방정식을 만족한다는 사실과 방정식이 해를 하나만 갖는다는 사실은 다르다. `while true do skip`에서는 오른쪽이 그냥 `Wσ`가 되어 `W=W`만 남는다. `Σ→Σ⊥`의 모든 함수가 이 식을 만족하지만, 실행 직관이 원하는 것은 모든 상태를 `⊥`로 보내는 함수 하나다. 자기 동일식은 그 함수를 골라내지 못한다.
-
-조금 덜 극단적인 `while x≠0 do x:=x-2`도 같은 문제를 보인다. 양의 짝수에서는 0에 도달하지만 양의 홀수와 음수에서는 종료하지 않는다. 펼침 방정식은 종료하는 입력의 결과를 강제해도 실제로 loop가 끝나지 않는 입력에 임의의 상태를 배정한 가짜 해까지 허용할 수 있다. 우리는 ‘유한 횟수의 실행으로 확인되는 결과만 인정한다’는 추가 기준이 필요하다.
-
-### Factoring unwinding into a functional equation
-
-```text
-F : (Σ → Σ⊥) → (Σ → Σ⊥)
-F(f)(σ) = if ⟦b⟧σ
-          then f†(⟦c⟧σ)
-          else σ
-
-while의 후보 의미 W는 F(W)=W를 만족해야 한다.
-```
-
-문제는 fixed point의 existence만이 아니라 여러 fixed point 중 execution을 가장 적게 가정하는 solution을 선택하는 것이다.
-
-> [!example] Too many solutions for an infinite loop
-> `b=true`, `c=skip`일 때 functional `F`를 simplify한다.
->
-> 1. 가드는 모든 `σ`에서 참이고 `⟦skip⟧σ=σ`다.
-> 2. 따라서 `F(f)(σ)=f†(σ)=f(σ)`이며 `F`는 함수 공간의 항등 함수다.
-> 3. 모든 `f`가 `F(f)=f`를 만족하므로 펼침 방정식만으로는 의미가 정해지지 않는다.
-> 4. 정보가 가장 적은 함수 `λσ.⊥`를 고르면 유한 실행으로 얻지 못한 최종 상태를 만들어 내지 않는다.
->
-> **결론:** ‘최소’는 구현 속도가 아니라 정당화된 정보량의 최소성을 뜻한다.
-
-> [!question] Retrieval check
-> 1. 펼침 방정식이 올바른 필요조건이면서도 충분한 정의가 아닌 이유를 구분해 말하라.
-> 2. `while true do skip`의 방정식이 허용하는 가짜 해 하나를 만들고 왜 실행 직관과 어긋나는지 설명하라.
-> 3. loop 의미를 직접 구조 재귀로 정의하려 할 때 어느 부분에서 더 작은 syntax으로 내려가지 못하는가?
-
-### English companion — Why the while-unwinding equation is not yet a definition
+### Why the while-unwinding equation is not yet a definition — §2.2 · pp. 28–29
 
 *A recursive equation states a necessary property but may fail to determine a unique denotation.*
 
@@ -517,17 +530,27 @@ The problem is not merely to find a fixed point but to select, among possibly ma
 >
 > **Conclusion:** Leastness concerns justified information, not implementation speed.
 
+> [!tip] Bottom is not an empty state
+> A state `σ` assigns an integer to every variable. Bottom is not one such assignment; it is the separate outcome indicating that no final state is produced. Thus `σ ⊑ τ` is not a numeric comparison of variable values but an information comparison between computation results.
+
 > [!question] Retrieval check
-> 1. Why is the unwinding equation a correct necessary condition but not a sufficient definition?
-> 2. Construct one fake solution admitted for `while true do skip` and explain why it conflicts with execution intuition.
-> 3. Where does a direct structural-recursive definition of loop meaning fail to descend to smaller syntax?
+> 1. When can `⟦c₁⟧(⟦c₀⟧σ)` be ill-typed, and how does `†` repair it?
+> 2. Use the semantic equation to explain why divergence in an unselected conditional branch does not affect the result.
+> 3. Show by a state calculation why `x:=y; y:=x` is not generally a swap.
+> 4. Why is the unwinding equation a correct necessary condition but not a sufficient definition?
+> 5. Construct one fake solution admitted for `while true do skip` and explain why it conflicts with execution intuition.
+> 6. Where does a direct structural-recursive definition of loop meaning fail to descend to smaller syntax?
 
 ---
 
-## 05. Information order, chains, predomains, and lifting — §2.3 · pp. 29–32 · 7 min
+## 2.3 Domains and Continuous Functions — §2.3 · pp. 29–35 · 14 min
 
 > [!abstract] Section focus
-> domain (정보 순서 구조)은 실행값의 크기가 아니라 computation (계산)에 관해 얼마나 많은 result가 알려졌는지를 정렬한다.
+> `while` equation의 해를 고르기 위한 수학적 기반으로 information order, chain, least upper bound, predomain, domain, lifting을 차례로 정의하고, 이어 monotone·continuous function과 pointwise function space를 세운다.
+
+### Information order, chains, predomains, and lifting — §2.3 · pp. 29–32
+
+*domain (정보 순서 구조)은 실행값의 크기가 아니라 computation (계산)에 관해 얼마나 많은 result가 알려졌는지를 정렬한다.*
 
 domain theory의 order `x ⊑ y`는 `x`가 `y`를 approximate (근사)한다, 즉 `y`가 적어도 `x`만큼의 information을 준다는 뜻이다. 이는 수치 해석의 오차 거리와 다르다. normal state `σ`는 complete final result이므로 다른 normal state `τ`와 incomparable (비교 불가능)하고 자기 자신과만 비교된다. 반면 bottom `⊥`는 final result를 전혀 알려 주지 않으므로 모든 `σ` 아래에 놓인다.
 
@@ -571,12 +594,56 @@ r ⊑ r'  iff
 > [!warning] ‘Domain of a function’ versus ‘a domain’
 > function의 domain은 input set (입력 집합)을 뜻하지만, domain theory의 a domain은 chain limit와 least element를 갖춘 ordered structure (순서 구조)다. function의 input set이 domain일 필요는 없다. 문맥과 전치사 `of`를 보고 두 뜻을 구별한다.
 
+### Continuous functions and pointwise function domains — §2.3 · pp. 32–35
+
+*continuity (연속성)는 점점 정교해지는 input의 limit를 먼저 취하든 function을 각 stage에 먼저 apply하든 result가 같다는 조건이다.*
+
+function `f : P → P'`가 monotone (단조)하다는 것은 `x ⊑ y`이면 `f(x) ⊑ f(y)`라는 뜻이다. 더 많은 input information을 주었는데 output information이 사라지지 않는다. continuity는 여기에 chain limit preservation (보존)을 더한다. 모든 chain `x₀⊑x₁⊑···`에 대해 `f(⊔ₙxₙ)=⊔ₙf(xₙ)`이어야 한다. continuous function은 monotone이지만 monotone function이 항상 continuous인 것은 아니다.
+
+직관적으로 continuous function (연속 함수)이 구체적인 finite information을 output했다면 그 output은 input chain의 어떤 finite stage에서 이미 정당화되어야 한다. limit에 도착한 뒤에만 발견할 수 있는 infinite evidence (무한한 증거)를 요구하지 않는다. 이 finite-observation principle (유한 관찰 원리)은 Chapter 5의 I/O와 physical computation에서 더 강한 동기로 돌아온다.
+
+predomain `P`, `P'` 사이의 continuous function을 `P → P'`로 쓰고 pointwise order (점별 순서)를 준다. `f ⊑ g`는 모든 `x`에서 `f(x) ⊑ g(x)`라는 뜻이다. codomain `P'`가 domain이면 이 function space도 domain이며 least function은 모든 input을 bottom으로 보내는 `λx.⊥`다. command denotation이 속한 `Σ → Σ⊥`가 바로 이런 domain이다.
+
+이 pointwise order에서 `f ⊑ g`는 `g`가 `f`가 terminate하던 모든 initial state에서 같은 final state를 주고, 추가 initial state에서도 terminate할 수 있다는 뜻이다. result를 다른 state로 바꾸는 것은 더 많은 information이 아니다. 같은 result에 대한 function domain을 넓히는 것이 approximation의 증가다. loop functional `F`는 이런 의미에서 approximant를 더 정교하게 만든다.
+
+### Continuity and function-space order
+
+```text
+f(⊔ₙ xₙ) = ⊔ₙ f(xₙ)
+
+(f ⊑ g)  iff  ∀x. f(x) ⊑ g(x)
+(⊔ₙ fₙ)(x) = ⊔ₙ fₙ(x)
+⊥₍P→D₎ = λx. ⊥ᴰ
+```
+
+function chain의 limit는 각 input에서 result chain의 limit를 취해 만든다. 따라서 `while` approximant 전체를 initial state별로 계산할 수 있다.
+
+> [!example] Comparing information in command denotations
+> `f`, `g : Σ→Σ⊥`가 있고 `f`는 `x>0`에서만 종료하며 `g`는 `x≥0`에서 종료한다고 하자.
+>
+> 1. `x>0`인 모든 상태에서 두 함수가 같은 최종 상태를 준다면 `f`가 가진 정보는 `g`에도 있다.
+> 2. `x=0`에서 `f(σ)=⊥`, `g(σ)=τ`이므로 `g`가 추가 종료 정보를 준다.
+> 3. 따라서 `f⊑g`다. 반대로 `g⊑f`는 `x=0`에서 성립하지 않는다.
+> 4. 만약 `x>0`에서 서로 다른 최종 상태를 준다면 어느 방향으로도 비교할 수 없다.
+>
+> **결론:** pointwise order는 실행 횟수나 시간보다 ‘어떤 입력에서 어떤 최종 결과가 확인되었는가’를 기록한다.
+
+> [!tip] Strictness and continuity are different properties
+> strict 함수는 least element를 least element로 보낸다. continuous 함수는 모든 chain limit를 보존한다. 이 장의 lifting 연산은 strict하고 continuous하지만, 모든 continuous 함수가 strict한 것은 아니다. 예를 들어 입력과 무관하게 고정된 정상 결과를 내는 상수 함수는 continuous하지만 `⊥`도 그 결과로 보내므로 strict하지 않다.
+
 > [!question] Retrieval check
 > 1. `Σ⊥`에서 서로 다른 정상 상태가 incomparable해야 하는 이유를 정보 관점에서 설명하라.
 > 2. predomain과 domain의 정의 차이, discrete ordering과 lifting의 역할을 각각 말하라.
 > 3. terminating loop와 diverging loop의 approximant chain이 각각 어떤 shape인지 써 보라.
+> 4. monotonicity와 continuity의 차이를 chain limit 식으로 설명하라.
+> 5. `Σ→Σ⊥`의 least element가 어떤 함수인지, 그리고 왜 least인지 말하라.
+> 6. 두 command meaning이 서로 다른 정상 상태를 같은 입력에 돌려주면 pointwise order로 비교되지 않는 이유는 무엇인가?
 
-### English companion — Information order, chains, predomains, and lifting
+### English companion — 2.3 Domains and Continuous Functions
+
+*Build the mathematics needed to select a solution of the `while` equation: information orders, chains, least upper bounds, predomains, domains, and lifting, followed by monotone and continuous functions and pointwise function spaces.*
+
+### Information order, chains, predomains, and lifting — §2.3 · pp. 29–32
 
 *A domain orders how much is known about a computation, not the magnitude of its result.*
 
@@ -622,57 +689,7 @@ Normal states are not ordered componentwise by numeric size. Distinct final stat
 > [!warning] ‘Domain of a function’ versus ‘a domain’
 > The domain of a function is its input set, whereas a domain in domain theory is an ordered structure with chain limits and a least element. A function's input set need not be a domain. Context—and the preposition ‘of’—distinguishes the two uses.
 
-> [!question] Retrieval check
-> 1. Why must distinct normal states be incomparable in `Σ⊥`? Explain in terms of information.
-> 2. State the difference between a predomain and a domain, and the roles of discrete order and lifting.
-> 3. Describe the approximation-chain shape for a terminating loop and a diverging loop.
-
----
-
-## 06. Continuous functions and pointwise function domains — §2.3 · pp. 32–35 · 7 min
-
-> [!abstract] Section focus
-> continuity (연속성)는 점점 정교해지는 input의 limit를 먼저 취하든 function을 각 stage에 먼저 apply하든 result가 같다는 조건이다.
-
-function `f : P → P'`가 monotone (단조)하다는 것은 `x ⊑ y`이면 `f(x) ⊑ f(y)`라는 뜻이다. 더 많은 input information을 주었는데 output information이 사라지지 않는다. continuity는 여기에 chain limit preservation (보존)을 더한다. 모든 chain `x₀⊑x₁⊑···`에 대해 `f(⊔ₙxₙ)=⊔ₙf(xₙ)`이어야 한다. continuous function은 monotone이지만 monotone function이 항상 continuous인 것은 아니다.
-
-직관적으로 continuous function (연속 함수)이 구체적인 finite information을 output했다면 그 output은 input chain의 어떤 finite stage에서 이미 정당화되어야 한다. limit에 도착한 뒤에만 발견할 수 있는 infinite evidence (무한한 증거)를 요구하지 않는다. 이 finite-observation principle (유한 관찰 원리)은 Chapter 5의 I/O와 physical computation에서 더 강한 동기로 돌아온다.
-
-predomain `P`, `P'` 사이의 continuous function을 `P → P'`로 쓰고 pointwise order (점별 순서)를 준다. `f ⊑ g`는 모든 `x`에서 `f(x) ⊑ g(x)`라는 뜻이다. codomain `P'`가 domain이면 이 function space도 domain이며 least function은 모든 input을 bottom으로 보내는 `λx.⊥`다. command denotation이 속한 `Σ → Σ⊥`가 바로 이런 domain이다.
-
-이 pointwise order에서 `f ⊑ g`는 `g`가 `f`가 terminate하던 모든 initial state에서 같은 final state를 주고, 추가 initial state에서도 terminate할 수 있다는 뜻이다. result를 다른 state로 바꾸는 것은 더 많은 information이 아니다. 같은 result에 대한 function domain을 넓히는 것이 approximation의 증가다. loop functional `F`는 이런 의미에서 approximant를 더 정교하게 만든다.
-
-### Continuity and function-space order
-
-```text
-f(⊔ₙ xₙ) = ⊔ₙ f(xₙ)
-
-(f ⊑ g)  iff  ∀x. f(x) ⊑ g(x)
-(⊔ₙ fₙ)(x) = ⊔ₙ fₙ(x)
-⊥₍P→D₎ = λx. ⊥ᴰ
-```
-
-function chain의 limit는 각 input에서 result chain의 limit를 취해 만든다. 따라서 `while` approximant 전체를 initial state별로 계산할 수 있다.
-
-> [!example] Comparing information in command denotations
-> `f`, `g : Σ→Σ⊥`가 있고 `f`는 `x>0`에서만 종료하며 `g`는 `x≥0`에서 종료한다고 하자.
->
-> 1. `x>0`인 모든 상태에서 두 함수가 같은 최종 상태를 준다면 `f`가 가진 정보는 `g`에도 있다.
-> 2. `x=0`에서 `f(σ)=⊥`, `g(σ)=τ`이므로 `g`가 추가 종료 정보를 준다.
-> 3. 따라서 `f⊑g`다. 반대로 `g⊑f`는 `x=0`에서 성립하지 않는다.
-> 4. 만약 `x>0`에서 서로 다른 최종 상태를 준다면 어느 방향으로도 비교할 수 없다.
->
-> **결론:** pointwise order는 실행 횟수나 시간보다 ‘어떤 입력에서 어떤 최종 결과가 확인되었는가’를 기록한다.
-
-> [!tip] Strictness and continuity are different properties
-> strict 함수는 least element를 least element로 보낸다. continuous 함수는 모든 chain limit를 보존한다. 이 장의 lifting 연산은 strict하고 continuous하지만, 모든 continuous 함수가 strict한 것은 아니다. 예를 들어 입력과 무관하게 고정된 정상 결과를 내는 상수 함수는 continuous하지만 `⊥`도 그 결과로 보내므로 strict하지 않다.
-
-> [!question] Retrieval check
-> 1. monotonicity와 continuity의 차이를 chain limit 식으로 설명하라.
-> 2. `Σ→Σ⊥`의 least element가 어떤 함수인지, 그리고 왜 least인지 말하라.
-> 3. 두 command meaning이 서로 다른 정상 상태를 같은 입력에 돌려주면 pointwise order로 비교되지 않는 이유는 무엇인가?
-
-### English companion — Continuous functions and pointwise function domains
+### Continuous functions and pointwise function domains — §2.3 · pp. 32–35
 
 *Continuity says that refining an input and then taking its limit agrees with applying the function stage by stage and taking the output limit.*
 
@@ -710,16 +727,23 @@ The limit of a function chain is computed pointwise by taking the result-chain l
 > A strict function maps least element to least element; a continuous function preserves all chain limits. The lifting operations here are both strict and continuous, but continuity does not imply strictness. A function that constantly returns one normal result is continuous yet non-strict because it maps bottom to that result.
 
 > [!question] Retrieval check
-> 1. Explain the difference between monotonicity and continuity using the chain-limit equation.
-> 2. What is the least element of `Σ→Σ⊥`, and why is it least?
-> 3. Why are two command denotations incomparable if they return different normal states on the same input?
+> 1. Why must distinct normal states be incomparable in `Σ⊥`? Explain in terms of information.
+> 2. State the difference between a predomain and a domain, and the roles of discrete order and lifting.
+> 3. Describe the approximation-chain shape for a terminating loop and a diverging loop.
+> 4. Explain the difference between monotonicity and continuity using the chain-limit equation.
+> 5. What is the least element of `Σ→Σ⊥`, and why is it least?
+> 6. Why are two command denotations incomparable if they return different normal states on the same input?
 
 ---
 
-## 07. The least fixed-point theorem and finite loop approximants — §2.4 · pp. 35–39 · 9 min
+## 2.4 The Least Fixed-Point Theorem — §2.4 · pp. 35–39 · 9 min
 
 > [!abstract] Section focus
-> continuous functional (연속인 고차 함수)은 `⊥, F⊥, F²⊥, …` chain의 limit에서 least fixed point를 갖는다.
+> 앞 절의 domain과 continuity를 사용해 least fixed-point theorem을 증명하고, 그 theorem을 `while` functional에 적용한 뒤 finite approximant가 실제 loop 실행을 어떻게 나타내는지 계산한다.
+
+### The least fixed-point theorem and finite loop approximants — §2.4 · pp. 35–39
+
+*continuous functional (연속인 고차 함수)은 `⊥, F⊥, F²⊥, …` chain의 limit에서 least fixed point를 갖는다.*
 
 domain `D`와 continuous functional `F:D→D`가 주어지면 `⊥⊑F(⊥)`이고 monotonicity (단조성) 때문에 `Fⁿ(⊥)⊑Fⁿ⁺¹(⊥)`가 계속 성립한다. 따라서 `⊥,F⊥,F²⊥,…`는 chain이며 limit `μF = ⊔ₙFⁿ(⊥)`가 존재한다. continuity를 사용하면 `F(μF)=F(⊔ₙFⁿ⊥)=⊔ₙFⁿ⁺¹⊥=μF`이므로 이 limit가 fixed point (고정점)다.
 
@@ -766,13 +790,29 @@ F(f)(σ) = if ⟦b⟧σ then f†(⟦c⟧σ) else σ
 > [!tip] Abstract syntax is also a least fixed point
 > Chapter 1의 depth-indexed syntax set도 empty set에서 시작해 constructor를 한 층씩 적용한 뒤 union을 취했다. powerset domain에서 grammar functional의 least fixed point를 구한 셈이다. constructor가 finite arity (유한 인자 수)를 가지므로 grammar functional은 finitely generated이고 continuous하다. syntax의 finite generation과 loop의 finite unfolding은 같은 수학적 pattern이다.
 
+> [!example] One while command traced through the domain terms
+> `while x>0 do x:=x-1`을 `σ(x)=2`인 initial state에서 해석하며 새 term을 순서대로 연결한다.
+>
+> 1. command denotation은 type `Σ→Σ⊥`의 state transformer다. 종료하면 `x=0`인 final state를 주고, 어떤 input에서 끝나지 않는다면 그 input에는 `⊥`를 준다.
+> 2. least transformer `⊥₍Σ→Σ⊥₎`는 모든 initial state에 bottom을 준다. 이는 ‘loop를 아직 한 번도 unfold하지 않아 어떤 종료도 정당화하지 못했다’는 0-stage approximant다.
+> 3. functional `F`는 candidate transformer `g`를 받아 guard가 false이면 current state를 돌려주고, true이면 body를 한 번 실행한 뒤 `g`를 사용한다. `F(g)`는 `g`보다 loop behavior를 한 단계 더 안다.
+> 4. `σ(x)=2`에서는 `F⁰(⊥)(σ)=⊥`, `F¹(⊥)(σ)=⊥`, `F²(⊥)(σ)=⊥`이고 `F³(⊥)(σ)`에서 두 번의 body execution 뒤 guard가 false인 `x=0` state가 처음 드러난다.
+> 5. 이 approximant들은 pointwise information order에서 chain을 이룬다. normal final state가 나타난 뒤에는 이후 stage도 같은 state를 주므로 lub는 그 state다. 끝나지 않는 input에서는 모든 stage와 lub가 bottom이다.
+> 6. continuity로 `F(lub approximants)=lub(F applied to approximants)`를 얻으므로 limit는 fixed point이고, bottom에서 시작했으므로 다른 fixed point보다 아래인 least fixed point다. 이것이 whole while command의 denotation이다.
+>
+> **결론:** 용어의 의존 순서는 `state → lifted result → state transformer → information order → approximant chain → continuity → least fixed point → while denotation`이다. 뒤 절은 이 화살표의 각 단계를 definition과 theorem으로 정밀화한다.
+
 > [!question] Retrieval check
 > 1. least fixed-point theorem의 existence, fixed-point, leastness argument를 각각 한 문장으로 재구성하라.
 > 2. `Fⁿ⊥`가 loop 실행의 어떤 유한 정보를 나타내는지 설명하라.
 > 3. continuity 없이 증명의 어느 등식이 정당화되지 않는가?
 > 4. abstract syntax의 depth approximant와 `while` approximant의 common structure를 말하라.
 
-### English companion — The least fixed-point theorem and finite loop approximants
+### English companion — 2.4 The Least Fixed-Point Theorem
+
+*Use the preceding domain and continuity definitions to prove the least fixed-point theorem, apply it to the `while` functional, and calculate how finite approximants represent actual loop executions.*
+
+### The least fixed-point theorem and finite loop approximants — §2.4 · pp. 35–39
 
 *A continuous functional has its least fixed point at the limit of `⊥, F⊥, F²⊥, …`.*
 
@@ -821,6 +861,18 @@ F(f)(σ) = if ⟦b⟧σ then f†(⟦c⟧σ) else σ
 > [!tip] Abstract syntax is also a least fixed point
 > Chapter 1's depth-indexed syntax sets also started from empty sets, applied constructors one layer at a time, and took a union. This is a least fixed point in a powerset domain. Finite constructor arity makes the grammar functional finitely generated and continuous. Finite syntax generation and finite loop unfolding share one mathematical pattern.
 
+> [!example] One while command traced through the domain terms
+> Interpret `while x>0 do x:=x-1` from an initial state with `σ(x)=2`, connecting the new terms in order.
+>
+> 1. The command denotation is a state transformer of type `Σ→Σ⊥`. It returns a final state with `x=0` when it terminates and returns `⊥` on any input from which it diverges.
+> 2. The least transformer `⊥₍Σ→Σ⊥₎` maps every initial state to bottom. It is the zero-stage approximant: no loop unfolding has yet justified any termination result.
+> 3. The functional `F` accepts a candidate transformer `g`: when the guard is false it returns the current state; when true it executes the body once and then uses `g`. Thus `F(g)` knows one more layer of loop behavior than `g`.
+> 4. For `σ(x)=2`, `F⁰(⊥)(σ)=⊥`, `F¹(⊥)(σ)=⊥`, and `F²(⊥)(σ)=⊥`; at `F³(⊥)(σ)`, the state with `x=0` first appears after two body executions and a false guard.
+> 5. These approximants form a chain in the pointwise information order. Once a normal final state appears, every later stage returns that same state, so the lub is that state. On a diverging input, every stage and the lub remain bottom.
+> 6. Continuity gives `F(lub approximants)=lub(F applied to approximants)`, so the limit is a fixed point. Because the construction starts at bottom, it lies below every other fixed point and is the least fixed point—the denotation of the whole while command.
+>
+> **Conclusion:** The dependency order is `state → lifted result → state transformer → information order → approximant chain → continuity → least fixed point → while denotation`. Later sections make each arrow precise through definitions and theorems.
+
 > [!question] Retrieval check
 > 1. Reconstruct the existence, fixed-point, and leastness parts of the theorem in one sentence each.
 > 2. What finite information about loop execution does `Fⁿ⊥` represent?
@@ -829,10 +881,14 @@ F(f)(σ) = if ⟦b⟧σ then f†(⟦c⟧σ) else σ
 
 ---
 
-## 08. Binding, initialization, and restoration of local variables — §2.5 · pp. 39–41 · 7 min
+## 2.5 Variable Declarations and Substitution — §2.5 · pp. 39–45 · 20 min
 
 > [!abstract] Section focus
-> `newvar v:=e in c`는 초기 상태에서 값을 계산하고, body 안에서만 새 `v`를 사용한 뒤 바깥 값을 복원한다.
+> local variable declaration을 syntax과 semantics에 추가하고 initialization·scope·restoration을 정한 뒤, free variable/assigned variable의 coincidence 성질을 거쳐 command substitution과 aliasing 조건으로 이동한다.
+
+### Binding, initialization, and restoration of local variables — §2.5 · pp. 39–41
+
+*`newvar v:=e in c`는 초기 상태에서 값을 계산하고, body 안에서만 새 `v`를 사용한 뒤 바깥 값을 복원한다.*
 
 local variable declaration (지역 변수 선언)을 추가하는 production은 `comm ::= newvar v := e in c`다. binder는 `v`이고 scope는 body `c`뿐이다. initializer `e`는 scope 밖이므로 같은 name의 outer variable (바깥 변수)을 읽는다. 예를 들어 `newvar x:=x+1 in c`의 오른쪽 `x`는 새로 선언될 `x`가 아니라 declaration 전 state의 `x`다. 이 scope를 잘못 잡으면 initialization equation부터 순환적이 된다.
 
@@ -869,61 +925,9 @@ initializer의 free-variable set (자유 변수 집합)에는 `v`가 남을 수 
 > [!warning] An assignment target is not a binder
 > `x:=e`의 `x`는 이후 phrase의 scope를 만들지 않으며 free occurrence (자유 출현)다. 그래서 `FV(x:=e)={x}∪FV(e)`이고 assignment로 변경될 수 있는 freely assigned-variable set은 `FA(x:=e)={x}`다. 반면 `newvar x:=e in c`의 declared `x`는 body의 binder이므로 `FA`를 계산할 때 local `x`를 바깥 assigned-variable set에서 제거한다.
 
-> [!question] Retrieval check
-> 1. `newvar v:=e in c`에서 binder의 scope가 `e`를 포함하지 않는 이유를 예제로 설명하라.
-> 2. body가 terminate normally (정상 종료)할 때와 nonterminate할 때 restoration function이 각각 어떻게 동작하는가?
-> 3. `FV`와 `FA`가 다른 정보를 기록하는 이유를 assignment target과 연결해 설명하라.
+### The Coincidence Theorem for commands and effect boundaries — §2.5 · pp. 41–42
 
-### English companion — Binding, initialization, and restoration of local variables
-
-*`newvar v:=e in c` computes an initializer in the old state, uses a new `v` only in the body, and restores the outer value afterward.*
-
-Local declarations add the production `comm ::= newvar v := e in c`. The binder is `v`, and its scope is only the body `c`; the initializer `e` lies outside. Thus the right-hand `x` in `newvar x:=x+1 in c` reads the outer `x`, not the newly declared one. Giving the binder scope over the initializer would make the initialization equation circular.
-
-The semantics has three steps. First compute `n=⟦e⟧σ` in the original state and form `σ₀=σ[v↦n]`. Execute `c` from `σ₀`. If it returns a normal state `σ₁`, restore the outer value `σ(v)` and return `σ₁[v↦σ(v)]`. If the body diverges, strict extension makes the whole declaration bottom; no restored final state is observed.
-
-The model does not literally describe allocating a fresh physical address. Because the language observes only variable names and integer states, saving and restoring the old value of `v` suffices to represent lexical locality. Changes to other free variables remain visible; changes to local `v` are hidden. Whether this abstraction is adequate will depend on the observations and contexts chosen in the final section.
-
-Explicit initialization is a semantic design choice, not mere convenience. Leaving a local uninitialized may make execution depend on accidental storage contents and destroy reproducibility. An explicit initializer keeps behavior explainable from syntax and the initial state. It is more general than mandatory zero initialization while remaining deterministic.
-
-### Declaration semantics and free variables
-
-```text
-⟦newvar v:=e in c⟧ σ
-  = restoreᵥ,σ†(⟦c⟧(σ[v ↦ ⟦e⟧σ]))
-
-restoreᵥ,σ(σ') = σ'[v ↦ σ(v)]
-
-FV(newvar v:=e in c)
-  = FV(e) ∪ (FV(c) − {v})
-```
-
-The initializer may contain free `v`, while occurrences of `v` in the body are bound. The restoration function is extended strictly over bottom.
-
-> [!example] Separating local and global changes
-> From `x=10`, `y=3`, evaluate `newvar x:=x+1 in (x:=x+y; y:=x)`.
->
-> 1. The initializer is evaluated outside the scope, yielding 11 and local state `x=11,y=3`.
-> 2. After the first body assignment local `x=14`; after the second, `y=14`.
-> 3. On leaving the scope, only `x` is restored to its outer value 10.
-> 4. The final observation is `x=10,y=14`; the local computation's effect on `y` remains.
->
-> **Conclusion:** Locality does not roll back the whole body; it protects the outer value of the bound name.
-
-> [!warning] An assignment target is not a binder
-> The `x` in `x:=e` creates no scope and is a free occurrence. Hence `FV(x:=e)={x}∪FV(e)` and the set of freely assigned variables is `FA(x:=e)={x}`. In `newvar x:=e in c`, the declared `x` binds the body, so local assignments to it are removed when computing the declaration's externally assigned set.
-
-> [!question] Retrieval check
-> 1. Use an example to explain why the binder in `newvar v:=e in c` does not scope over `e`.
-> 2. How does restoration behave when the body terminates normally versus diverges?
-> 3. Why do `FV` and `FA` record different information? Relate the answer to assignment targets.
-
----
-
-## 09. The Coincidence Theorem for commands and effect boundaries — §2.5 · pp. 41–42 · 5 min
-
-> [!abstract] Section focus
-> command 결과 전체는 초기 상태 전체를 포함하지만, 자유롭게 읽고 쓸 수 있는 변수만 결과 차이를 만들 수 있다.
+*command 결과 전체는 초기 상태 전체를 포함하지만, 자유롭게 읽고 쓸 수 있는 변수만 결과 차이를 만들 수 있다.*
 
 Chapter 1의 expression Coincidence Theorem은 두 state가 free variable에서 agree (일치)하면 expression value도 같다고 말했다. command에는 더 섬세한 statement가 필요하다. `⟦c⟧σ`가 normal state라면 그 result는 command와 무관한 variable의 initial value까지 그대로 담는 total state다. 그래서 whole result state가 오직 `FV(c)`에만 의존한다고 말할 수는 없다. relevant result와 preserved result를 나누어야 한다.
 
@@ -960,61 +964,9 @@ Chapter 1의 expression Coincidence Theorem은 두 state가 free variable에서 
 > [!tip] A sufficient condition for independent commands to commute
 > `FV(c₀)∩FA(c₁)=∅`이고 `FA(c₀)∩FV(c₁)=∅`이면 어느 command도 다른 command가 읽는 값을 바꾸지 않는다. 두 command가 모두 deterministic한 현재 언어에서는 이 disjointness를 이용해 `c₀;c₁`과 `c₁;c₀`의 같은 결과를 증명할 수 있다. aliasing substitution이나 concurrency를 추가하면 독립성 가정을 다시 확인해야 한다.
 
-> [!question] Retrieval check
-> 1. 왜 command Coincidence Theorem이 결과 상태 전체의 equality를 주장하지 않는가?
-> 2. `w∉FA(c)`가 정상 종료 뒤 보장하는 frame 성질을 쓰고 local assignment가 반례가 아닌 이유를 말하라.
-> 3. 두 command가 commute하기 위한 read/write disjointness 조건을 `FV`와 `FA`로 써 보라.
+### Command substitution, fresh renaming, and aliasing — §2.5 · pp. 41–45
 
-### English companion — The Coincidence Theorem for commands and effect boundaries
-
-*A command result is a whole state, but only variables the command can freely read or write can create observable differences.*
-
-Chapter 1's expression Coincidence Theorem said that states agreeing on free variables give the same expression value. Commands need a subtler statement. A normal result `⟦c⟧σ` is a complete state carrying through initial values of variables irrelevant to the command. The entire result state therefore does not depend only on `FV(c)`; relevant output and preserved output must be separated.
-
-The first part concerns termination and free-variable results. If initial states `σ` and `σ'` agree on every variable in `FV(c)`, the executions either both diverge or both terminate. On termination, their result states agree on every variable in `FV(c)`. Control flow and all freely computed values depend only on those initial values, so termination and relevant outputs cannot split.
-
-The second part is a frame property. If `c` terminates and `w∉FA(c)`, final `w` equals initial `σ(w)`. A command cannot change a variable it never freely assigns. Assignments to a local `w` do not count externally because restoration removes them from the declaration's `FA`. This prepares frame-style reasoning and conditions for reordering independent commands.
-
-Together the two parts track dependence of a result variable `w`. If `w∈FV(c)`, its final value is determined by initial values on `FV(c)`; if `w∉FA(c)`, its own initial value is preserved outright. This is an early form of static effect summaries used to decide which commands optimizations may move and which read/write sets they share.
-
-### Two clauses of command coincidence
-
-```text
-σ =FV(c) σ'  ⇒
-+  (⟦c⟧σ = ⊥ = ⟦c⟧σ')
-+  or
-+  (⟦c⟧σ =FV(c) ⟦c⟧σ')
-+
-⟦c⟧σ ≠ ⊥ ∧ w∉FA(c)  ⇒
-+  (⟦c⟧σ)(w) = σ(w)
-```
-
-Equality in the first clause is restricted to the displayed variable set, not whole-state equality. The second clause assumes normal termination because variable selection is undefined on bottom.
-
-> [!example] Calculating result dependence from read/write sets
-> Execute `c = x:=x+z; y:=x+y` from state `σ`.
->
-> 1. `FV(c)={x,y,z}` and `FA(c)={x,y}`.
-> 2. Final `x=σ(x)+σ(z)` and final `y=σ(x)+σ(z)+σ(y)`, depending only on the three free initial values.
-> 3. Since `z∉FA(c)`, final `z=σ(z)`; every other `w∉{x,y}` also retains its initial value.
-> 4. Thus states agreeing on `x,y,z` agree on termination and relevant outputs; differences in irrelevant variables are merely carried through.
->
-> **Conclusion:** Whole result states may differ, while the command's computed observable effect agrees within the free-variable boundary.
-
-> [!tip] A sufficient condition for independent commands to commute
-> If `FV(c₀)∩FA(c₁)=∅` and `FA(c₀)∩FV(c₁)=∅`, neither command changes a value read by the other. In the current deterministic language, this disjointness can prove `c₀;c₁` and `c₁;c₀` equal. Aliasing substitution or concurrency requires the independence assumption to be checked again.
-
-> [!question] Retrieval check
-> 1. Why does the command Coincidence Theorem not claim equality of whole result states?
-> 2. State the frame property guaranteed by `w∉FA(c)` and explain why local assignment is not a counterexample.
-> 3. Write a read/write disjointness condition for two commands to commute using `FV` and `FA`.
-
----
-
-## 10. Command substitution, fresh renaming, and aliasing — §2.5 · pp. 41–45 · 8 min
-
-> [!abstract] Section focus
-> command substitution (command 치환)은 variable만 variable로 보낼 수 있고 semantic preservation (의미 보존)에는 relevant variable에서의 injectivity가 필요하다.
+*command substitution (command 치환)은 variable만 variable로 보낼 수 있고 semantic preservation (의미 보존)에는 relevant variable에서의 injectivity가 필요하다.*
 
 expression substitution은 variable을 임의의 integer expression으로 바꿀 수 있지만 command에는 assignment target이 있다. `x:=x+1`에서 `x`를 `10`으로 substitute하면 `10:=10+1`, `y×z`로 substitute하면 `y×z:=y×z+1`이 되어 abstract syntax을 벗어난다. 따라서 command substitution map은 `S:Var→Var`로 제한한다. 이 map은 read occurrence (읽기 출현)와 write occurrence (쓰기 출현) 모두에 같은 renaming을 적용한다.
 
@@ -1061,12 +1013,100 @@ binder clause는 initializer와 body에 서로 다른 map을 사용한다. `v_ne
 > binder case에서는 `S`를 `S[v↦v_new]`로 바꾸고 sequence case에서는 whole free-variable set보다 작은 각 subcommand set을 다룬다. 처음부터 ‘모든 variable에서 injective’나 ‘정확히 `FV(c)`에서만 대응’이라는 special statement로 잡으면 recursive call에 맞지 않는다. 더 큰 relevant set `V`를 parameter로 두고 그 위의 injectivity와 state correspondence (상태 대응)를 가정해야 structural induction이 닫힌다.
 
 > [!question] Retrieval check
-> 1. command substitution을 `Var→IntExp`가 아니라 `Var→Var`로 제한해야 하는 이유를 반례로 보라.
-> 2. capture avoidance와 alias prevention이 해결하는 서로 다른 문제를 설명하라.
-> 3. bound-variable renaming은 safe하지만 두 free variable을 하나로 map하는 substitution은 위험한 이유는 무엇인가?
-> 4. substitution theorem의 상태 대응 조건 `σ(w)=σ'(S(w))`가 무엇을 뜻하는지 말하라.
+> 1. `newvar v:=e in c`에서 binder의 scope가 `e`를 포함하지 않는 이유를 예제로 설명하라.
+> 2. body가 terminate normally (정상 종료)할 때와 nonterminate할 때 restoration function이 각각 어떻게 동작하는가?
+> 3. `FV`와 `FA`가 다른 정보를 기록하는 이유를 assignment target과 연결해 설명하라.
+> 4. 왜 command Coincidence Theorem이 결과 상태 전체의 equality를 주장하지 않는가?
+> 5. `w∉FA(c)`가 정상 종료 뒤 보장하는 frame 성질을 쓰고 local assignment가 반례가 아닌 이유를 말하라.
+> 6. 두 command가 commute하기 위한 read/write disjointness 조건을 `FV`와 `FA`로 써 보라.
+> 7. command substitution을 `Var→IntExp`가 아니라 `Var→Var`로 제한해야 하는 이유를 반례로 보라.
+> 8. capture avoidance와 alias prevention이 해결하는 서로 다른 문제를 설명하라.
+> 9. bound-variable renaming은 safe하지만 두 free variable을 하나로 map하는 substitution은 위험한 이유는 무엇인가?
+> 10. substitution theorem의 상태 대응 조건 `σ(w)=σ'(S(w))`가 무엇을 뜻하는지 말하라.
 
-### English companion — Command substitution, fresh renaming, and aliasing
+### English companion — 2.5 Variable Declarations and Substitution
+
+*Add local variable declarations to syntax and semantics, establish initialization, scope, and restoration, then proceed through coincidence properties for free and assigned variables to command substitution and aliasing conditions.*
+
+### Binding, initialization, and restoration of local variables — §2.5 · pp. 39–41
+
+*`newvar v:=e in c` computes an initializer in the old state, uses a new `v` only in the body, and restores the outer value afterward.*
+
+Local declarations add the production `comm ::= newvar v := e in c`. The binder is `v`, and its scope is only the body `c`; the initializer `e` lies outside. Thus the right-hand `x` in `newvar x:=x+1 in c` reads the outer `x`, not the newly declared one. Giving the binder scope over the initializer would make the initialization equation circular.
+
+The semantics has three steps. First compute `n=⟦e⟧σ` in the original state and form `σ₀=σ[v↦n]`. Execute `c` from `σ₀`. If it returns a normal state `σ₁`, restore the outer value `σ(v)` and return `σ₁[v↦σ(v)]`. If the body diverges, strict extension makes the whole declaration bottom; no restored final state is observed.
+
+The model does not literally describe allocating a fresh physical address. Because the language observes only variable names and integer states, saving and restoring the old value of `v` suffices to represent lexical locality. Changes to other free variables remain visible; changes to local `v` are hidden. Whether this abstraction is adequate will depend on the observations and contexts chosen in the final section.
+
+Explicit initialization is a semantic design choice, not mere convenience. Leaving a local uninitialized may make execution depend on accidental storage contents and destroy reproducibility. An explicit initializer keeps behavior explainable from syntax and the initial state. It is more general than mandatory zero initialization while remaining deterministic.
+
+### Declaration semantics and free variables
+
+```text
+⟦newvar v:=e in c⟧ σ
+  = restoreᵥ,σ†(⟦c⟧(σ[v ↦ ⟦e⟧σ]))
+
+restoreᵥ,σ(σ') = σ'[v ↦ σ(v)]
+
+FV(newvar v:=e in c)
+  = FV(e) ∪ (FV(c) − {v})
+```
+
+The initializer may contain free `v`, while occurrences of `v` in the body are bound. The restoration function is extended strictly over bottom.
+
+> [!example] Separating local and global changes
+> From `x=10`, `y=3`, evaluate `newvar x:=x+1 in (x:=x+y; y:=x)`.
+>
+> 1. The initializer is evaluated outside the scope, yielding 11 and local state `x=11,y=3`.
+> 2. After the first body assignment local `x=14`; after the second, `y=14`.
+> 3. On leaving the scope, only `x` is restored to its outer value 10.
+> 4. The final observation is `x=10,y=14`; the local computation's effect on `y` remains.
+>
+> **Conclusion:** Locality does not roll back the whole body; it protects the outer value of the bound name.
+
+> [!warning] An assignment target is not a binder
+> The `x` in `x:=e` creates no scope and is a free occurrence. Hence `FV(x:=e)={x}∪FV(e)` and the set of freely assigned variables is `FA(x:=e)={x}`. In `newvar x:=e in c`, the declared `x` binds the body, so local assignments to it are removed when computing the declaration's externally assigned set.
+
+### The Coincidence Theorem for commands and effect boundaries — §2.5 · pp. 41–42
+
+*A command result is a whole state, but only variables the command can freely read or write can create observable differences.*
+
+Chapter 1's expression Coincidence Theorem said that states agreeing on free variables give the same expression value. Commands need a subtler statement. A normal result `⟦c⟧σ` is a complete state carrying through initial values of variables irrelevant to the command. The entire result state therefore does not depend only on `FV(c)`; relevant output and preserved output must be separated.
+
+The first part concerns termination and free-variable results. If initial states `σ` and `σ'` agree on every variable in `FV(c)`, the executions either both diverge or both terminate. On termination, their result states agree on every variable in `FV(c)`. Control flow and all freely computed values depend only on those initial values, so termination and relevant outputs cannot split.
+
+The second part is a frame property. If `c` terminates and `w∉FA(c)`, final `w` equals initial `σ(w)`. A command cannot change a variable it never freely assigns. Assignments to a local `w` do not count externally because restoration removes them from the declaration's `FA`. This prepares frame-style reasoning and conditions for reordering independent commands.
+
+Together the two parts track dependence of a result variable `w`. If `w∈FV(c)`, its final value is determined by initial values on `FV(c)`; if `w∉FA(c)`, its own initial value is preserved outright. This is an early form of static effect summaries used to decide which commands optimizations may move and which read/write sets they share.
+
+### Two clauses of command coincidence
+
+```text
+σ =FV(c) σ'  ⇒
++  (⟦c⟧σ = ⊥ = ⟦c⟧σ')
++  or
++  (⟦c⟧σ =FV(c) ⟦c⟧σ')
++
+⟦c⟧σ ≠ ⊥ ∧ w∉FA(c)  ⇒
++  (⟦c⟧σ)(w) = σ(w)
+```
+
+Equality in the first clause is restricted to the displayed variable set, not whole-state equality. The second clause assumes normal termination because variable selection is undefined on bottom.
+
+> [!example] Calculating result dependence from read/write sets
+> Execute `c = x:=x+z; y:=x+y` from state `σ`.
+>
+> 1. `FV(c)={x,y,z}` and `FA(c)={x,y}`.
+> 2. Final `x=σ(x)+σ(z)` and final `y=σ(x)+σ(z)+σ(y)`, depending only on the three free initial values.
+> 3. Since `z∉FA(c)`, final `z=σ(z)`; every other `w∉{x,y}` also retains its initial value.
+> 4. Thus states agreeing on `x,y,z` agree on termination and relevant outputs; differences in irrelevant variables are merely carried through.
+>
+> **Conclusion:** Whole result states may differ, while the command's computed observable effect agrees within the free-variable boundary.
+
+> [!tip] A sufficient condition for independent commands to commute
+> If `FV(c₀)∩FA(c₁)=∅` and `FA(c₀)∩FV(c₁)=∅`, neither command changes a value read by the other. In the current deterministic language, this disjointness can prove `c₀;c₁` and `c₁;c₀` equal. Aliasing substitution or concurrency requires the independence assumption to be checked again.
+
+### Command substitution, fresh renaming, and aliasing — §2.5 · pp. 41–45
 
 *Command substitution may map variables only to variables, and semantic preservation requires injectivity on the relevant names.*
 
@@ -1115,17 +1155,27 @@ The binder clause uses different maps for initializer and body. Different valid 
 > The binder case replaces `S` by `S[v↦v_new]`, while the sequence case applies induction to subcommands with smaller free-variable sets. A special statement using global injectivity or exactly `FV(c)` does not fit these recursive calls. Parameterizing by a larger relevant set `V`, with injectivity and state correspondence on `V`, makes structural induction close.
 
 > [!question] Retrieval check
-> 1. Give a counterexample showing why command substitution must be `Var→Var`, not `Var→IntExp`.
-> 2. Explain the distinct problems solved by capture avoidance and alias prevention.
-> 3. Why is bound-variable renaming safe while mapping two free variables to one is dangerous?
-> 4. What does the state-correspondence condition `σ(w)=σ'(S(w))` mean in the substitution theorem?
+> 1. Use an example to explain why the binder in `newvar v:=e in c` does not scope over `e`.
+> 2. How does restoration behave when the body terminates normally versus diverges?
+> 3. Why do `FV` and `FA` record different information? Relate the answer to assignment targets.
+> 4. Why does the command Coincidence Theorem not claim equality of whole result states?
+> 5. State the frame property guaranteed by `w∉FA(c)` and explain why local assignment is not a counterexample.
+> 6. Write a read/write disjointness condition for two commands to commute using `FV` and `FA`.
+> 7. Give a counterexample showing why command substitution must be `Var→Var`, not `Var→IntExp`.
+> 8. Explain the distinct problems solved by capture avoidance and alias prevention.
+> 9. Why is bound-variable renaming safe while mapping two free variables to one is dangerous?
+> 10. What does the state-correspondence condition `σ(w)=σ'(S(w))` mean in the substitution theorem?
 
 ---
 
-## 11. Using `for` desugaring as a language-design audit — §2.6 · pp. 45–47 · 6 min
+## 2.6 Syntactic Sugar: The for Command — §2.6 · pp. 45–47 · 6 min
 
 > [!abstract] Section focus
-> syntactic sugar는 짧은 표기를 core language로 옮기는 번역이며, 번역식이 세부 실행 정책을 고정한다.
+> 새 primitive meaning을 추가하지 않고 `for` command를 앞서 정의한 core command로 translate하며, bound evaluation과 fresh variable에 필요한 side condition을 순서대로 점검한다.
+
+### Using `for` desugaring as a language-design audit — §2.6 · pp. 45–47
+
+*syntactic sugar는 짧은 표기를 core language로 옮기는 번역이며, 번역식이 세부 실행 정책을 고정한다.*
 
 `for v:=e₀ to e₁ do c`는 `e₀`부터 `e₁`까지 포함하는 increasing interval (증가 구간)의 각 integer에 `v`를 두고 body를 실행하는 convenience syntax다. 별도 semantic domain이나 semantic equation을 추가하는 대신 기존 `newvar`, `while`, assignment로 translate할 수 있다. 모든 `for`를 반복적으로 eliminate해 core command를 얻을 수 있으면 새 notation은 계산 가능성의 범위를 넓히지 않지만 의도를 더 짧고 제한적으로 표현한다.
 
@@ -1166,7 +1216,11 @@ side conditions:
 > 2. upper bound를 fresh 변수에 저장하지 않으면 실행 횟수가 바뀌는 예를 만들어라.
 > 3. side condition `v∉FA(c)`가 보장하는 `for`의 추론상 장점은 무엇인가?
 
-### English companion — Using `for` desugaring as a language-design audit
+### English companion — 2.6 Syntactic Sugar: The for Command
+
+*Translate the `for` command into previously defined core commands without adding a primitive meaning, checking bound evaluation and fresh-variable side conditions in order.*
+
+### Using `for` desugaring as a language-design audit — §2.6 · pp. 45–47
 
 *Syntactic sugar is a translation into the core language, and the translation fixes detailed execution policy.*
 
@@ -1211,10 +1265,14 @@ The `≤` makes the interval inclusive. If `e₀>e₁`, the first test is false 
 
 ---
 
-## 12. How arithmetic-error policy changes semantic types — §2.7 · pp. 47–48 · 5 min
+## 2.7 Arithmetic Errors — §2.7 · pp. 47–48 · 5 min
 
 > [!abstract] Section focus
-> 이 절은 오류 결과를 실제로 추가하지 않고, 검출 정책과 비검출 정책이 각각 어떤 semantics을 요구하는지 분리한다.
+> arithmetic error를 포함하려면 expression result type과 모든 propagation equation이 어떻게 달라져야 하는지 검토하고, 교재가 이 확장을 현재 장에서는 채택하지 않는 이유까지 따른다.
+
+### How arithmetic-error policy changes semantic types — §2.7 · pp. 47–48
+
+*이 절은 오류 결과를 실제로 추가하지 않고, 검출 정책과 비검출 정책이 각각 어떤 semantics을 요구하는지 분리한다.*
 
 이 언어에는 0으로 나누기와 overflow라는 두 산술 위험이 있다. overflow는 더 넓은 정수 기계에서는 발생하지 않을 수 있지만 division by zero는 완전한 정수 연산에서도 값이 없다. 그 차이에도 불구하고 언어 설계자는 둘을 검출해 보고할지, underlying hardware가 내는 결과를 받아들일지 결정해야 한다. 이 정책은 구현 세부가 아니라 프로그램이 관찰할 수 있는 동작을 정하는 언어 정의의 일부다.
 
@@ -1254,7 +1312,11 @@ error를 detect하려면 현재 model을 조금 고치는 것으로는 부족하
 > 2. 검출된 error를 `⊥`와 합치면 잃는 관찰을 말하라.
 > 3. 2장이 explicit error semantics을 논의하면서도 채택하지 않는 이유를 두 가지 말하라.
 
-### English companion — How arithmetic-error policy changes semantic types
+### English companion — 2.7 Arithmetic Errors
+
+*Examine how arithmetic errors would change expression result types and propagation equations, then follow the textbook's reasons for not adopting that extension in this chapter.*
+
+### How arithmetic-error policy changes semantic types — §2.7 · pp. 47–48
 
 *This section does not actually add error results; it separates the semantics required by checked and unchecked arithmetic.*
 
@@ -1298,10 +1360,14 @@ Chapter 2 deliberately does not adopt this extension. It would distract from the
 
 ---
 
-## 13. Defining soundness and full abstraction through observations — §2.8 · pp. 48–51 · 7 min
+## 2.8 Soundness and Full Abstraction — §2.8 · pp. 48–51 · 7 min
 
 > [!abstract] Section focus
-> semantics의 추상화 수준은 어떤 phrase를 어떤 context에 넣고 무엇을 관찰하는지 정한 뒤에만 평가할 수 있다.
+> 마지막으로 denotational equality를 program context와 observation에 대조해 semantic soundness와 full abstraction을 정의하고, 선택한 관찰 기준에서 현재 semantics이 적절한지 검사한다.
+
+### Defining soundness and full abstraction through observations — §2.8 · pp. 48–51
+
+*semantics의 추상화 수준은 어떤 phrase를 어떤 context에 넣고 무엇을 관찰하는지 정한 뒤에만 평가할 수 있다.*
 
 denotational semantics의 목적은 사용자에게 무관한 실행 세부를 버리고 중요한 동작만 남기는 것이다. semantics `⟦-⟧₁`이 `⟦-⟧₀`보다 적어도 더 abstract하다는 말은 `⟦p⟧₀=⟦q⟧₀`이면 반드시 `⟦p⟧₁=⟦q⟧₁`이라는 뜻이다. 더 abstract한 semantics은 더 많은 phrase 쌍을 같게 볼 수 있지만, 사용자에게 보이는 차이까지 지우면 안 된다.
 
@@ -1355,7 +1421,11 @@ semantic soundness는 denotationally equal하다고 선언한 pair를 user obser
 > 3. concurrency를 context에 추가하면 final-state semantics의 기존 equality가 unsound해질 수 있는 예를 말하라.
 > 4. semantics soundness와 inference-rule soundness를 구분하라.
 
-### English companion — Defining soundness and full abstraction through observations
+### English companion — 2.8 Soundness and Full Abstraction
+
+*Finally compare denotational equality with program contexts and observations, define semantic soundness and full abstraction, and test whether the semantics matches the chosen observations.*
+
+### Defining soundness and full abstraction through observations — §2.8 · pp. 48–51
 
 *A semantics can be judged too coarse or too fine only after phrases, contexts, and observations are fixed.*
 
@@ -1413,7 +1483,7 @@ Soundness prevents users from refuting an equality claimed by the model. Full ab
 
 ---
 
-## 14. Practice workshop: calculate states, approximants, and translations — Integrated practice · pp. 24–53 · 7 min
+## 09. Practice workshop: calculate states, approximants, and translations — Integrated practice · pp. 24–53 · 7 min
 
 > [!abstract] Section focus
 > 2장의 이해는 용어 암기보다 semantic type을 맞추고 작은 계산을 끝까지 전개할 때 드러난다.
@@ -1494,7 +1564,7 @@ For binding exercises, compute `FV` and `FA` separately and first check that a s
 
 ---
 
-## 15. Connecting state change to recursion and abstraction — Chapter synthesis · pp. 24–53 · 4 min
+## 10. Connecting state change to recursion and abstraction — Chapter synthesis · pp. 24–53 · 4 min
 
 > [!abstract] Section focus
 > Chapter 2는 small command language를 통해 partial computation (부분 계산), recursion (재귀), binding, language extension, observational equivalence (관찰 동치)를 한 이론으로 묶는다.
@@ -1557,71 +1627,139 @@ The same sequence is useful in reverse while reading: ask what an equation choos
 
 # Condensed review
 
-## Step 1 — Read commands as state transformers — §2.1–2.2
+## 2.1 Syntax — §2.1
 
-expression은 state를 관찰하고 command는 state를 바꾸는 state transformer다.
+integer expression, Boolean expression, command의 세 phrase class와 constructor를 정한다.
 
-assignment는 한 variable만 갱신하고, sequencing은 두 state transformer를 합성하며, conditional은 Boolean expression의 값으로 분기한다. nontermination은 final state의 부재이므로 command denotation에는 bottom element `⊥`가 필요하다.
+표면 문법보다 abstract syntax을 먼저 고정하고, expression language를 Chapter 1의 Predicate Logic과 가깝게 유지한 이유를 확인한다. 이 선택이 다음 장의 program specification과 proof를 연결한다.
 
 > [!question] Close the book and answer
-> `x:=x+1; y:=x`의 denotation을 두 state transformer의 composition으로 써 보라.
+> 세 phrase class를 말하고 각 class의 constructor를 하나씩 예로 들어라.
 
 ### English companion
 
-Expressions observe a state; commands transform it.
+Define the three phrase classes and their constructors.
 
-Assignment updates one variable, sequencing composes transformations, and conditionals branch on a Boolean expression. Nontermination is represented by the absence of a final state, introducing the bottom value ⊥.
+Fix abstract syntax first and explain why expressions remain close to Chapter 1 Predicate Logic, preparing the specification and proof system of the next chapter.
 
 ---
 
-## Step 2 — Approximation and least fixed points — §2.3–2.4
+## 2.2 Denotational Semantics — §2.2
 
-domain order는 계산 결과의 정보량을 나타내고 continuous function은 증가하는 approximation의 limit를 보존한다.
+expression은 state를 관찰하고 command는 possibly nonterminating state transformer가 된다.
 
-`while` functional `F`를 0회, 1회, 2회 펼친 finite approximant에서 시작한다. bottom에서 `F`를 반복해 얻는 chain의 least upper bound (lub)가 `fix F`, 즉 least fixed point다.
+assignment, skip, sequencing, conditional을 semantic equation으로 계산한 뒤 `while` equation이 자기 자신을 참조해 아직 유일한 definition이 되지 못한다는 지점에서 절을 마친다.
 
 > [!question] Close the book and answer
-> diverging loop의 모든 finite approximant가 왜 final state를 주지 않는지 설명하라.
+> `x:=x+1; y:=x`를 strict state-transformer composition으로 써 보라.
 
 ### English companion
 
-A domain order represents information content, and continuous functions preserve limits of increasing approximations.
+Expressions observe states, while commands denote possibly nonterminating state transformers.
 
-Approximate a while loop by allowing zero, one, two, and more unfoldings. Iterating F from ⊥ yields a chain whose least upper bound is `fix F`, the least solution that adds no unjustified behavior.
+Calculate assignment, skip, sequencing, and conditionals, then end where the self-referential `while` equation still fails to select a unique meaning.
 
 ---
 
-## Step 3 — Declarations, scope, and aliasing — §2.5
+## 2.3 Domains and Continuous Functions — §2.3
 
-local declaration은 name을 bind하고, 서로 다른 name이 같은 storage location을 가리키면 aliasing이 생긴다.
+information order와 chain limit가 partial computation을 비교하는 구조를 만든다.
 
-semantics은 declaration 전 값을 저장하고 scope가 끝날 때 복원하는 effect를 모델링한다. syntactic substitution은 binder를 피하고, 서로 다른 variable을 하나로 합치는 substitution이 assignment effect를 바꿀 수 있음을 고려해야 한다.
+predomain, domain, lifting을 차례로 정의하고 monotone·continuous function이 increasing approximation의 least upper bound를 보존하는 이유를 확인한다. function space에는 pointwise order를 사용한다.
 
 > [!question] Close the book and answer
-> input과 output parameter가 같은 variable로 substitute될 때 factorial program이 깨질 수 있는 이유는?
+> information order가 숫자 크기 순서가 아닌 이유와 bottom의 위치를 설명하라.
 
 ### English companion
 
-A local declaration binds a name; aliasing occurs when different names designate the same storage.
+Information orders and chain limits organize partial computations.
 
-The semantics models saving the old value and restoring it after the scope. Syntactic substitution must avoid binders and must account for substitutions that merge distinct variables, changing assignment effects.
+Define predomains, domains, and lifting in order; then explain monotone and continuous functions and the pointwise order on function spaces.
 
 ---
 
-## Step 4 — Extensions and observability — §2.6–2.8
+## 2.4 The Least Fixed-Point Theorem — §2.4
 
-`for` 같은 construct는 core language로 translate할 수 있고 arithmetic-error policy는 observable result space를 바꿀 수 있다.
+continuous functional의 least fixed point를 bottom에서 시작한 approximant chain으로 구성한다.
 
-syntactic sugar는 새 primitive semantics 없이 core language translation으로 정의된다. semantic soundness는 denotationally equal한 program을 어떤 허용 context와 observation도 구별하지 못하게 하며 full abstraction은 converse까지 요구한다.
+theorem을 먼저 증명한 뒤 `while` functional에 적용한다. `F⁰⊥, F¹⊥, …`는 허용된 finite unfolding 횟수를 늘리며, lub는 finite execution이 정당화한 behavior만 포함한다.
 
 > [!question] Close the book and answer
-> 두 program의 denotation은 다르지만 어떤 language context도 구별하지 못한다면 full abstraction에 어떤 문제가 생기는가?
+> diverging loop의 모든 finite approximant가 final state를 주지 않는 이유를 설명하라.
 
 ### English companion
 
-Constructs such as `for` can be translated into the core language, while arithmetic-error policy can change the space of observable results.
+Construct a continuous functional's least fixed point from the approximant chain starting at bottom.
 
-Syntactic sugar is defined by translation into the core language rather than a new primitive meaning. Semantic soundness requires denotationally equal programs to be indistinguishable by every allowed context and observation; full abstraction also requires the converse.
+Prove the theorem and then apply it to the `while` functional. Increasing unfoldings `F⁰⊥, F¹⊥, …` justify exactly the behavior collected by the least upper bound.
+
+---
+
+## 2.5 Variable Declarations and Substitution — §2.5
+
+local declaration의 scope·restoration에서 출발해 substitution과 aliasing 조건으로 이동한다.
+
+initializer는 outer state에서 계산하고 body가 정상 종료하면 local value를 복원한다. free variable과 assigned variable의 coincidence 성질을 세운 뒤, command substitution이 distinct variable을 합쳐 effect를 바꾸지 않도록 side condition을 둔다.
+
+> [!question] Close the book and answer
+> input과 output parameter가 같은 variable로 substitute될 때 program behavior가 바뀔 수 있는 이유는?
+
+### English companion
+
+Proceed from declaration scope and restoration to substitution and aliasing conditions.
+
+Evaluate the initializer in the outer state, restore the local value after normal termination, establish coincidence properties, and impose side conditions preventing substitution from merging distinct writable variables.
+
+---
+
+## 2.6 Syntactic Sugar: The for Command — §2.6
+
+`for`를 core command로 translate하며 translation의 의미 보존 조건을 확인한다.
+
+bound evaluation 횟수, empty interval, control variable의 scope와 fresh-name 조건을 각각 translation의 어느 부분이 보존하는지 추적한다.
+
+> [!question] Close the book and answer
+> upper bound를 한 번만 evaluate해야 하는 이유를 side effect 가능성과 연결해 설명하라.
+
+### English companion
+
+Translate `for` into core commands and audit the conditions for meaning preservation.
+
+Trace how the translation preserves bound evaluation count, empty intervals, control-variable scope, and fresh-name conditions.
+
+---
+
+## 2.7 Arithmetic Errors — §2.7
+
+explicit error를 넣으면 expression result type과 propagation rule이 달라진다.
+
+unchecked arithmetic과 checked arithmetic의 semantic design을 비교하고, 현재 장이 error result를 보류해 Chapter 3 assertion language와의 밀접한 연결을 유지하는 이유를 확인한다.
+
+> [!question] Close the book and answer
+> bottom과 arithmetic error가 같은 result가 아닌 이유를 말하라.
+
+### English companion
+
+Explicit errors change expression result types and propagation rules.
+
+Compare unchecked and checked arithmetic semantics and explain why this chapter defers error results to retain the close connection to Chapter 3 assertions.
+
+---
+
+## 2.8 Soundness and Full Abstraction — §2.8
+
+denotational equality를 context와 observation이 구별할 수 있는 behavior에 맞춘다.
+
+semantic soundness는 equal denotation이 observationally indistinguishable함을 요구하고, full abstraction은 그 converse까지 요구한다. observation을 바꾸면 equality 기준도 다시 검토해야 한다.
+
+> [!question] Close the book and answer
+> denotation은 다르지만 어떤 context도 구별하지 못하는 두 program이 있다면 full abstraction의 어느 방향이 실패하는가?
+
+### English companion
+
+Relate denotational equality to behavior distinguishable by contexts and observations.
+
+Semantic soundness requires equal denotations to be observationally indistinguishable; full abstraction also requires the converse. Changing observations requires re-auditing equality.
 
 ## Self-check quiz
 

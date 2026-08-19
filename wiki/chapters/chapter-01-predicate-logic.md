@@ -231,6 +231,49 @@ assertion이 특정 상태 하나가 아니라 고려하는 모든 상태에서 
 >
 > **English:** Establishes how to separate and reconnect the three layers used throughout the book: syntax, semantics, and proof.
 
+## The Chapter 1 vocabulary pipeline
+
+> [!tip] First-pass terminology map
+> 각 term은 독립된 암기 항목이 아니라 한 phrase가 글자에서 수학적 의미와 theorem으로 이동하는 과정의 한 단계다. 아래 화살표를 먼저 잡고, longform의 ∀x. x+0=x 예제에서 같은 연결을 확인한다.
+>
+> **English:** The terms are not isolated vocabulary items. Each names one stage in the path from written text to mathematical meaning and theorem. Learn the arrows first, then follow the same path through the worked ∀x. x+0=x example.
+
+### `concrete syntax → parser → abstract syntax`
+
+concrete syntax은 사람이 쓰는 문자열이고 parser는 표기 세부를 제거한 constructor tree를 만든다. semantics이 읽는 input은 원문 문자열이 아니라 이 abstract phrase다.
+
+**English:** Concrete syntax is the written string. Parsing removes presentation details and produces the constructor tree—the abstract phrase consumed by semantics.
+
+### `carrier set + constructor → initial algebra`
+
+carrier set은 같은 phrase class의 가능한 모든 값을 모으고 constructor는 값을 만든다. constructor로 유한하게 생성된 값만 포함하는 자유로운 전체 구조를 initial algebra라고 한다.
+
+**English:** Carrier sets collect phrases of each sort, while constructors build them. The freely generated structure containing exactly the finite constructor-built values is the initial algebra.
+
+### `initial algebra → unique homomorphism → denotational semantics`
+
+각 constructor를 target operation으로 해석하면 AST 전체를 target으로 보내는 구조 보존 map이 하나 정해진다. target을 state-dependent value function으로 선택한 경우가 denotational semantics이다.
+
+**English:** Interpreting every constructor in a target determines one structure-preserving map over the whole AST. Choosing state-dependent value functions as the target yields denotational semantics.
+
+### `state → truth in a state → validity`
+
+state는 free variable의 값을 공급한다. assertion denotation을 state 하나에 적용하면 그 state에서의 truth를 얻고, 모든 state에서 true인지 물으면 validity가 된다.
+
+**English:** A state supplies values for free variables. Applying an assertion denotation to one state gives truth there; requiring truth in every state gives validity.
+
+### `inference rule → derivability → soundness → validity`
+
+inference rule을 유한 번 연결해 proof를 만들 수 있으면 derivable하다. soundness는 derivability가 semantic validity를 보장한다는 방향의 theorem이며 두 definition을 같은 것으로 만들지는 않는다.
+
+**English:** Finite use of inference rules gives derivability. Soundness is the theorem that derivability implies semantic validity; it does not collapse the two definitions.
+
+### `binder → scope → free/bound occurrence → substitution`
+
+binder는 scope 안의 occurrence를 bound로 만든다. substitution은 free occurrence만 바꾸며, replacement의 free variable이 새 binder에 capture되지 않도록 fresh renaming을 사용한다.
+
+**English:** A binder makes governed occurrences bound. Substitution rewrites free occurrences and uses fresh renaming to prevent replacement variables from being captured by a binder.
+
 ### §1.1 · Abstract syntax and structural definition
 
 논리식의 표면 표기 대신 항과 공식의 constructor를 정의한다. 이 구조는 재귀 함수와 구조적 귀납법의 기준이 된다.
@@ -270,7 +313,7 @@ assertion이 특정 상태 하나가 아니라 고려하는 모든 상태에서 
 > - 문자열 치환은 변수를 포획할 수 있으므로 바인더 이름 변경이 필요하다.
 >   - EN: Textual replacement can capture variables, so bound-variable renaming may be required.
 
-# Chapter 1 complete study text (60 MIN READ)
+# Chapter 1 complete study text (65 MIN READ)
 
 이 본문은 PL 이론이나 수리논리학을 배운 적 없는 엔지니어를 기준 독자로 삼는다. AST, 함수, map, unit test처럼 익숙한 구현 개념에서 시작해 definition과 proof로 이동한다. 수학 notation이 먼저 나왔더라도 외우지 말고, 바로 뒤의 코드 관점 설명과 worked example에서 어떤 문제를 해결하는지 확인하자.
 
@@ -293,7 +336,7 @@ assertion이 특정 상태 하나가 아니라 고려하는 모든 상태에서 
 >
 > The reading path is: separate strings from ASTs; describe ASTs by constructor contracts rather than one class implementation; map ASTs to state-dependent meanings; distinguish truth in all states from provability by rules; and finally manipulate names safely under binders. The first half connects to compiler front ends and interpreters, the second to type checkers, optimizers, and verifiers.
 
-## 01. Why a programming-languages book begins with Predicate Logic — 도입 · pp. 1 · 4 min
+## 01. Why a programming-languages book begins with Predicate Logic — 도입 · pp. 1 · 9 min
 
 > [!abstract] Section focus
 > 낯선 방법을 익숙한 대상에 먼저 적용하면 방법 자체를 선명하게 볼 수 있다.
@@ -303,6 +346,27 @@ assertion이 특정 상태 하나가 아니라 고려하는 모든 상태에서 
 Predicate Logic은 이 연습에 알맞은 첫 object language다. 정수식과 Boolean condition은 엔지니어에게 이미 익숙하므로 새 언어 기능보다 설명 방법에 집중할 수 있다. 또한 이 장의 식은 항상 정수나 truth value를 내므로 nontermination과 partial information은 잠시 미룬다. 3장에서는 여기서 만든 assertion language를 명령형 프로그램의 precondition과 postcondition에 그대로 사용한다.
 
 이 책의 용어는 전통 논리학과 조금 다르다. 논리학의 항(term)은 정수식(integer expression), 잘 형성된 공식은 assertion, 변수에 값을 배정하는 assignment는 상태(state)라고 부른다. 이런 명칭은 곧 등장할 프로그래밍 언어와 어휘를 맞추려는 선택이다. 여기서 상태는 프로그램 메모리를 아직 뜻하지 않고, 각 변수 이름에 정수 하나를 대응시키는 함수다.
+
+> [!tip] Chapter 1 vocabulary map: from source text to theorem
+> concrete syntax (구체 표기)는 사람이 쓰는 문자열과 괄호·우선순위 같은 표기 규칙이다. parser는 이를 읽어 abstract syntax (추상 구조), 즉 표기법을 지운 phrase structure (구절 구조)를 만든다. `x+0`이라는 source text와 `Add(Var(x),Const(0))`이라는 AST는 같은 phrase를 서로 다른 층에서 나타낸다. 따라서 syntax은 단순히 ‘코드 문자열’이 아니라 어떤 phrase가 존재하고 어떻게 구성되는지를 정하는 구조다.
+>
+> carrier set (운반 집합)은 한 phrase class에 속하는 모든 abstract phrase의 모음이고, constructor (구성자)는 그 원소를 만드는 operation이다. constructor만 유한 번 적용해 얻는 자유로운 구조가 initial algebra다. 각 constructor를 target mathematical operation으로 해석하면 AST 전체를 target으로 보내는 unique homomorphism (유일 준동형), 즉 구조를 보존하는 fold가 정해진다. target이 integer와 Boolean function이면 그 fold가 denotational semantics (denotation 기반 의미 정의)다.
+>
+> state (상태)는 free variable (자유 변수)의 값을 공급하는 input이고, denotation (지시 대상)은 phrase가 나타내는 수학적 object다. 따라서 free variable이 있는 expression의 denotation은 정수 하나가 아니라 `state → integer` function이다. assertion의 denotation을 한 state에 apply하면 truth in that state (그 상태에서의 참)를 얻고, 모든 state에서 true인지 물으면 validity (타당성)를 얻는다. inference rules (추론 규칙)로 finite proof를 만들 수 있는지는 derivability (유도 가능성)이며, soundness (건전성)가 `derivable ⇒ valid`를 연결한다.
+>
+> binder (바인더)는 scope (범위)를 만들고 그 안의 같은-name occurrence를 bound occurrence (결속 출현)로 만든다. binder가 지배하지 않는 occurrence는 free occurrence (자유 출현)이며 state에서 값을 읽는다. substitution (치환)은 free occurrence만 바꾸고, 새 binder가 교체식의 free variable을 붙잡는 variable capture (변수 포획)를 피해야 한다. 이 연결 때문에 binding은 인쇄된 이름의 문제가 아니라 denotation을 보존하기 위한 syntax 구조다.
+
+> [!example] One assertion traced through the vocabulary
+> assertion `∀x. x+0=x` 하나를 source text에서 theorem까지 추적한다.
+>
+> 1. 문자열과 precedence rule은 concrete syntax이다. parsing 뒤 가장 바깥 node는 quantifier constructor이고 body에는 equality와 addition constructor가 중첩된다. 이 constructor tree가 abstract syntax이다.
+> 2. `Assert`와 `IntExp`가 carrier set이고 `Forall`, `Equal`, `Add`, `Var`, `Const`가 constructor다. 이 tree가 모두 finite constructor application으로 만들어졌다는 사실이 initial-algebra 관점이다.
+> 3. semantic homomorphism은 각 constructor case를 따라 tree를 해석한다. `∀x`는 임의의 state `σ`에서 모든 integer `n`을 시험하도록 state를 `[σ|x:n]`으로 update하고, body는 `n+0=n`으로 계산된다.
+> 4. 모든 `n`과 모든 original state에서 body가 true이므로 assertion은 valid하다. 이는 semantic statement `⊨ ∀x. x+0=x`다.
+> 5. proof system이 이를 derive하면 `⊢ ∀x. x+0=x`라고 쓴다. soundness는 이 proof가 validity를 보장하지만, validity의 definition 자체가 proof라는 뜻은 아니다.
+> 6. binder `x`를 fresh `z`로 바꾼 `∀z. z+0=z`는 α-renaming으로 같은 denotation을 갖는다. 이 예에는 free occurrence가 없으므로 바깥 state의 variable value는 result에 영향을 주지 않는다.
+>
+> **결론:** 이 한 예에서 syntax는 ‘무엇이 만들어졌는가’, semantics은 ‘그것이 무엇을 뜻하는가’, proof system은 ‘어떤 rule로 그 truth를 인증하는가’, binding은 ‘어떤 occurrence가 state 대신 binder의 값을 쓰는가’를 각각 담당한다.
 
 ### Four questions to ask of every later language
 
@@ -328,6 +392,27 @@ Predicate logic is a good first object for three reasons. Its arithmetic and log
 
 The terminology is chosen to align logic with later programming languages: terms become integer expressions, formulas become assertions, and assignments of values to variables become states. At this point a state is simply a function from variable names to integers, not yet a machine store.
 
+> [!tip] Chapter 1 vocabulary map: from source text to theorem
+> Concrete syntax is the written string together with parsing conventions such as parentheses and precedence. A parser turns it into abstract syntax—the phrase structure with presentation details removed. The source `x+0` and the AST `Add(Var(x),Const(0))` represent one phrase at different layers. Syntax therefore specifies which phrases exist and how they are built, not merely which strings can be typed.
+>
+> A carrier set contains all abstract phrases of one syntactic class, and constructors build its members. The freely generated structure obtained by finitely applying constructors is the initial algebra. Once every constructor is interpreted by a target mathematical operation, a unique structure-preserving fold—a homomorphism—maps every AST into that target. When the target consists of integer- and Boolean-valued functions, that fold is the denotational semantics.
+>
+> A state supplies values for free variables, while a denotation is the mathematical object represented by a phrase. An open expression therefore denotes a function from states to integers, not one integer. Applying an assertion denotation to one state gives truth in that state; quantifying over every state gives validity. Derivability asks whether inference rules build a finite proof, and soundness connects the axes by guaranteeing `derivable ⇒ valid`.
+>
+> A binder creates a scope and makes governed same-name occurrences bound. An occurrence not governed by a binder is free and obtains its value from the state. Substitution rewrites only free occurrences and must avoid variable capture, where a new binder accidentally governs a variable introduced by the replacement. Binding is therefore semantic structure, not merely a property of printed names.
+
+> [!example] One assertion traced through the vocabulary
+> Trace the assertion `∀x. x+0=x` from source text to theorem.
+>
+> 1. The string and precedence rules belong to concrete syntax. After parsing, the outer node is a quantifier constructor whose body nests equality and addition constructors. That constructor tree is the abstract syntax.
+> 2. `Assert` and `IntExp` are carrier sets; `Forall`, `Equal`, `Add`, `Var`, and `Const` are constructors. The fact that the tree is built entirely by finite constructor applications is the initial-algebra view.
+> 3. The semantic homomorphism interprets the tree constructor by constructor. In an arbitrary state `σ`, `∀x` tests every integer `n` by updating the state to `[σ|x:n]`; the body evaluates to `n+0=n`.
+> 4. Because the body is true for every `n` and every original state, the assertion is valid: the semantic statement `⊨ ∀x. x+0=x`.
+> 5. If the proof system derives it, we write `⊢ ∀x. x+0=x`. Soundness ensures that such a proof implies validity; it does not identify validity with proof.
+> 6. Renaming binder `x` to fresh `z` gives `∀z. z+0=z`, with the same denotation by alpha-renaming. The phrase has no free occurrences, so values supplied by the outer state cannot affect its result.
+>
+> **Conclusion:** In one example, syntax says what was built, semantics says what it means, the proof system says how its truth may be certified by rules, and binding says which occurrences obtain values from a binder rather than the outer state.
+
 ### Four questions to ask of every later language
 
 - Syntax: What kinds of phrases exist, and which constructors build them?
@@ -344,7 +429,7 @@ The terminology is chosen to align logic with later programming languages: terms
 
 ---
 
-## 02. Separating strings from syntactic structure — §1.1 · pp. 1–3 · 6 min
+## Separating strings from syntactic structure — §1.1 · pp. 1–3 · 6 min
 
 > [!abstract] Section focus
 > 프로그램은 문자로 입력되지만 의미가 붙는 대상은 문자 배열이 아니라 파싱된 syntax structure다.
@@ -437,7 +522,7 @@ Quantifier bodies extend to a stopping symbol or the end of the enclosing phrase
 
 ---
 
-## 03. Carriers, constructors, and the initial-algebra view — §1.1 · pp. 3–8 · 7 min
+## Carriers, constructors, and the initial-algebra view — §1.1 · pp. 3–8 · 7 min
 
 > [!abstract] Section focus
 > 이 절의 algebra 용어는 AST 구현을 더 추상적으로 설명하는 interface라고 읽으면 된다.
@@ -556,7 +641,7 @@ Each stage permits one more constructor layer than the preceding stage. The unio
 
 ---
 
-## 04. Denotational meaning as a function of state — §1.2 · pp. 8–10 · 7 min
+## Denotational meaning as a function of state — §1.2 · pp. 8–10 · 7 min
 
 > [!abstract] Section focus
 > free variable이 있는 expression의 denotation은 정수 하나가 아니라 state가 주어질 때 정수를 돌려주는 function이다.
@@ -677,7 +762,7 @@ The function need not be the evaluator implementation itself. An implementation 
 
 ---
 
-## 05. Syntax direction, uniqueness, and compositionality — §1.2 · pp. 9–12 · 6 min
+## Syntax direction, uniqueness, and compositionality — §1.2 · pp. 9–12 · 6 min
 
 > [!abstract] Section focus
 > semantic equation은 example별 처리 코드가 아니라 모든 AST node에 정확히 하나의 의미를 주는 recursive definition이다.
@@ -756,7 +841,7 @@ Explaining an object-language feature with an analogous metalanguage feature is 
 
 ---
 
-## 06. Truth in a state, validity, and formal proof — §1.3 · pp. 12–15 · 8 min
+## Truth in a state, validity, and formal proof — §1.3 · pp. 12–15 · 8 min
 
 > [!abstract] Section focus
 > semantics가 truth를 정하고 proof system이 derivability를 정한다. test result와 verifier의 proof obligation을 구분하는 것과 비슷하다.
@@ -861,7 +946,7 @@ Completeness asks the converse: is every semantically valid assertion derivable?
 
 ---
 
-## 07. Binding, free variables, and the Coincidence Theorem — §1.4 · pp. 15–18 · 8 min
+## Binding, free variables, and the Coincidence Theorem — §1.4 · pp. 15–18 · 8 min
 
 > [!abstract] Section focus
 > 변수의 의미는 철자만으로 정해지지 않는다. 어느 바인더가 그 발생을 지배하는지가 syntax structure의 일부다.
@@ -972,7 +1057,7 @@ Structural induction is justified by induction on phrase depth. In practice, cov
 
 ---
 
-## 08. Capture-avoiding substitution and the Substitution Theorem — §1.4 · pp. 18–21 · 10 min
+## Capture-avoiding substitution and the Substitution Theorem — §1.4 · pp. 18–21 · 10 min
 
 > [!abstract] Section focus
 > substitution은 글자를 바꾸는 작업이 아니라 free variable의 semantic relationship을 보존하는 syntactic operation이다.

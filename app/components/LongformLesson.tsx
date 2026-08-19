@@ -17,6 +17,16 @@ function RichText({ children }: { children: string }) {
 }
 
 function renderBlock(block: LessonBlock, locale: Locale, headingLocale: Locale, index: number): ReactNode {
+  if (block.kind === "subsection") {
+    return (
+      <header className="longform-subsection" id={block.id} key={`subsection-${block.id}`}>
+        <p>{block.covers}</p>
+        <h3>{block.title[headingLocale]}</h3>
+        <div><RichText>{block.lead[locale]}</RichText></div>
+      </header>
+    );
+  }
+
   if (block.kind === "prose") {
     return (
       <div className="longform-prose" key={`prose-${index}`}>
@@ -105,10 +115,11 @@ export function LongformLesson({ lesson, locale, headingLocale = locale }: { les
         ))}
       </div>
 
-      {lesson.sections.map((section, sectionIndex) => (
-        <section className="longform-section" id={section.id} key={section.id}>
+      {lesson.sections.map((section, sectionIndex) => {
+        const textbookSectionNumber = section.covers.match(/^§(\d+\.\d+)/)?.[1];
+        return <section className="longform-section" id={section.id} key={section.id}>
           <header className="longform-section-header">
-            <div className="longform-section-number">{String(sectionIndex + 1).padStart(2, "0")}</div>
+            <div className="longform-section-number">{textbookSectionNumber ?? String(sectionIndex + 1).padStart(2, "0")}</div>
             <div>
               <p>{section.covers} · {section.minutes} {locale === "ko" ? "분" : "min"}</p>
               <h2>{section.title[headingLocale]}</h2>
@@ -126,8 +137,8 @@ export function LongformLesson({ lesson, locale, headingLocale = locale }: { les
               ))}
             </ol>
           </aside>
-        </section>
-      ))}
+        </section>;
+      })}
     </section>
   );
 }

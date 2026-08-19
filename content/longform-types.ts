@@ -34,12 +34,21 @@ export type LessonCalloutBlock = {
   paragraphs: Bilingual[];
 };
 
+export type LessonSubsectionBlock = {
+  kind: "subsection";
+  id: string;
+  covers: string;
+  title: Bilingual;
+  lead: Bilingual;
+};
+
 export type LessonBlock =
   | LessonProseBlock
   | LessonListBlock
   | LessonNotationBlock
   | LessonExampleBlock
-  | LessonCalloutBlock;
+  | LessonCalloutBlock
+  | LessonSubsectionBlock;
 
 export type LongformSection = {
   id: string;

@@ -6,8 +6,20 @@ export type SectionBrief = {
   detail: Bilingual;
 };
 
+export type TermConnection = {
+  path: string;
+  explanation: Bilingual;
+};
+
+export type TermPrimer = {
+  title: Bilingual;
+  lead: Bilingual;
+  connections: TermConnection[];
+};
+
 export type ChapterGuide = {
   purpose: Bilingual;
+  termPrimer?: TermPrimer;
   sections: SectionBrief[];
   takeaways: Bilingual[];
   cautions: Bilingual[];
@@ -19,9 +31,29 @@ const section = (covers: string, ko: string, en: string, detailKo: string, detai
   detail: b(detailKo, detailEn),
 });
 
+const connection = (path: string, ko: string, en: string): TermConnection => ({
+  path,
+  explanation: b(ko, en),
+});
+
 export const chapterGuides: Record<string, ChapterGuide> = {
   "predicate-logic": {
     purpose: b("이후 모든 장에서 사용할 세 가지 층위—syntax, 의미, 증명—를 분리하고 다시 연결하는 법을 세운다.", "Establishes how to separate and reconnect the three layers used throughout the book: syntax, semantics, and proof."),
+    termPrimer: {
+      title: b("The Chapter 1 vocabulary pipeline", "The Chapter 1 vocabulary pipeline"),
+      lead: b(
+        "각 term은 독립된 암기 항목이 아니라 한 phrase가 글자에서 수학적 의미와 theorem으로 이동하는 과정의 한 단계다. 아래 화살표를 먼저 잡고, longform의 ∀x. x+0=x 예제에서 같은 연결을 확인한다.",
+        "The terms are not isolated vocabulary items. Each names one stage in the path from written text to mathematical meaning and theorem. Learn the arrows first, then follow the same path through the worked ∀x. x+0=x example."
+      ),
+      connections: [
+        connection("concrete syntax → parser → abstract syntax", "concrete syntax은 사람이 쓰는 문자열이고 parser는 표기 세부를 제거한 constructor tree를 만든다. semantics이 읽는 input은 원문 문자열이 아니라 이 abstract phrase다.", "Concrete syntax is the written string. Parsing removes presentation details and produces the constructor tree—the abstract phrase consumed by semantics."),
+        connection("carrier set + constructor → initial algebra", "carrier set은 같은 phrase class의 가능한 모든 값을 모으고 constructor는 값을 만든다. constructor로 유한하게 생성된 값만 포함하는 자유로운 전체 구조를 initial algebra라고 한다.", "Carrier sets collect phrases of each sort, while constructors build them. The freely generated structure containing exactly the finite constructor-built values is the initial algebra."),
+        connection("initial algebra → unique homomorphism → denotational semantics", "각 constructor를 target operation으로 해석하면 AST 전체를 target으로 보내는 구조 보존 map이 하나 정해진다. target을 state-dependent value function으로 선택한 경우가 denotational semantics이다.", "Interpreting every constructor in a target determines one structure-preserving map over the whole AST. Choosing state-dependent value functions as the target yields denotational semantics."),
+        connection("state → truth in a state → validity", "state는 free variable의 값을 공급한다. assertion denotation을 state 하나에 적용하면 그 state에서의 truth를 얻고, 모든 state에서 true인지 물으면 validity가 된다.", "A state supplies values for free variables. Applying an assertion denotation to one state gives truth there; requiring truth in every state gives validity."),
+        connection("inference rule → derivability → soundness → validity", "inference rule을 유한 번 연결해 proof를 만들 수 있으면 derivable하다. soundness는 derivability가 semantic validity를 보장한다는 방향의 theorem이며 두 definition을 같은 것으로 만들지는 않는다.", "Finite use of inference rules gives derivability. Soundness is the theorem that derivability implies semantic validity; it does not collapse the two definitions."),
+        connection("binder → scope → free/bound occurrence → substitution", "binder는 scope 안의 occurrence를 bound로 만든다. substitution은 free occurrence만 바꾸며, replacement의 free variable이 새 binder에 capture되지 않도록 fresh renaming을 사용한다.", "A binder makes governed occurrences bound. Substitution rewrites free occurrences and uses fresh renaming to prevent replacement variables from being captured by a binder."),
+      ],
+    },
     sections: [
       section("§1.1", "abstract syntax과 구조적 정의", "Abstract syntax and structural definition", "논리식의 표면 표기 대신 항과 공식의 constructor를 정의한다. 이 구조는 재귀 함수와 구조적 귀납법의 기준이 된다.", "Defines constructors for terms and formulas independently of surface notation. That structure supports recursive functions and structural induction."),
       section("§1.2", "환경을 통한 표시적 의미", "Denotational meaning through environments", "변수 환경과 기호 해석을 입력으로 받아 항은 값으로, 공식은 진릿값으로 보낸다. 의미 함수의 각 절은 syntax constructor에 대응한다.", "Given a variable environment and an interpretation of symbols, terms denote values and formulas denote truth values. Each semantic clause follows a syntax constructor."),
@@ -40,12 +72,29 @@ export const chapterGuides: Record<string, ChapterGuide> = {
   },
   "simple-imperative-language": {
     purpose: b("The Simple Imperative Language를 완전한 수학적 대상으로 만들고, iteration과 recursion에 의미를 부여하는 domain theory (도메인 이론)의 최소 도구를 도입한다.", "Turns a small imperative language into a complete mathematical object and introduces the minimum domain theory needed to interpret iteration and recursion."),
+    termPrimer: {
+      title: b("The Chapter 2 vocabulary pipeline", "The Chapter 2 vocabulary pipeline"),
+      lead: b(
+        "2장의 domain-theory term은 while에 meaning을 주기 위해 순서대로 필요한 부품이다. 아래 경로에서 앞 term 없이 뒤 term을 정의할 수 없다는 점을 먼저 확인하고, longform의 while x>0 do x:=x-1 계산으로 내려간다.",
+        "Chapter 2's domain-theory terms are ordered dependencies needed to give while a meaning. Read the path as a construction in which each later term depends on the earlier ones, then follow the concrete loop calculation in the longform lesson."
+      ),
+      connections: [
+        connection("state + command → state transformer", "state는 한 순간의 variable-value assignment이고 command denotation은 initial state에서 final state로 가는 whole function이다. 한 번의 state update와 whole state transformer를 구분한다.", "A state is one variable assignment; a command denotation is the whole function from initial to final states. Distinguish one state update from the entire state transformer."),
+        connection("state set Σ → lifting → result domain Σ⊥", "lifting은 ordinary state set에 fresh bottom을 추가한다. normal state는 termination result이고 ⊥는 error나 빈 state가 아니라 final state가 생산되지 않은 nontermination이다.", "Lifting adds a fresh bottom to the ordinary state set. A normal state is a termination result; ⊥ denotes nontermination with no final state, not an error or empty state."),
+        connection("information order → chain → least upper bound", "information order는 result의 수치가 아니라 알려진 정도를 비교한다. finite approximant가 증가하면 chain이 되고 lub는 모든 finite stage가 정당화한 정보를 모은 limit다.", "Information order compares how much of a result is known, not numeric magnitude. Increasing finite approximants form a chain whose least upper bound collects all finitely justified information."),
+        connection("candidate transformer → functional F → finite approximants", "functional은 state가 아니라 candidate state transformer를 받아 loop를 한 번 더 unfold한 transformer를 만든다. ⊥, F⊥, F²⊥, …가 허용된 finite unfolding 횟수별 loop meaning이다.", "A functional consumes a candidate state transformer, not a state, and adds one loop unfolding. ⊥, F⊥, F²⊥, … are loop meanings with increasing finite unfolding budgets."),
+        connection("continuity + approximant chain → least fixed point μF", "continuity가 functional의 limit 보존을 보장하므로 approximant chain의 lub가 fixed point가 된다. bottom에서 시작했기 때문에 arbitrary solution이 아니라 finite execution으로 정당화된 least fixed point다.", "Continuity makes the functional preserve the chain limit, turning the approximants' lub into a fixed point. Starting from bottom selects the least fixed point justified by finite execution rather than an arbitrary solution."),
+      ],
+    },
     sections: [
-      section("§2.1–2.2", "Syntax, states, and semantic functions", "Syntax, states, and semantic functions", "expression은 state에서 value로, command는 possibly nonterminating state transformer (비종료 가능 상태 변환 함수)로 해석된다. undefinedness는 arithmetic error가 아니라 nontermination을 먼저 나타낸다.", "Expressions map states to values, while commands are partial functions from states to states. Undefinedness initially represents nontermination rather than arithmetic failure."),
-      section("§2.3–2.4", "Domains, continuity, and least fixed points", "Domains, continuity, and least fixed points", "partial information을 information order로 정렬하고 chain의 least upper bound (lub)를 사용한다. continuous function의 least fixed point는 `while` denotation을 finite approximant의 limit로 구성한다.", "Partial information is ordered and increasing chains receive least upper bounds. A continuous function’s least fixed point constructs while-loop meaning as the limit of finite approximations."),
-      section("§2.5–2.6", "Declarations, substitution, and syntactic sugar", "Declarations, substitution, and syntactic sugar", "local variable declaration의 denotation을 state update와 restoration으로 설명한다. `for` command는 core language로 desugar되는 derived form이며 translation은 variable capture와 evaluation 횟수를 보존해야 한다.", "Local declarations are compared through environment extension and substitution. A for-command is derived syntax whose translation must preserve binding and evaluation behavior."),
-      section("§2.7", "Arithmetic-error policy", "Arithmetic-error policy", "unchecked arithmetic은 정확히 지정된 total hardware function을 사용할 수 있다. checked arithmetic은 별도 error result와 propagation rule이 필요하지만, 이 장은 Chapter 3의 predicate-logic assertion language와 연결하기 위해 그 확장을 보류한다.", "Unchecked arithmetic can use precisely specified total hardware functions. Checked arithmetic requires explicit error results and propagation rules, but this chapter defers that extension to preserve the connection with Chapter 3's assertion language."),
-      section("§2.8", "Soundness and full abstraction", "Soundness and full abstraction", "semantic soundness가 observation을 보존하는지 검사한다. full abstraction (완전 추상성)은 semantic equality와 contextual equivalence (문맥 동치)의 정확한 일치를 요구한다.", "Checks whether denotations preserve operational observations and identify only programs no context can distinguish. Full abstraction asks denotational and contextual equivalence to coincide."),
+      section("§2.1", "Syntax", "Syntax", "integer expression, Boolean expression, command의 세 phrase class와 constructor를 먼저 정한다. 다음 장의 Predicate Logic과 맞추기 위해 expression syntax을 의도적으로 가깝게 선택한 이유도 이 절에서 설명한다.", "Defines the three phrase classes—integer expressions, Boolean expressions, and commands—and explains why expression syntax is deliberately aligned with the Predicate Logic used in the next chapter."),
+      section("§2.2", "Denotational Semantics", "Denotational Semantics", "expression semantic function을 확인한 뒤 state set과 possibly nonterminating state transformer를 정의한다. assignment, skip, sequencing, conditional의 equation을 계산하고 마지막에 `while`의 recursive equation이 해를 아직 선택하지 못한다는 문제를 남긴다.", "Introduces states and possibly nonterminating state transformers after reusing expression semantics, calculates assignment, skip, sequencing, and conditionals, and ends with the unresolved recursive equation for `while`."),
+      section("§2.3", "Domains and Continuous Functions", "Domains and Continuous Functions", "information order, chain, least upper bound, predomain, domain, lifting을 정의한 뒤 monotone function과 continuous function으로 이동한다. pointwise function domain이 command denotation을 ordered object로 만드는 과정까지 따른다.", "Defines information orders, chains, least upper bounds, predomains, domains, and lifting before introducing monotone and continuous functions and pointwise function domains."),
+      section("§2.4", "The Least Fixed-Point Theorem", "The Least Fixed-Point Theorem", "continuous functional의 least fixed point를 bottom에서 시작한 finite approximant chain의 lub로 구성한다. 이 theorem을 `while` functional에 적용해 loop denotation을 얻는다.", "Constructs the least fixed point of a continuous functional as the least upper bound of finite approximants from bottom, then applies the theorem to the `while` functional."),
+      section("§2.5", "Variable Declarations and Substitution", "Variable Declarations and Substitution", "local declaration의 initialization, scope, restoration을 정의한 뒤 free variable과 assigned variable의 coincidence 성질을 세운다. 그 결과를 command substitution, fresh renaming, aliasing side condition에 적용한다.", "Defines initialization, scope, and restoration for local declarations, establishes coincidence properties for free and assigned variables, and applies them to command substitution, fresh renaming, and aliasing conditions."),
+      section("§2.6", "Syntactic Sugar: The for Command", "Syntactic Sugar: The for Command", "`for` command를 core language로 translate하며 bound의 평가 횟수, empty interval, control variable의 scope와 fresh-name condition을 보존하는지 순서대로 검사한다.", "Translates the `for` command into the core language while checking bound evaluation, empty intervals, control-variable scope, and fresh-name conditions."),
+      section("§2.7", "Arithmetic Errors", "Arithmetic Errors", "arithmetic error를 explicit result로 만들 때 expression type과 propagation equation이 어떻게 달라지는지 검토한다. 이어 Chapter 3의 predicate-logic assertion language와 연결하기 위해 이 확장을 보류하는 이유를 설명한다.", "Examines how explicit arithmetic errors would change expression types and propagation equations, then explains why the extension is deferred to preserve the connection with Chapter 3 assertions."),
+      section("§2.8", "Soundness and Full Abstraction", "Soundness and Full Abstraction", "program context와 observation을 먼저 정한 뒤 semantic soundness와 full abstraction을 구분한다. denotational equality와 contextual equivalence가 선택한 관찰 기준에서 정확히 맞는지 검사한다.", "Fixes program contexts and observations before distinguishing semantic soundness from full abstraction and testing whether denotational and contextual equivalence coincide."),
     ],
     takeaways: [
       b("command의 핵심 semantic object는 nontermination을 포함하는 state transformer다.", "A command’s central semantic object is a state transformer, generally partial because of divergence."),

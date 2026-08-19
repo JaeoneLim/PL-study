@@ -49,6 +49,10 @@ function asCallout(type: string, title: string, body: string) {
 }
 
 function longformBlockMarkdown(block: LessonBlock, locale: Locale, headingLocale: Locale = locale) {
+  if (block.kind === "subsection") {
+    return `### ${block.title[headingLocale]} — ${block.covers}\n\n*${block.lead[locale]}*`;
+  }
+
   if (block.kind === "prose") {
     return block.paragraphs.map((paragraph) => paragraph[locale]).join("\n\n");
   }
@@ -79,12 +83,16 @@ function longformMarkdown(slug: string) {
   const heading = (ko: string, en: string) => headingsInEnglish ? en : ko;
 
   const sections = lesson.sections.map((lessonSection, index) => {
+    const textbookSectionNumber = lessonSection.covers.match(/^§(\d+\.\d+)/)?.[1];
+    const wikiSectionTitle = textbookSectionNumber
+      ? lessonSection.title[headingLocale]
+      : `${String(index + 1).padStart(2, "0")}. ${lessonSection.title[headingLocale]}`;
     const koreanBlocks = lessonSection.blocks.map((block) => longformBlockMarkdown(block, "ko", headingLocale)).join("\n\n");
     const englishBlocks = lessonSection.blocks.map((block) => longformBlockMarkdown(block, "en")).join("\n\n");
     const koreanChecks = lessonSection.checkpoints.map((checkpoint, checkIndex) => `${checkIndex + 1}. ${checkpoint.ko}`).join("\n");
     const englishChecks = lessonSection.checkpoints.map((checkpoint, checkIndex) => `${checkIndex + 1}. ${checkpoint.en}`).join("\n");
 
-    return `## ${String(index + 1).padStart(2, "0")}. ${lessonSection.title[headingLocale]} — ${lessonSection.covers} · ${lessonSection.minutes} ${heading("분", "min")}
+    return `## ${wikiSectionTitle} — ${lessonSection.covers} · ${lessonSection.minutes} ${heading("분", "min")}
 
 > [!abstract] ${heading("이 절의 중심", "Section focus")}
 > ${lessonSection.lead.ko}
@@ -140,6 +148,9 @@ function chapterNote(unit: (typeof units)[number]) {
   const detailedContents = guide.sections.map((item) => `### ${item.covers} · ${item.title[headingLocale]}\n\n${item.detail.ko}\n\n**English — ${item.title.en}:** ${item.detail.en}`).join("\n\n");
   const takeaways = guide.takeaways.map((item) => `- ${item.ko}\n  - EN: ${item.en}`).join("\n");
   const cautions = guide.cautions.map((item) => `- ${item.ko}\n  - EN: ${item.en}`).join("\n");
+  const termPrimer = guide.termPrimer
+    ? `## ${guide.termPrimer.title[headingLocale]}\n\n> [!tip] ${heading("처음 읽는 용어 연결 지도", "First-pass terminology map")}\n> ${guide.termPrimer.lead.ko}\n>\n> **English:** ${guide.termPrimer.lead.en}\n\n${guide.termPrimer.connections.map((item) => `### \`${item.path}\`\n\n${item.explanation.ko}\n\n**English:** ${item.explanation.en}`).join("\n\n")}`
+    : "";
   const completeLesson = longformMarkdown(unit.slug);
   const steps = unit.steps.map((step) => `## ${step.title[headingLocale]} — ${step.covers}\n\n${step.summary.ko}\n\n${step.detail.ko}\n\n> [!question] ${heading("책을 덮고 답해 보기", "Close the book and answer")}\n> ${step.checkpoint.ko}\n\n### English companion\n\n${step.summary.en}\n\n${step.detail.en}`).join("\n\n---\n\n");
   const quiz = unit.quiz.map((question, index) => {
@@ -195,7 +206,7 @@ ${glossaryEntries}
 >
 > **English:** ${guide.purpose.en}
 
-${detailedContents}
+${termPrimer ? `${termPrimer}\n\n` : ""}${detailedContents}
 
 ## ${heading("반드시 남겨야 할 핵심", "What to retain")}
 

@@ -6,6 +6,8 @@ import type {
   LessonListBlock,
   LessonNotationBlock,
   LessonProseBlock,
+  LessonSubsectionBlock,
+  LongformSection,
 } from "./longform-types";
 
 const englishHeading = (title: Bilingual): Bilingual => b(title.en, title.en);
@@ -52,9 +54,9 @@ const sectionOrder = [
   "chapter-synthesis",
 ];
 
-export const simpleImperativeLanguageLongform: ChapterLongform = {
+const chapterTwoDraft: ChapterLongform = {
   slug: "simple-imperative-language",
-  readingMinutes: 75,
+  readingMinutes: 81,
   minimumKoreanCharacters: 12000,
   title: b("Chapter 2 complete study text", "Chapter 2 complete study text"),
   introduction: [
@@ -79,7 +81,7 @@ export const simpleImperativeLanguageLongform: ChapterLongform = {
     {
       id: "imperative-lens",
       covers: "Introduction · p. 24",
-      minutes: 4,
+      minutes: 10,
       title: b("Isolating imperative computation as state change", "Isolating imperative computation as state change"),
       lead: b(
         "익숙한 language를 좁게 만들면 nontermination (비종료)·iteration (반복)·locality (지역성)라는 새 이론만 선명하게 볼 수 있다.",
@@ -98,6 +100,45 @@ export const simpleImperativeLanguageLongform: ChapterLongform = {
           b(
             "이 장의 두 번째 변화는 name이 읽기 전용이 아니라 writable location (쓰기 가능한 저장 위치)이 된다는 점이다. assertion에서 variable을 다른 expression으로 substitute하는 일은 값을 다시 표현하는 문제였다. command에서 variable은 assignment target (대입 대상)에도 나타나므로 substitution은 storage location 자체를 합치거나 나눌 수 있다. 서로 다른 name을 하나로 보내는 순간 aliasing이 생기고, 원래 독립이던 assignment의 순서가 observable해진다.",
             "The second change is that names become writable locations rather than merely readable inputs. In assertions, substitution re-expressed values. In commands, variables also occur on assignment's left side, so substitution may merge or separate storage locations. Mapping distinct names to one name creates aliasing and can make the order of previously independent assignments observable."
+          )
+        ),
+        callout(
+          "key",
+          b("Chapter 2 vocabulary map: from state change to loop meaning", "Chapter 2 vocabulary map: from state change to loop meaning"),
+          b(
+            "state (상태) `σ`는 한 순간의 variable-value assignment이고, state update (상태 갱신) `σ[v↦n]`은 그중 한 variable의 값을 바꾼 새 state다. state transformer (상태 변환 함수)는 update 한 번과 동의어가 아니라 command 전체의 denotation이다. 즉 `⟦c⟧ : Σ→Σ⊥`는 initial state 하나를 받아 command가 terminate하면 final state를, nonterminate하면 bottom `⊥`를 돌려주는 function이다.",
+            "A state `σ` is one assignment of values to variables, and a state update `σ[v↦n]` is a new state differing at one variable. A state transformer is not another name for one update; it is the denotation of a whole command. Thus `⟦c⟧ : Σ→Σ⊥` maps an initial state to a final state when the command terminates and to bottom `⊥` when it diverges."
+          ),
+          b(
+            "lifting (리프팅)은 ordinary state set `Σ`에 fresh bottom을 추가해 result domain `Σ⊥`를 만드는 construction이다. bottom은 빈 state나 error가 아니라 ‘final state가 생산되지 않았다’는 outcome이다. strict extension (엄격 확장) `f†`는 normal state에는 `f`를 적용하고 bottom은 그대로 propagate한다. 그래서 sequencing에서 first command의 result type `Σ⊥`를 second command가 기대하는 input type `Σ`와 안전하게 연결한다.",
+            "Lifting constructs the result domain `Σ⊥` by adding a fresh bottom to the ordinary state set `Σ`. Bottom is neither an empty state nor an error; it records that no final state was produced. A strict extension `f†` applies `f` to normal states and propagates bottom, safely connecting the first command's result type `Σ⊥` to the second command's expected input type `Σ`."
+          ),
+          b(
+            "information order (정보 순서) `r⊑r'`는 숫자나 state component의 크기가 아니라 `r'`가 computation result에 관해 적어도 `r`만큼 알려 준다는 뜻이다. 이 order에서 bottom은 모든 normal result 아래에 있다. approximant (근사 함수)가 점점 더 많은 terminating input을 알아내면 chain (사슬)을 이루고, least upper bound (lub)는 모든 finite stage가 정당화한 정보를 모은 limit다. predomain은 이런 chain limit를 가지며, domain은 추가로 least element를 가진다.",
+            "The information order `r⊑r'` compares knowledge about a computation result, not numeric size or state components. Bottom lies below every normal result. Approximants form a chain as they discover results for more terminating inputs, and the least upper bound collects exactly the information justified by all finite stages. A predomain has such chain limits; a domain additionally has a least element."
+          ),
+          b(
+            "functional (범함수) `F`는 program state가 아니라 candidate state transformer를 input으로 받아, loop를 한 번 더 unfold한 새 candidate transformer를 돌려주는 higher-order function이다. `⊥,F(⊥),F²(⊥),…`는 loop를 허용된 finite unfolding 횟수별로 보는 approximant chain이다. continuity (연속성)는 `F`가 이 chain의 limit를 보존하게 하고, 그 limit `μF`가 least fixed point (최소 고정점)가 된다. 따라서 while denotation은 단지 `F(W)=W`를 만족하는 아무 solution이 아니라 finite execution이 아래에서부터 정당화한 least solution이다.",
+            "A functional `F` consumes a candidate state transformer—not a program state—and returns a new candidate obtained by one more loop unfolding. The chain `⊥,F(⊥),F²(⊥),…` views the loop with increasing finite unfolding budgets. Continuity makes `F` preserve the chain's limit, and that limit `μF` is the least fixed point. A while denotation is therefore not an arbitrary solution of `F(W)=W`, but the least solution justified from below by finite execution."
+          )
+        ),
+        example(
+          b("One while command traced through the domain terms", "One while command traced through the domain terms"),
+          b(
+            "`while x>0 do x:=x-1`을 `σ(x)=2`인 initial state에서 해석하며 새 term을 순서대로 연결한다.",
+            "Interpret `while x>0 do x:=x-1` from an initial state with `σ(x)=2`, connecting the new terms in order."
+          ),
+          [
+            b("command denotation은 type `Σ→Σ⊥`의 state transformer다. 종료하면 `x=0`인 final state를 주고, 어떤 input에서 끝나지 않는다면 그 input에는 `⊥`를 준다.", "The command denotation is a state transformer of type `Σ→Σ⊥`. It returns a final state with `x=0` when it terminates and returns `⊥` on any input from which it diverges."),
+            b("least transformer `⊥₍Σ→Σ⊥₎`는 모든 initial state에 bottom을 준다. 이는 ‘loop를 아직 한 번도 unfold하지 않아 어떤 종료도 정당화하지 못했다’는 0-stage approximant다.", "The least transformer `⊥₍Σ→Σ⊥₎` maps every initial state to bottom. It is the zero-stage approximant: no loop unfolding has yet justified any termination result."),
+            b("functional `F`는 candidate transformer `g`를 받아 guard가 false이면 current state를 돌려주고, true이면 body를 한 번 실행한 뒤 `g`를 사용한다. `F(g)`는 `g`보다 loop behavior를 한 단계 더 안다.", "The functional `F` accepts a candidate transformer `g`: when the guard is false it returns the current state; when true it executes the body once and then uses `g`. Thus `F(g)` knows one more layer of loop behavior than `g`."),
+            b("`σ(x)=2`에서는 `F⁰(⊥)(σ)=⊥`, `F¹(⊥)(σ)=⊥`, `F²(⊥)(σ)=⊥`이고 `F³(⊥)(σ)`에서 두 번의 body execution 뒤 guard가 false인 `x=0` state가 처음 드러난다.", "For `σ(x)=2`, `F⁰(⊥)(σ)=⊥`, `F¹(⊥)(σ)=⊥`, and `F²(⊥)(σ)=⊥`; at `F³(⊥)(σ)`, the state with `x=0` first appears after two body executions and a false guard."),
+            b("이 approximant들은 pointwise information order에서 chain을 이룬다. normal final state가 나타난 뒤에는 이후 stage도 같은 state를 주므로 lub는 그 state다. 끝나지 않는 input에서는 모든 stage와 lub가 bottom이다.", "These approximants form a chain in the pointwise information order. Once a normal final state appears, every later stage returns that same state, so the lub is that state. On a diverging input, every stage and the lub remain bottom."),
+            b("continuity로 `F(lub approximants)=lub(F applied to approximants)`를 얻으므로 limit는 fixed point이고, bottom에서 시작했으므로 다른 fixed point보다 아래인 least fixed point다. 이것이 whole while command의 denotation이다.", "Continuity gives `F(lub approximants)=lub(F applied to approximants)`, so the limit is a fixed point. Because the construction starts at bottom, it lies below every other fixed point and is the least fixed point—the denotation of the whole while command.")
+          ],
+          b(
+            "용어의 의존 순서는 `state → lifted result → state transformer → information order → approximant chain → continuity → least fixed point → while denotation`이다. 뒤 절은 이 화살표의 각 단계를 definition과 theorem으로 정밀화한다.",
+            "The dependency order is `state → lifted result → state transformer → information order → approximant chain → continuity → least fixed point → while denotation`. Later sections make each arrow precise through definitions and theorems."
           )
         ),
         list(
@@ -1207,4 +1248,145 @@ W=\llbracket\mathsf{while}\ b\ \mathsf{do}\ c\rrbracket
       ],
     },
   ].sort((left, right) => sectionOrder.indexOf(left.id) - sectionOrder.indexOf(right.id)),
+};
+
+const chapterTwoSectionById = new Map(chapterTwoDraft.sections.map((section) => [section.id, section]));
+
+function chapterTwoSection(id: string): LongformSection {
+  const section = chapterTwoSectionById.get(id);
+  if (!section) throw new Error(`Missing Chapter 2 section: ${id}`);
+  return section;
+}
+
+function textbookSection(
+  id: string,
+  covers: string,
+  title: string,
+  lead: Bilingual,
+  partIds: string[],
+  trailingBlocks: LongformSection["blocks"] = [],
+): LongformSection {
+  const parts = partIds.map(chapterTwoSection);
+  return {
+    id,
+    covers,
+    minutes: parts.reduce((total, part) => total + part.minutes, 0),
+    title: b(title, title),
+    lead,
+    blocks: [
+      ...parts.flatMap((part) => {
+        const subsection: LessonSubsectionBlock = {
+          kind: "subsection",
+          id: part.id,
+          covers: part.covers,
+          title: part.title,
+          lead: part.lead,
+        };
+        return [subsection, ...part.blocks];
+      }),
+      ...trailingBlocks,
+    ],
+    checkpoints: parts.flatMap((part) => part.checkpoints),
+  };
+}
+
+const whileVocabularyExample = chapterTwoSection("imperative-lens").blocks.filter(
+  (block) => block.kind === "example" && block.title.en === "One while command traced through the domain terms",
+);
+const canonicalTerminologyGuide = chapterTwoSection("imperative-lens").blocks.filter(
+  (block) => block.kind === "callout" && block.title.en === "How to read the canonical terminology",
+);
+const bottomClarification = chapterTwoSection("imperative-lens").blocks.filter(
+  (block) => block.kind === "callout" && block.title.en === "Bottom is not an empty state",
+);
+
+export const simpleImperativeLanguageLongform: ChapterLongform = {
+  ...chapterTwoDraft,
+  sections: [
+    textbookSection(
+      "section-2-1",
+      "§2.1 · pp. 24–26",
+      "2.1 Syntax",
+      b(
+        "교재의 첫 단계 그대로 integer expression, Boolean expression, command라는 세 phrase class와 constructor를 정하고, 이 syntax 선택이 다음 장의 Predicate Logic과 어떻게 맞물리는지 설명한다.",
+        "Following the textbook's first step, define the three phrase classes—integer expressions, Boolean expressions, and commands—and explain how this syntax anticipates the connection to Predicate Logic in the next chapter.",
+      ),
+      ["syntax"],
+      canonicalTerminologyGuide,
+    ),
+    textbookSection(
+      "section-2-2",
+      "§2.2 · pp. 26–29",
+      "2.2 Denotational Semantics",
+      b(
+        "expression semantics을 Chapter 1에서 가져온 뒤 state와 command semantic function을 정의하고, assignment·skip·sequencing·conditional을 계산한 다음 마지막에 `while`의 recursive equation이 남기는 문제에 도달한다.",
+        "Carry expression semantics forward from Chapter 1, define states and the command semantic function, calculate assignment, skip, sequencing, and conditionals, and only then reach the unresolved recursive equation for `while`.",
+      ),
+      ["state-transformers", "while-equation"],
+      bottomClarification,
+    ),
+    textbookSection(
+      "section-2-3",
+      "§2.3 · pp. 29–35",
+      "2.3 Domains and Continuous Functions",
+      b(
+        "`while` equation의 해를 고르기 위한 수학적 기반으로 information order, chain, least upper bound, predomain, domain, lifting을 차례로 정의하고, 이어 monotone·continuous function과 pointwise function space를 세운다.",
+        "Build the mathematics needed to select a solution of the `while` equation: information orders, chains, least upper bounds, predomains, domains, and lifting, followed by monotone and continuous functions and pointwise function spaces.",
+      ),
+      ["domains", "continuity"],
+    ),
+    textbookSection(
+      "section-2-4",
+      "§2.4 · pp. 35–39",
+      "2.4 The Least Fixed-Point Theorem",
+      b(
+        "앞 절의 domain과 continuity를 사용해 least fixed-point theorem을 증명하고, 그 theorem을 `while` functional에 적용한 뒤 finite approximant가 실제 loop 실행을 어떻게 나타내는지 계산한다.",
+        "Use the preceding domain and continuity definitions to prove the least fixed-point theorem, apply it to the `while` functional, and calculate how finite approximants represent actual loop executions.",
+      ),
+      ["least-fixed-point"],
+      whileVocabularyExample,
+    ),
+    textbookSection(
+      "section-2-5",
+      "§2.5 · pp. 39–45",
+      "2.5 Variable Declarations and Substitution",
+      b(
+        "local variable declaration을 syntax과 semantics에 추가하고 initialization·scope·restoration을 정한 뒤, free variable/assigned variable의 coincidence 성질을 거쳐 command substitution과 aliasing 조건으로 이동한다.",
+        "Add local variable declarations to syntax and semantics, establish initialization, scope, and restoration, then proceed through coincidence properties for free and assigned variables to command substitution and aliasing conditions.",
+      ),
+      ["declarations", "command-coincidence", "substitution-aliasing"],
+    ),
+    textbookSection(
+      "section-2-6",
+      "§2.6 · pp. 45–47",
+      "2.6 Syntactic Sugar: The for Command",
+      b(
+        "새 primitive meaning을 추가하지 않고 `for` command를 앞서 정의한 core command로 translate하며, bound evaluation과 fresh variable에 필요한 side condition을 순서대로 점검한다.",
+        "Translate the `for` command into previously defined core commands without adding a primitive meaning, checking bound evaluation and fresh-variable side conditions in order.",
+      ),
+      ["for-sugar"],
+    ),
+    textbookSection(
+      "section-2-7",
+      "§2.7 · pp. 47–48",
+      "2.7 Arithmetic Errors",
+      b(
+        "arithmetic error를 포함하려면 expression result type과 모든 propagation equation이 어떻게 달라져야 하는지 검토하고, 교재가 이 확장을 현재 장에서는 채택하지 않는 이유까지 따른다.",
+        "Examine how arithmetic errors would change expression result types and propagation equations, then follow the textbook's reasons for not adopting that extension in this chapter.",
+      ),
+      ["arithmetic-errors"],
+    ),
+    textbookSection(
+      "section-2-8",
+      "§2.8 · pp. 48–51",
+      "2.8 Soundness and Full Abstraction",
+      b(
+        "마지막으로 denotational equality를 program context와 observation에 대조해 semantic soundness와 full abstraction을 정의하고, 선택한 관찰 기준에서 현재 semantics이 적절한지 검사한다.",
+        "Finally compare denotational equality with program contexts and observations, define semantic soundness and full abstraction, and test whether the semantics matches the chosen observations.",
+      ),
+      ["full-abstraction"],
+    ),
+    chapterTwoSection("practice-workshop"),
+    chapterTwoSection("chapter-synthesis"),
+  ],
 };

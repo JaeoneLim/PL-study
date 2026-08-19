@@ -76,11 +76,15 @@ export default async function ChapterPage({ params }: Props) {
             <nav aria-label={locale === "ko" ? "장 목차" : "Chapter contents"}>
               <a href="#contents"><span>00</span>{locale === "ko" ? "상세 내용 지도" : "Detailed contents"}</a>
               {longform
-                ? longform.sections.map((section, index) => (
-                  <a href={`#${section.id}`} key={section.id}>
-                    <span>{String(index + 1).padStart(2, "0")}</span>{section.title[headingLocale]}
-                  </a>
-                ))
+                ? longform.sections.map((section, index) => {
+                  const textbookSectionNumber = section.covers.match(/^§(\d+\.\d+)/)?.[1];
+                  const navigationTitle = textbookSectionNumber
+                    ? section.title[headingLocale].replace(new RegExp(`^${textbookSectionNumber.replace(".", "\\.")}\\s+`), "")
+                    : section.title[headingLocale];
+                  return <a href={`#${section.id}`} key={section.id}>
+                    <span>{textbookSectionNumber ?? String(index + 1).padStart(2, "0")}</span>{navigationTitle}
+                  </a>;
+                })
                 : unit.steps.map((step, index) => <a href={`#${step.id}`} key={step.id}><span>{String(index + 1).padStart(2, "0")}</span>{step.title[locale].replace(/^.*?—\s*/, "")}</a>)}
               {longform && <a href="#review"><span>R</span>{locale === "ko" ? "압축 복습" : "Condensed review"}</a>}
               <Link href={`/${locale}/chapter/${slug}/glossary`}><span>G</span>{locale === "ko" ? "장별 용어집" : "Chapter glossary"}</Link>
@@ -95,6 +99,23 @@ export default async function ChapterPage({ params }: Props) {
               <p className="section-index">00 · {locale === "ko" ? "장 전체 내용 지도" : "DETAILED CHAPTER MAP"}</p>
               <h2>{headingsInEnglish || locale === "en" ? "What this chapter actually covers" : "이 장에서 실제로 다루는 것"}</h2>
               <p className="deep-guide-purpose">{guide.purpose[locale]}</p>
+              {guide.termPrimer && (
+                <section className="term-primer" aria-labelledby={`${slug}-term-primer-heading`}>
+                  <header>
+                    <p>{locale === "ko" ? "처음 읽는 용어 연결 지도" : "FIRST-PASS TERMINOLOGY MAP"}</p>
+                    <h3 id={`${slug}-term-primer-heading`}>{guide.termPrimer.title[headingLocale]}</h3>
+                    <div>{guide.termPrimer.lead[locale]}</div>
+                  </header>
+                  <ol>
+                    {guide.termPrimer.connections.map((item) => (
+                      <li key={item.path}>
+                        <code>{item.path}</code>
+                        <p>{item.explanation[locale]}</p>
+                      </li>
+                    ))}
+                  </ol>
+                </section>
+              )}
               <div className="section-brief-list">
                 {guide.sections.map((item) => (
                   <article key={item.covers}>
