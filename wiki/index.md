@@ -8,7 +8,7 @@
 
 - [[chapter-01-predicate-logic|01. Predicate Logic]] — Four tools for describing languages
 - [[chapter-02-simple-imperative-language|02. The Simple Imperative Language]] — State transformers and least fixed points
-- [[chapter-03-program-specifications|03. 프로그램 명세와 증명]] — 부분 정확성, 전체 정확성, 불변식
+- [[chapter-03-program-specifications|03. Program Specifications and Their Proofs]] — Partial correctness, total correctness, invariants
 - [[chapter-04-arrays|04. 배열]] — 업데이트되는 함수와 higher-order assertion
 - [[chapter-05-failure-io-continuations|05. 실패, 입출력, 계속]] — 결과에서 상호작용 과정으로
 - [[chapter-06-transition-semantics|06. transition semantics]] — 실행을 작은 단계로 분해하기

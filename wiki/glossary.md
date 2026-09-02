@@ -3,9 +3,9 @@
 > [!info] 용어 정책과 읽는 법
 > 한국어 학습 노트에서도 syntax, semantics, statement, assertion, constructor, Predicate Logic, initial algebra와 그 표준 파생 표현은 영문으로 쓴다. 영문 term은 바로 이어지는 한국어 설명과 구현 예제로 뜻을 익힌다. 각 장의 링크를 열면 정확한 definition, English companion, 하드웨어 중심의 엔지니어 관점을 함께 볼 수 있다.
 
-## [[chapter-01-predicate-logic#장별 용어 해설|01. Predicate Logic]]
+## [[chapter-01-predicate-logic#Chapter glossary|01. Predicate Logic]]
 
-### Predicate Logic (predicate logic)
+### predicate logic
 
 대상의 값과 관계를 변수, 논리 연산자, 그리고 ‘모든’·‘어떤’ 같은 수량자로 표현하는 논리 체계다. 명제가 한 비트의 참·거짓이라면, predicate는 입력값에 따라 참·거짓이 달라지는 조건이다.
 
@@ -23,7 +23,7 @@
 
 **English:** Rules or mathematical functions that assign precise meanings to well-formed syntax. They explain the result, state change, or observable behavior produced by a program.
 
-### 상태 (state)
+### state
 
 특정 순간에 각 변수에 저장된 값을 한꺼번에 나타낸 지도다. 식의 의미는 대개 상태를 입력받아 값을 내놓는 함수로 정의된다.
 
@@ -119,37 +119,97 @@ full abstraction (완전 추상성)은 semantic equality와 어떤 program conte
 
 ---
 
-## [[chapter-03-program-specifications#장별 용어 해설|03. 프로그램 명세와 증명]]
+## [[chapter-03-program-specifications#Chapter glossary|03. Program Specifications and Their Proofs]]
 
-### Hoare 삼중항 (Hoare triple)
+### Hoare triple
 
-`{p} c {q}` 형태로, 전제조건 p를 만족하는 상태에서 명령 c를 실행해 종료하면 사후조건 q가 성립한다는 명세다.
+Hoare triple은 precondition, command, postcondition을 한 specification으로 묶는 form이다. 이 교재에서는 partial correctness에 `{p}c{q}`, total correctness에 `[p]c[q]`를 사용하므로 delimiter를 함께 읽어야 한다.
 
-**English:** A specification `{p} c {q}` saying that if command c starts in a state satisfying precondition p and terminates, its final state satisfies postcondition q.
+**English:** A specification form combining a precondition, command, and postcondition. This text uses braces for partial correctness and brackets for total correctness, so the delimiters are semantically significant.
 
-### 루프 불변식 (loop invariant)
+### partial correctness
 
-루프에 들어가기 전 참이고, 본문을 한 번 실행해도 보존되며, 루프 종료 시 원하는 결과를 끌어내는 assertion이다.
+partial correctness는 precondition을 만족하는 실행이 terminate한다면 그 final state가 postcondition을 만족한다는 specification이다. nontermination 자체는 violation으로 세지 않는다.
 
-**English:** An assertion that is true before entering a loop, preserved by one body iteration, and strong enough to imply the desired result when the loop exits.
+**English:** A specification requiring every terminating execution from a precondition state to finish in a postcondition state. Nontermination itself is not a violation.
 
-### 변량 함수 (variant function)
+### total correctness
 
-루프가 반복될 때마다 엄격히 감소하고 0 아래로 내려갈 수 없는 자연수 값이다. 무한 반복이 불가능함을 증명하는 데 쓴다.
+total correctness는 partial correctness의 result requirement에 더해 모든 precondition state에서 command가 terminate해야 한다고 요구한다.
 
-**English:** A natural-number measure that strictly decreases on every loop iteration and cannot fall below zero. It is used to prove that infinite iteration is impossible.
+**English:** A specification requiring both termination from every precondition state and satisfaction of the postcondition in the resulting state.
 
-### 결과 규칙 (rule of consequence)
+### precondition
 
-이미 증명한 Hoare 삼중항의 전제조건을 더 강하게 하거나 사후조건을 더 약하게 하여 다른 유효한 명세를 얻는 규칙이다.
+precondition은 command 실행 전 initial state에 요구하는 assertion이다. stronger precondition은 더 적은 input state만 허용한다.
 
-**English:** A rule that derives another valid Hoare triple by strengthening the precondition or weakening the postcondition of one already proved.
+**English:** An assertion required of the initial state before command execution. A stronger precondition admits fewer input states.
 
-### 건전성 (soundness)
+### postcondition
 
-증명 규칙으로 유도할 수 있는 모든 결론이 실제 semantics에서도 참이라는 성질이다. 잘못된 프로그램을 규칙만으로 ‘증명’하지 못하게 한다.
+postcondition은 command가 normal termination한 뒤 final state에 요구하는 assertion이다. weaker postcondition은 output에 더 적은 성질만 요구한다.
 
-**English:** The property that every conclusion derivable by the proof rules is also true in the semantics. It prevents the rules from proving incorrect programs correct.
+**English:** An assertion required of the final state after normal termination. A weaker postcondition demands fewer properties of the output state.
+
+### derivation
+
+derivation은 axiom schema와 inference rule instance를 유한하게 연결해 target specification을 root로 만드는 formal proof tree다.
+
+**English:** A finite formal proof tree whose leaves are axioms or logical facts and whose internal nodes are instances of inference rules leading to a target specification.
+
+### assignment rule
+
+assignment rule은 desired postcondition에서 assigned variable의 free occurrence를 right-hand expression으로 backward substitute해 필요한 precondition을 계산한다.
+
+**English:** The rule that calculates an assignment precondition by substituting the right-hand expression for free occurrences of the assigned variable in the desired postcondition.
+
+### intermediate assertion
+
+intermediate assertion은 `c₀;c₁`에서 c₀의 postcondition이자 c₁의 precondition으로, 두 command 사이 boundary state를 설명한다.
+
+**English:** An assertion describing the boundary state in `c₀;c₁`; it is simultaneously the postcondition of c₀ and the precondition of c₁.
+
+### loop invariant
+
+loop invariant는 guard를 검사하기 직전마다 참이고, body를 한 번 실행해도 보존되며, guard가 false인 exit에서 원하는 result를 이끌어내는 assertion이다.
+
+**English:** An assertion true before every guard test, preserved by one body iteration, and strong enough to imply the desired result when the guard is false at exit.
+
+### loop variant
+
+loop variant는 guard가 true인 동안 lower-bounded well-founded set에 있고, body iteration마다 strictly decrease하는 expression이다. total correctness의 termination argument를 제공한다.
+
+**English:** An expression in a lower-bounded well-founded set while the guard holds that strictly decreases on every body iteration, providing the termination argument for total correctness.
+
+### ghost variable
+
+ghost variable은 program execution을 바꾸지 않고 proof에서 old value 같은 history를 기억하는 fresh logical variable이다. WHT에서는 iteration 시작 시 variant 값을 저장한다.
+
+**English:** A fresh logical variable used only in proof to remember history such as an old value without changing program execution. WHT uses one to record the variant at iteration entry.
+
+### rule of consequence
+
+rule of consequence는 이미 증명한 Hoare triple의 precondition을 stronger하게 하거나 postcondition을 weaker하게 하여 새 valid specification을 얻는 structural rule이다.
+
+**English:** A structural rule deriving a new valid Hoare triple by strengthening the precondition or weakening the postcondition of an already proved triple.
+
+### verification condition
+
+verification condition은 command rule을 syntax-directed하게 모두 적용한 뒤 남는 pure Predicate Logic implication이다. 이를 valid하게 증명하면 program-level derivation을 완성할 수 있다.
+
+**English:** A pure predicate-logic implication left after syntax-directed command rules have been applied. Proving it valid completes the program-level derivation.
+
+### soundness
+
+soundness는 proof rules로 derivable한 모든 specification이 denotational semantics에서도 valid하다는 metatheorem이다. `⊢s ⇒ ⊨s` 방향만을 말한다.
+
+**English:** The metatheorem that every specification derivable by the proof rules is valid in the denotational semantics: `⊢s ⇒ ⊨s`.
+
+### relative completeness
+
+relative completeness는 assertion language가 필요한 invariant와 intermediate relation을 표현할 수 있고 모든 valid assertion implication을 증명할 수 있다고 가정할 때, 모든 valid program specification을 derive할 수 있다는 성질이다.
+
+**English:** Completeness relative to two assumptions: the assertion language can express the necessary annotations, and every valid assertion implication can be proved by the underlying logic.
 
 ---
 

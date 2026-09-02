@@ -51,6 +51,7 @@ assert(bookOverview.semanticSpine.length >= 5, "whole-book overview needs a comp
 assert(bookOverview.recurringLenses.length >= 6, "whole-book overview needs recurring conceptual lenses");
 assert(Boolean(chapterLongforms["predicate-logic"]), "Chapter 1 must have a complete longform lesson");
 assert(Boolean(chapterLongforms["simple-imperative-language"]), "Chapter 2 must have a complete longform lesson");
+assert(Boolean(chapterLongforms["program-specifications"]), "Chapter 3 must have a complete longform lesson");
 
 const chapterTwoSlug = "simple-imperative-language";
 const chapterTwoUnit = units.find((unit) => unit.slug === chapterTwoSlug);
@@ -98,6 +99,80 @@ if (chapterTwoUnit && chapterTwoGuide && chapterTwoLongform) {
     assert(new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(chapterTwoText), `Chapter 2 Korean context must preserve the English term ${term}`);
   }
   assert(!chapterTwoText.includes("함수자"), "Chapter 2 must use functional, not the functor-like translation 함수자");
+}
+
+const chapterThreeSlug = "program-specifications";
+const chapterThreeUnit = units.find((unit) => unit.slug === chapterThreeSlug);
+const chapterThreeGuide = chapterGuides[chapterThreeSlug];
+const chapterThreeLongform = chapterLongforms[chapterThreeSlug];
+if (chapterThreeUnit && chapterThreeGuide && chapterThreeLongform) {
+  const headings = [
+    chapterThreeUnit.title,
+    chapterThreeUnit.eyebrow,
+    ...chapterThreeUnit.steps.map((step) => step.title),
+    ...chapterThreeGuide.sections.map((section) => section.title),
+    chapterThreeLongform.title,
+    ...chapterThreeLongform.sections.flatMap((section) => [
+      section.title,
+      ...section.blocks.flatMap((block) => "title" in block && block.title ? [block.title] : []),
+    ]),
+  ];
+  for (const [index, heading] of headings.entries()) {
+    assert(heading.ko === heading.en, `Chapter 3 heading ${index + 1} must use the canonical English text in both locales`);
+    assert(!/[가-힣]/.test(heading.ko), `Chapter 3 heading ${index + 1} must not replace the English title with Korean`);
+  }
+
+  const expectedSections = [
+    "3.1 Syntax and Semantics of Specifications",
+    "3.2 Inference Rules",
+    "3.3 Rules for Assignment and Sequential Composition",
+    "3.4 Rules for while Commands",
+    "3.5 Further Rules",
+    "3.6 Computing Fibonacci Numbers",
+    "3.7 Fast Exponentiation",
+    "3.8 Complications and Limitations",
+  ];
+  assert(
+    JSON.stringify(chapterThreeUnit.steps.map((step) => step.title.en)) === JSON.stringify(expectedSections),
+    "Chapter 3 study steps must preserve the textbook's exact §3.1–§3.8 order",
+  );
+  assert(
+    JSON.stringify(chapterThreeGuide.sections.map((section) => `${section.covers.slice(1)} ${section.title.en}`)) === JSON.stringify(expectedSections),
+    "Chapter 3 guide must preserve the textbook's exact §3.1–§3.8 order",
+  );
+  assert(
+    JSON.stringify(chapterThreeLongform.sections.slice(0, 8).map((section) => section.title.en)) === JSON.stringify(expectedSections),
+    "Chapter 3 longform must preserve the textbook's exact §3.1–§3.8 order",
+  );
+
+  const chapterThreeKoreanCopy: string[] = [];
+  collectKoreanCopy({
+    unit: chapterThreeUnit,
+    guide: chapterThreeGuide,
+    glossary: chapterGlossaries[chapterThreeSlug],
+    longform: chapterThreeLongform,
+  }, chapterThreeKoreanCopy);
+  const chapterThreeText = chapterThreeKoreanCopy.join("\n");
+  for (const term of [
+    "Program Specifications and Their Proofs",
+    "partial correctness",
+    "total correctness",
+    "precondition",
+    "postcondition",
+    "inference rule",
+    "derivation",
+    "assignment rule",
+    "sequential composition",
+    "intermediate assertion",
+    "loop invariant",
+    "loop variant",
+    "ghost variable",
+    "verification condition",
+    "soundness",
+    "relative completeness",
+  ]) {
+    assert(new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(chapterThreeText), `Chapter 3 Korean context must preserve the English term ${term}`);
+  }
 }
 
 const chapterOne = chapterLongforms["predicate-logic"];

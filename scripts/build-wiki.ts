@@ -13,7 +13,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const date = "2026-08-03";
 const sourcePath = ".raw/private/reynolds-theories-of-programming-languages-2009.pdf";
 const chapterTwoSlug = "simple-imperative-language";
-const englishHeadingSlugs = new Set(["predicate-logic", chapterTwoSlug]);
+const englishHeadingSlugs = new Set(["predicate-logic", chapterTwoSlug, "program-specifications"]);
 
 const filenames: Record<string, string> = {
   "predicate-logic": "chapter-01-predicate-logic",
@@ -393,7 +393,7 @@ await write("wiki/log.md", `# Wiki log
 `);
 
 const glossaryIndex = units.map((unit) => {
-  const headingsInEnglish = unit.slug === chapterTwoSlug;
+  const headingsInEnglish = englishHeadingSlugs.has(unit.slug);
   const entries = chapterGlossaries[unit.slug].map((entry) => {
     const alternate = headingsInEnglish
       ? entry.term.en
