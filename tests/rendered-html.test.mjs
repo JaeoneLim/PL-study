@@ -209,6 +209,74 @@ test("renders Chapter 2 as a complete longform lesson", async () => {
   assert.match(en, /Defining soundness and full abstraction through observations/);
 });
 
+test("renders Chapter 3 as a complete longform lesson in textbook order", async () => {
+  const [koResponse, enResponse] = await Promise.all([
+    render("/ko/chapter/program-specifications"),
+    render("/en/chapter/program-specifications"),
+  ]);
+  assert.equal(koResponse.status, 200);
+  assert.equal(enResponse.status, 200);
+  const [ko, en] = await Promise.all([koResponse.text(), enResponse.text()]);
+  assert.match(ko, /Program Specifications and Their Proofs/);
+  assert.match(ko, /Chapter 3 complete study text/);
+  assert.match(ko, /93.*분 읽기/s);
+  assert.match(ko, /class="term-primer"/);
+  assert.match(ko, /The Chapter 3 vocabulary pipeline/);
+  assert.match(ko, /partial correctness \{p\}c\{q\} → total correctness \[p\]c\[q\]/);
+  assert.match(ko, /One preservation calculation/);
+  assert.match(ko, /Tracing A=3 and N=5/);
+  const textbookSectionTitles = [
+    "3.1 Syntax and Semantics of Specifications",
+    "3.2 Inference Rules",
+    "3.3 Rules for Assignment and Sequential Composition",
+    "3.4 Rules for while Commands",
+    "3.5 Further Rules",
+    "3.6 Computing Fibonacci Numbers",
+    "3.7 Fast Exponentiation",
+    "3.8 Complications and Limitations",
+  ];
+  let previousTextbookSection = -1;
+  for (const title of textbookSectionTitles) {
+    const position = ko.indexOf(title);
+    assert.ok(position > previousTextbookSection, `${title} should follow the textbook section order`);
+    previousTextbookSection = position;
+  }
+  for (const term of [
+    "partial correctness",
+    "total correctness",
+    "precondition",
+    "postcondition",
+    "derivation",
+    "assignment rule",
+    "sequential composition",
+    "intermediate assertion",
+    "loop invariant",
+    "loop variant",
+    "ghost variable",
+    "verification condition",
+    "relative completeness",
+  ]) {
+    assert.match(ko, new RegExp(term, "i"));
+  }
+  assert.match(ko, /semicolon.*Chapter 2와 동일한 sequential composition/s);
+  assert.match(ko, /\{p\} c \{q\}  is valid iff/);
+  assert.match(ko, /\[p\] c \[q\]  is valid iff/);
+  assert.ok((ko.match(/class="math-display"/g) ?? []).length >= 10, "Chapter 3 notation boxes should use display math typesetting");
+  assert.match(ko, /class="katex-display"/);
+  assert.match(ko, /class="math-inline"/);
+  assert.match(ko, /<math xmlns="http:\/\/www\.w3\.org\/1998\/Math\/MathML"/);
+  assert.doesNotMatch(ko, /katex-error/);
+  assert.match(ko, /class="chapter-sidebar-resizer"/);
+  assert.match(ko, /class="chapter-sidebar-toggle"/);
+  const headings = [...ko.matchAll(/<h[1-3]\b[^>]*>([\s\S]*?)<\/h[1-3]>/g)]
+    .map((match) => match[1].replace(/<[^>]+>/g, ""));
+  assert.ok(headings.length >= 25, "Chapter 3 should render its complete heading hierarchy");
+  assert.deepEqual(headings.filter((heading) => /[가-힣]/.test(heading)), [], "Chapter 3 headings should remain in English");
+  assert.match(en, /Chapter 3 complete study text/);
+  assert.match(en, /93.*MIN READ/s);
+  assert.match(en, /Connecting denotational semantics to mechanical proof/);
+});
+
 test("keeps copyrighted source material out of the tracked surface", async () => {
   const [gitignore, rawReadme] = await Promise.all([
     readFile(new URL("../.gitignore", import.meta.url), "utf8"),

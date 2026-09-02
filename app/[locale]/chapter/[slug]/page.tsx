@@ -38,7 +38,7 @@ export default async function ChapterPage({ params }: Props) {
   if (!guide) notFound();
   const longform = chapterLongforms[slug];
   const { previous, next } = getUnitNeighbors(slug);
-  const headingsInEnglish = slug === "predicate-logic" || slug === "simple-imperative-language";
+  const headingsInEnglish = slug === "predicate-logic" || slug === "simple-imperative-language" || slug === "program-specifications";
   const headingLocale = headingsInEnglish ? "en" : locale;
 
   return (
@@ -142,7 +142,11 @@ export default async function ChapterPage({ params }: Props) {
               {longform && (
                 <header className="lesson-review-header">
                   <p className="section-index">R · {locale === "ko" ? "압축 복습" : "CONDENSED REVIEW"}</p>
-                  <h2>{headingsInEnglish || locale === "en" ? `Chapter ${Number(unit.number)} again in four steps` : `네 단계로 다시 잡는 ${unit.number}장`}</h2>
+                  <h2>{slug === "program-specifications"
+                    ? "Review Chapter 3 section by section"
+                    : headingsInEnglish || locale === "en"
+                      ? `Chapter ${Number(unit.number)} again in four steps`
+                      : `네 단계로 다시 잡는 ${unit.number}장`}</h2>
                   <p>{locale === "ko" ? "장문 본문을 읽은 뒤 핵심 연결을 빠르게 회상하는 구간입니다." : "Use this section to retrieve the central connections after the complete lesson."}</p>
                 </header>
               )}
