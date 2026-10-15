@@ -10,7 +10,7 @@
 - [[chapter-02-simple-imperative-language|02. The Simple Imperative Language]] — State transformers and least fixed points
 - [[chapter-03-program-specifications|03. Program Specifications and Their Proofs]] — Partial correctness, total correctness, invariants
 - [[chapter-04-arrays|04. 배열]] — 업데이트되는 함수와 higher-order assertion
-- [[chapter-05-failure-io-continuations|05. 실패, 입출력, 계속]] — 결과에서 상호작용 과정으로
+- [[chapter-05-failure-io-continuations|05. Failure, Input-Output, and Continuations]] — From final results to interaction processes
 - [[chapter-06-transition-semantics|06. transition semantics]] — 실행을 작은 단계로 분해하기
 - [[chapter-07-nondeterminism|07. 비결정성과 보호 명령]] — 하나의 프로그램, 여러 가능한 결과
 - [[chapter-08-shared-variable-concurrency|08. 공유 변수 동시성]] — 인터리빙, 원자성, 공정성

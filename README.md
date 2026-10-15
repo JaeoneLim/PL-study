@@ -19,12 +19,14 @@ units: Chapters 1–19 plus the mathematical appendix.
 
 ## Longform expansion status
 
-The course is being expanded sequentially so displayed reading times reflect
+The course is being expanded chapter by chapter so displayed reading times reflect
 actual material rather than a nominal estimate.
 
-- Chapters 1–2: complete 60+ minute lessons, worked examples, proof sketches,
+- Chapters 1–3: complete 60+ minute lessons, worked examples, proof sketches,
   retrieval checks, and practice workshops
-- Chapters 3–19 and the appendix: concise guided briefs, labeled `Brief` until
+- Chapter 5: a 60-minute bilingual lesson covering §§5.1–5.8 with worked
+  calculations, retrieval checks, and an original practice workshop
+- Chapters 4, 6–19 and the appendix: concise guided briefs, labeled `Brief` until
   each receives the same 30+ minute treatment
 
 ## Korean terminology policy

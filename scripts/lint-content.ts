@@ -52,6 +52,20 @@ assert(bookOverview.recurringLenses.length >= 6, "whole-book overview needs recu
 assert(Boolean(chapterLongforms["predicate-logic"]), "Chapter 1 must have a complete longform lesson");
 assert(Boolean(chapterLongforms["simple-imperative-language"]), "Chapter 2 must have a complete longform lesson");
 assert(Boolean(chapterLongforms["program-specifications"]), "Chapter 3 must have a complete longform lesson");
+assert(Boolean(chapterLongforms["failure-io-continuations"]), "Chapter 5 must have a complete longform lesson");
+
+const chapterFive = chapterLongforms["failure-io-continuations"];
+if (chapterFive) {
+  for (let section = 1; section <= 8; section += 1) {
+    assert(chapterFive.sections.some((item) => item.covers.includes(`§5.${section}`)), `Chapter 5 must explicitly cover §5.${section}`);
+  }
+  const unit = units.find((item) => item.slug === chapterFive.slug);
+  const allIds = [...chapterFive.sections.map((item) => item.id), ...(unit?.steps.map((item) => item.id) ?? [])];
+  assert(new Set(allIds).size === allIds.length, "Chapter 5 longform and condensed review anchors must not collide");
+  for (const item of chapterFive.sections) {
+    assert(item.title.ko === item.title.en, `Chapter 5/${item.id}: preserve canonical English headings`);
+  }
+}
 
 const chapterTwoSlug = "simple-imperative-language";
 const chapterTwoUnit = units.find((unit) => unit.slug === chapterTwoSlug);

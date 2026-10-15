@@ -130,7 +130,7 @@ Reynolds의 출발점은 syntax만으로 언어를 설명할 수 없다는 것�
 - [[chapter-02-simple-imperative-language|02. The Simple Imperative Language]] — State transformers and least fixed points
 - [[chapter-03-program-specifications|03. Program Specifications and Their Proofs]] — Partial correctness, total correctness, invariants
 - [[chapter-04-arrays|04. 배열]] — 업데이트되는 함수와 higher-order assertion
-- [[chapter-05-failure-io-continuations|05. 실패, 입출력, 계속]] — 결과에서 상호작용 과정으로
+- [[chapter-05-failure-io-continuations|05. Failure, Input-Output, and Continuations]] — From final results to interaction processes
 - [[appendix-mathematical-background|A. 수학적 배경]] — 집합, 관계, 함수, 곱과 합의 도구상자
 
 ### 2부 · 연산 · 비결정성 · 동시성 (Operational · Nondeterminism · Concurrency)
