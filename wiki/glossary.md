@@ -247,33 +247,33 @@ relative completeness는 assertion language가 필요한 invariant와 intermedia
 
 ---
 
-## [[chapter-05-failure-io-continuations#장별 용어 해설|05. 실패, 입출력, 계속]]
+## [[chapter-05-failure-io-continuations#Chapter glossary|05. Failure, Input-Output, and Continuations]]
 
-### 시퀀스 도메인 (sequence domain)
+### sequence domain
 
 유한 또는 무한한 관찰 순서를 원소로 삼고, 짧은 prefix가 긴 실행의 근사가 되도록 순서를 둔 도메인이다.
 
 **English:** A domain whose elements are finite or infinite observation sequences, ordered so that a shorter prefix approximates a longer execution.
 
-### 재귀 도메인 동형 (recursive domain isomorphism)
+### recursive domain isomorphism
 
 정의하려는 의미 공간이 자기 자신을 포함하는 방정식의 해라는 뜻이다. 펼쳤다가 다시 접을 수 있는 구조적 대응으로 재귀 데이터를 엄밀히 만든다.
 
 **English:** A meaning space defined as a solution to an equation that contains the space itself. A structural correspondence for unfolding and folding makes recursive data precise.
 
-### 재개 (resumption)
+### resumption
 
 입출력 하나를 내보낸 뒤 환경의 응답에 따라 계산을 이어 가는 나머지 동작을 담은 재귀적 의미 구조다.
 
 **English:** A recursive semantic structure that emits one interaction and contains the remaining computation to resume after the environment responds.
 
-### 계속 (continuation)
+### continuation
 
 현재 계산이 값을 만든 뒤 수행할 나머지 계산을 함수나 데이터로 나타낸 것이다.
 
 **English:** A representation, as a function or data structure, of the rest of the computation to perform after the current computation produces a value.
 
-### CPS (continuation-passing style)
+### continuation-passing style
 
 함수가 결과를 직접 반환하지 않고, 그 결과를 받을 계속 함수를 명시적 인수로 받아 호출하는 프로그램 형태다.
 

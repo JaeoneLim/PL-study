@@ -1,6 +1,6 @@
 import katex from "katex";
 
-const codeKeywords = /^(?:for|if|newvar|skip|while)\b/;
+const codeKeywords = /^(?:fail|for|if|newvar|skip|while)\b/;
 const mathematicalGlyphs = /[=<>_+−×÷₀₁₂₃₄₅₆₇₈₉ₙ₊⁰¹²³⁴⁵⁶⁷⁸⁹ⁿ⁺∈∉∅∪⊆⊥⊑⊔∀∃μλΣσρτℤℕ𝔹⟦⟧⇒⇔→↦∧∨¬≤≥≠†]/;
 const mathematicalNames = /^(?:FV(?:exp|assert)?|IntExp|Sat|contextuallyEqual|restore|[A-Za-z]|[A-Za-z]\([^)]*\))$/;
 
@@ -35,7 +35,9 @@ const symbolReplacements: Array<[RegExp, string]> = [
 export function looksLikeMath(source: string): boolean {
   const value = source.trim();
   if (!value || /[가-힣]/.test(value)) return false;
-  if (codeKeywords.test(value) && /\s/.test(value)) return false;
+  // Assignment and I/O snippets are executable code, not algebra. Denotations
+  // such as ⟦x:=e⟧σ remain math even though they contain command syntax.
+  if (!/[⟦⟧]/.test(value) && (codeKeywords.test(value) || /:=|^[!?]/.test(value))) return false;
   return mathematicalGlyphs.test(value) || mathematicalNames.test(value);
 }
 

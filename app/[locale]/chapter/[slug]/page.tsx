@@ -38,7 +38,7 @@ export default async function ChapterPage({ params }: Props) {
   if (!guide) notFound();
   const longform = chapterLongforms[slug];
   const { previous, next } = getUnitNeighbors(slug);
-  const headingsInEnglish = slug === "predicate-logic" || slug === "simple-imperative-language" || slug === "program-specifications";
+  const headingsInEnglish = slug === "predicate-logic" || slug === "simple-imperative-language" || slug === "program-specifications" || slug === "failure-io-continuations";
   const headingLocale = headingsInEnglish ? "en" : locale;
 
   return (
@@ -59,6 +59,26 @@ export default async function ChapterPage({ params }: Props) {
                 <CompletionButton locale={locale} slug={slug} />
                 <Link className="chapter-glossary-button" href={`/${locale}/chapter/${slug}/glossary`}>
                   <span aria-hidden="true">Aa</span>{locale === "ko" ? "이 장의 용어집" : "Chapter glossary"}<span aria-hidden="true">→</span>
+                </Link>
+                <Link
+                  className="chapter-glossary-button chapter-previous-button"
+                  href={previous ? `/${locale}/chapter/${previous.slug}` : `/${locale}/overview`}
+                  rel={previous ? "prev" : undefined}
+                >
+                  <span aria-hidden="true">←</span>
+                  {previous
+                    ? (locale === "ko" ? `이전 장: ${previous.number}. ${previous.title[locale]}` : `Previous chapter: ${previous.number}. ${previous.title[locale]}`)
+                    : (locale === "ko" ? "책 전체 개요" : "Whole-book overview")}
+                </Link>
+                <Link
+                  className="chapter-glossary-button chapter-next-button"
+                  href={next ? `/${locale}/chapter/${next.slug}` : `/${locale}`}
+                  rel={next ? "next" : undefined}
+                >
+                  {next
+                    ? (locale === "ko" ? `다음 장: ${next.number}. ${next.title[locale]}` : `Next chapter: ${next.number}. ${next.title[locale]}`)
+                    : (locale === "ko" ? "과정 지도로 돌아가기" : "Return to course map")}
+                  <span aria-hidden="true">→</span>
                 </Link>
               </div>
             </div>

@@ -326,6 +326,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .completion-button.complete { border-color: var(--blue); background: var(--blue); color: white; }
 .chapter-glossary-button { display: inline-flex; min-height: 42px; align-items: center; gap: 9px; border: 1px solid var(--blue); border-radius: 22px; padding: 0 15px; color: var(--blue); font-size: 11px; font-weight: 750; transition: background 160ms ease, color 160ms ease; }
 .chapter-glossary-button:hover { background: var(--blue); color: white; }
+.chapter-previous-button, .chapter-next-button { min-width: 0; max-width: 100%; padding-block: 10px; line-height: 1.5; }
+.chapter-previous-button > span, .chapter-next-button > span { flex-shrink: 0; }
 .chapter-glossary-button > span:first-child { font: 700 13px/1 var(--serif); }
 .learning-goals { border-left: 3px solid var(--acid); padding: 8px 0 8px 25px; }
 .learning-goals > p { margin: 0 0 18px; font: 800 9px/1 var(--mono); letter-spacing: .12em; }
@@ -398,7 +400,7 @@ body.is-resizing-sidebar, body.is-resizing-sidebar * { cursor: col-resize !impor
 .longform-section-header p { margin: 3px 0 13px; color: var(--blue); font: 800 9px/1 var(--mono); letter-spacing: .08em; }
 .longform-section-header h2 { max-width: 680px; margin: 0 0 17px; font: 600 clamp(30px, 4vw, 46px)/1.15 var(--serif); letter-spacing: -.03em; }
 .longform-lead { max-width: 690px; color: var(--ink-soft); font: 500 18px/1.7 var(--serif); }
-.longform-blocks { display: grid; gap: 30px; padding-left: 95px; }
+.longform-blocks { display: grid; grid-template-columns: minmax(0, 1fr); gap: 30px; padding-left: 95px; }
 .longform-subsection { scroll-margin-top: 98px; border-top: 1px solid var(--ink); padding: 28px 0 4px; }
 .longform-subsection:first-child { border-top: 0; padding-top: 0; }
 .longform-subsection > p { margin: 0 0 9px; color: var(--blue); font: 750 9px/1.4 var(--mono); letter-spacing: .06em; }
@@ -408,7 +410,7 @@ body.is-resizing-sidebar, body.is-resizing-sidebar * { cursor: col-resize !impor
 .longform-prose p, .longform-notation > p, .longform-callout > p, .worked-example p, .longform-list li, .section-checkpoints li { overflow-wrap: anywhere; }
 .longform-prose p { margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 2; }
 .longform-blocks code, .longform-introduction code, .section-checkpoints code { border-radius: 2px; padding: .1em .3em; background: rgba(37,79,232,.08); color: var(--blue-dark); font: 600 .88em/1.5 var(--mono); }
-.math-inline { display: inline-block; margin-inline: .08em; color: var(--ink); white-space: nowrap; vertical-align: -.08em; }
+.math-inline { display: inline-block; max-width: 100%; overflow-x: auto; margin-inline: .08em; color: var(--ink); white-space: nowrap; vertical-align: -.08em; }
 .math-inline .katex { font-size: 1.04em; }
 .math-display { display: block; overflow-x: auto; padding: 27px 30px; color: var(--blue-dark); background: var(--paper-bright); text-align: center; }
 .math-display .katex-display { min-width: max-content; margin: 0; }

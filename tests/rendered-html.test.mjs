@@ -277,6 +277,74 @@ test("renders Chapter 3 as a complete longform lesson in textbook order", async 
   assert.match(en, /Connecting denotational semantics to mechanical proof/);
 });
 
+test("keeps previous and next navigation above the lesson and at the bottom in both locales", async () => {
+  for (const locale of ["ko", "en"]) {
+    for (const [index, slug] of chapterSlugs.entries()) {
+      const response = await render(`/${locale}/chapter/${slug}`);
+      assert.equal(response.status, 200);
+      const html = await response.text();
+      const target = index + 1 < chapterSlugs.length ? `/${locale}/chapter/${chapterSlugs[index + 1]}` : `/${locale}`;
+      const top = html.match(/<a\b[^>]*class="[^"]*chapter-next-button[^"]*"[^>]*>[\s\S]*?<\/a>/)?.[0];
+      assert.ok(top, `${locale}/${slug}: missing top next navigation`);
+      assert.ok(top.includes(`href="${target}"`), `${locale}/${slug}: wrong next destination`);
+      assert.ok(html.indexOf(top) < html.indexOf('class="lesson-content"'));
+      const bottom = html.match(/<nav class="chapter-neighbors"[\s\S]*?<\/nav>/)?.[0];
+      assert.ok(bottom?.includes(`href="${target}"`));
+      const previousTarget = index > 0 ? `/${locale}/chapter/${chapterSlugs[index - 1]}` : `/${locale}/overview`;
+      const previousTop = html.match(/<a\b[^>]*class="[^"]*chapter-previous-button[^"]*"[^>]*>[\s\S]*?<\/a>/)?.[0];
+      assert.ok(previousTop, `${locale}/${slug}: missing top previous navigation`);
+      assert.ok(previousTop.includes(`href="${previousTarget}"`));
+      assert.ok(html.indexOf(previousTop) < html.indexOf(top));
+      assert.ok(bottom?.includes(`href="${previousTarget}"`));
+    }
+  }
+});
+
+test("renders Chapter 5 as a bilingual, section-complete study lesson", async () => {
+  const sectionIds = [
+    "failure-results", "local-restoration", "correctness", "output-domain", "continuity",
+    "predomain-constructions", "recursive-domains", "input-resumptions",
+    "continuation-semantics", "two-continuations", "practice-workshop", "chapter-synthesis",
+  ];
+  for (const locale of ["ko", "en"]) {
+    const response = await render(`/${locale}/chapter/failure-io-continuations`);
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    assert.match(html, /Chapter 5 complete study text/);
+    assert.match(html, /Chapter 5 again in four steps/);
+    assert.doesNotMatch(html, /katex-error|�/);
+    for (const id of sectionIds) {
+      assert.equal([...html.matchAll(new RegExp(`id="${id}"`, "g"))].length, 1);
+      assert.ok(html.includes(`href="#${id}"`));
+    }
+    const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
+    assert.equal(new Set(ids).size, ids.length);
+    assert.ok((html.match(/class="math-display"/g) ?? []).length >= 8);
+    assert.ok((html.match(/class="worked-example"/g) ?? []).length >= 4);
+    const headings = [...html.matchAll(/<h[1-3]\b[^>]*>([\s\S]*?)<\/h[1-3]>/g)]
+      .map((match) => match[1].replace(/<[^>]+>/g, ""));
+    assert.deepEqual(headings.filter((heading) => /[가-힣]/.test(heading)), []);
+    assert.ok(html.includes(`href="/${locale === "ko" ? "en" : "ko"}/chapter/failure-io-continuations"`));
+  }
+});
+
+test("renders executable command examples as code rather than mathematical letters", async () => {
+  const commands = ["x:=x+4; fail; x:=100", "?x; if x<0 then fail else !(x+3)", "!6; skip"];
+  for (const locale of ["ko", "en"]) {
+    const response = await render(`/${locale}/chapter/failure-io-continuations`);
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    for (const command of commands) {
+      const escaped = command.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+      assert.ok(html.includes(`<code>${escaped}</code>`), `${locale}: ${command} must remain code`);
+      assert.ok(!html.includes(`data-math-source="${escaped}"`));
+    }
+    assert.match(html, /class="math-display"/);
+    assert.match(html, /<math xmlns="http:\/\/www\.w3\.org\/1998\/Math\/MathML"/);
+    assert.doesNotMatch(html, /katex-error/);
+  }
+});
+
 test("keeps copyrighted source material out of the tracked surface", async () => {
   const [gitignore, rawReadme] = await Promise.all([
     readFile(new URL("../.gitignore", import.meta.url), "utf8"),
